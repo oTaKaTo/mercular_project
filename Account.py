@@ -14,7 +14,6 @@ class Admin(Account):
             self.__coupon = coupon # Coupon object
             self.__promotion = promotion # Promotion object
             self.__order = order # Order object (specific user) 
-    #some method for managing our web
    
         
 class User(Account):
