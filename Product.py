@@ -24,3 +24,6 @@ class Product:
         self.__option = option
         self.__detail = detail
         self._promotion = promotion
+        
+    def add_promotion(promotion):
+        self._promotion.append(promotion)
