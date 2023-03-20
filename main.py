@@ -1,7 +1,4 @@
-from Product import ProductCatalog
-
 def main():
-    product_catalog = ProductCatalog()
-
+    pass
 if __name__ == "__main__":
     main()
