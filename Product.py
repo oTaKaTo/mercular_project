@@ -17,6 +17,9 @@ class ProductCatalog:
     def get_product_info(self):
         pass
     
+    def check_product_amount(product_id):
+        pass
+    
     def update_quantity(self):
         pass
     
