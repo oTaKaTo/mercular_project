@@ -4,7 +4,7 @@ class Cart:
     self.__total_price = total_price
     self.__coupon = coupon # Coupon object (use a coupon for discount)
   
-  def get_cart(self):
+  def get_item_in_cart(self):
     string_to_return = ""
     for item in self.__items:
       string_to_return = string_to_return + item.get_item() + '\n'
