@@ -5,32 +5,30 @@ class ProductCatalog:
     def add_product(self, product):
         pass
 
-    def remove_product(self,product):
+    def remove_product(self, product):
         pass
 
     def edit_product(self):
         pass
-    
-    def add_promotion(self,product_id,promotion):
+
+    def add_promotion(self, product_id, promotion):
         pass
 
     def get_product_info(self):
         pass
-    
+
     def check_product_amount(product_id):
         pass
-    
+
     def update_quantity(self):
         pass
-    
+
     def search_product(self):
         pass
-    
-    
 
 
 class Product:
-    def __init__(self, product_id, object_id, name, type, brand, price,amount, detail="",image=[], option=[]):
+    def __init__(self, product_id, object_id, name, type, brand, price, amount, detail="", image=[], option=[]):
         self.__product_id = product_id
         self.__object_id = object_id
         self.__name = name
@@ -42,9 +40,14 @@ class Product:
         self.__option = option
         self.__detail = detail
         self.__promotion = []
-    
+
     def add_promotion(self):
         pass
 
     def edit(self):
         pass
+
+class Item:
+    def __init__(self, product, quantity):
+        self.__product = product
+        self.__quantity = quantity
