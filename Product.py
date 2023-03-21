@@ -47,7 +47,19 @@ class Product:
     def edit(self):
         pass
 
+    def get_price(self):
+        return self.__price
+    
+    def get_name(self):
+        return self.__name
+
 class Item:
     def __init__(self, product, quantity):
         self.__product = product
         self.__quantity = quantity
+
+    def get_price(self):
+        return self.__product.get_price() * self.__quantity
+    
+    def get_item(self):
+        return str(self.__product.get_name()) + ' ' + str(self.__quantity)

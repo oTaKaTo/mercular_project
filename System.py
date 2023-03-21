@@ -1,7 +1,4 @@
-from Product import Item
-from cart import Cart
 
-my_cart = Cart()
 
 class System:
     def __init__(self, product_catalog = []):
@@ -29,9 +26,4 @@ class System:
         pass
     def request_COD(self, total_price, user_address, cart):
         pass
-
-    def addtocart(self, product, quantity):
-        my_cart.add_item_to_cart(Item(product, quantity))
-        print("add success")
-        return True
 
