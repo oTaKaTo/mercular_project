@@ -25,9 +25,9 @@ class User(Account):
         self.__order_history = order_history # OrderHistory object
         self.__coupons = [] # List for store Coupon object
      
-     def get_user_data():
-          pass
-     def get_user_coupon():
-          pass
-     def get_address():
-          pass
+     def get_user_data(self):
+          return self.__person_data
+     def get_user_coupon(self):
+          return self.__coupons
+     def get_address(self):
+          return self.__address
