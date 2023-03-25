@@ -42,6 +42,9 @@ class Product:
     
     def add_promotion(self):
         pass
+    
+    def get_type_brand_id(self):
+        return {"type": self.__type, "brand": self.__brand, "id": self.__product_id}
 
     def edit(self):
         pass
