@@ -62,4 +62,4 @@ class Item:
         return self.__product.get_price() * self.__quantity
     
     def get_item(self):
-        return str(self.__product.get_name()) + ' ' + str(self.__quantity)
+        return f"{self.__product.get_name()}: {self.__quantity} item(s)"

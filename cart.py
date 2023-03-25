@@ -11,8 +11,15 @@ class Cart:
         result += item.get_item() + '\n'
       result = result[:-1]
     else:
-      result = "Cat is empty"
+      result = "Cart is empty"
     return result
+  
+  def delete_item_in_cart(self, item):
+    if(len(self.__items) != 0):
+      self.__items.pop(item)
+    else:
+      return "Cart is empty"
+    return "Success"
   
   def get_is_selected_item():
     pass

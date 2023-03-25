@@ -24,4 +24,7 @@ print(my_user.add_item_to_cart(my_second_product, 2))
 print(my_cart.get_item_in_cart())
 print(my_cart.get_total_price())
 
+my_cart.delete_item_in_cart()
+print(my_cart.get_item_in_cart())
+
 
