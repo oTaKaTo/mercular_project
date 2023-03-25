@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date
 
 class Promotion:
     # due_date format = DD-MM-YYYY
@@ -10,7 +10,7 @@ class Promotion:
     def is_available_price(self, price):
         today = date.today()
         d, m, y = [int(x) for x in self.__due_date.split('-')]
-        due_date = datetime(d, m, y)
+        due_date = date(y, m, d)
         if today > due_date:
             return False
         if price < self.__minimum_price:
@@ -91,7 +91,7 @@ class PercentageCoupon(PercentageDiscount, Coupon):
         return False
 
 
-class CouponCatalog():
+class CouponCatalog:
     def __init__(self):
         self.__coupons = []
 
@@ -104,5 +104,15 @@ class CouponCatalog():
 
     def add_coupon(self, coupon):
         self.__coupons.append(coupon)
+
+# data = {"type": "keyboard", "brand": "razor", "id": "1234"}
+# price = 200
+
+# my_coupon = FlatCoupon("26-3-2023", 100, 50, 1, "asdf", "123")
+# my_pc_coupon = PercentageCoupon("23-3-2023", 100, 20, 10, 1, "12301294")
+# my_coupon_catalog = CouponCatalog()
+# my_coupon_catalog.add_coupon(my_coupon)
+# my_coupon_catalog.add_coupon(my_pc_coupon)
+# print(my_coupon_catalog.get_available_coupon(price, data)[1].get_discount(price))
 
 
