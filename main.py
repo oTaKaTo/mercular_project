@@ -16,11 +16,12 @@ my_second_product = Product("12341", "4123", "mouseRGB", "mouse", "stellseries",
 my_system = System()
 my_user = User("admin", "password", "1234@gmail.com", "0123456789", "คนสักคน")
 
-my_cart = my_user.add_item_to_cart(my_product, 2)
+my_cart = my_user.get_user_cart()
+my_user.add_item_to_cart(my_product, 2)
 
 print(my_product)
 print(my_user.add_item_to_cart(my_second_product, 2))
-print(my_cart.get_cart())
+print(my_cart.get_item_in_cart())
 print(my_cart.get_total_price())
 
 

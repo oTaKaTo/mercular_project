@@ -1,14 +1,18 @@
 class Cart:
-  def __init__(self, items=[], total_price=0, coupon=None):
+  def __init__(self, items = [], total_price = 0, coupon = None):
     self.__items = items # List for store Item object 
     self.__total_price = total_price
     self.__coupon = coupon # Coupon object (use a coupon for discount)
   
   def get_item_in_cart(self):
-    string_to_return = ""
-    for item in self.__items:
-      string_to_return = string_to_return + item.get_item() + '\n'
-    return string_to_return[:-1]
+    result = ""
+    if(len(self.__items) != 0):
+      for item in self.__items:
+        result += item.get_item() + '\n'
+      result = result[:-1]
+    else:
+      result = "Cat is empty"
+    return result
   
   def get_is_selected_item():
     pass
@@ -23,5 +27,5 @@ class Cart:
   def get_total_price(self):
     return self.__total_price
 
-  def update_total_price(coupon):
+  def update_total_price(self, coupon):
     pass
