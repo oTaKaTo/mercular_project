@@ -1,5 +1,7 @@
+
+
 class System:
-    def __init__(self, product_catalog):
+    def __init__(self, product_catalog = []):
         self.__product_catalog = product_catalog
         self.__account_list = []
     
@@ -24,3 +26,4 @@ class System:
         pass
     def request_COD(self, total_price, user_address, cart):
         pass
+
