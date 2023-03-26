@@ -12,7 +12,6 @@ class Account:
      def get_password(self):
           return self.__password
      
-
 class Admin(Account):
      __product_catalog = []
      def __init__(self, username, password, email, phone_number, product_catalog, coupon, promotion, order):
@@ -37,4 +36,12 @@ class User(Account):
           return self.__coupons
      def get_address(self):
           return self.__address
-     
+     def add_address(self,address):
+          self.__address.append(address)
+          return True
+     def delete_address(self,address):
+          if len(self.__address)>1:
+               self.__address.remove(address)
+               return True
+          else:
+               return"You must have at least 1 address for delivery"
