@@ -27,6 +27,7 @@ class ProductCatalog:
         pass
 
 
+
 class Product:
     def __init__(self, product_id, object_id, name, type, brand, price, amount, detail="", image=[], option=[]):
         self.__product_id = product_id
@@ -43,7 +44,13 @@ class Product:
 
     def add_promotion(self):
         pass
-
+    
+    def get_price(self):
+        return self.__price
+    
+    def get_name(self):
+        return self.__name
+    
     def edit(self):
         pass
 
