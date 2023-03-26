@@ -23,7 +23,17 @@ class ProductCatalog:
     def search_product(self):
         pass
     
+class Item:
+    def __init__(self, product, quantity):
+        self.__product = product
+        self.__quantity = quantity
+
+    def get_price(self):
+        return self.__product.get_price() * self.__quantity
     
+    def get_item(self):
+        return str(self.__product.get_name()) + ' ' + str(self.__quantity)
+
 
 
 class Product:
@@ -42,6 +52,12 @@ class Product:
     
     def add_promotion(self):
         pass
-
+    
+    def get_price(self):
+        return self.__price
+    
+    def get_name(self):
+        return self.__name
+    
     def edit(self):
         pass
