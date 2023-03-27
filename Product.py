@@ -63,3 +63,4 @@ class Item:
     
     def get_item(self):
         return f"{self.__product.get_name()}: {self.__quantity} item(s)"
+    
