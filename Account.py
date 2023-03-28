@@ -1,5 +1,6 @@
 from Product import *
 from Shipping_Address import *
+from copy import copy
 class Account:
      def __init__(self, username, password, email, phone_number,online_status:bool=None):
           self.__username = username
@@ -84,7 +85,7 @@ class User(Account):
      def add_coupon(self,coupon_Id,system_coupon_catalog):
           for ID in system_coupon_catalog:
                if ID.get_id() == coupon_Id:
-                    self.__coupons.append(copy)
+                    self.__coupons.append(copy(ID))
 
      def add_address(self,name_surname, phone_number, address, sub_district, district, province, postal_code):
           self.__address.append(Shipping_Address(name_surname,phone_number,address,sub_district,district,province,postal_code))
