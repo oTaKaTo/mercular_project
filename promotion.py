@@ -7,12 +7,15 @@ class Promotion:
         self.__minimum_price = minimum_price
         self.__description = description
 
-    def is_available_price(self, price):
+    def is_available_date(self):
         today = date.today()
         d, m, y = [int(x) for x in self.__due_date.split('-')]
         due_date = date(y, m, d)
         if today > due_date:
             return False
+        return True
+
+    def is_available_price(self, price):
         if price < self.__minimum_price:
             return False
         return True
@@ -96,7 +99,7 @@ class FlatCoupon(FlatDiscount, Coupon):
         Coupon.__init__(self, quantity, code_id, ban_products, ban_types, types, brands)
     
     def is_available(self, price, data):
-        if self.is_available_price(price) and self.is_available_type(data):
+        if self.is_available_price(price) and self.is_available_type(data) and self.is_available_date():
             return True
         return False
 
@@ -106,7 +109,7 @@ class PercentageCoupon(PercentageDiscount, Coupon):
         Coupon.__init__(self, quantity, code_id, ban_products, ban_types, types, brands)
     
     def is_available(self, price, data):
-        if self.is_available_price(price) and self.is_available_type(data):
+        if self.is_available_price(price) and self.is_available_type(data) and self.is_available_date():
             return True
         return False
 
@@ -130,8 +133,8 @@ class CouponCatalog:
         del self.__coupons[id]
         return True
 
-data = {"type": "keyboard", "brand": "razor", "id": 1234}
-price = 300
+# data = {"type": "keyboard", "brand": "razor", "id": 1234}
+# price = 300
 
 # my_coupon = FlatCoupon("26-4-2023", 100, 50, 1)
 # my_pc_coupon = PercentageCoupon("23-4-2023", 100, 20, 10, 1)
