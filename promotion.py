@@ -53,6 +53,9 @@ class Coupon(Promotion):
         self.__types = types
         self.__brands = brands
 
+    def get_id(self):
+        return self.__code_id
+
     def is_available_type(self, data):
         if self.__quantity < 1:
             return False
@@ -96,7 +99,7 @@ class PercentageCoupon(PercentageDiscount, Coupon):
 
 class CouponCatalog:
     def __init__(self):
-        self.__coupons = []
+        self.__coupons = {}
 
     def get_available_coupon(self, price, data):
         available_coupon = []
@@ -106,7 +109,12 @@ class CouponCatalog:
         return available_coupon
 
     def add_coupon(self, coupon):
-        self.__coupons.append(coupon)
+        self.__coupons[coupon.get_id()] = coupon
+        return True
+
+    def delete_coupon(self, id):
+        del self.__coupons[id]
+        return True
 
 # data = {"type": "keyboard", "brand": "razor", "id": "1234"}
 # price = 200
