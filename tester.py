@@ -10,7 +10,7 @@ def main():
     User_1 = User("userครับ", "password", "1234@gmail.com", "0123456789", "คนสักคน")
     User_1_order_history = User_1.get_user_order_history()
     User_1_order_history.add_order_history([order_1, order_2, order_3])
-    User_1_order_history.get_order()
+    print(User_1_order_history.get_order_info())
     return 0
     
 if __name__ == "__main__":
