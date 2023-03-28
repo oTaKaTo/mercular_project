@@ -1,4 +1,4 @@
-from Cart import Cart
+from cart import Cart
 from Product import Item
 
 class Account:
@@ -20,13 +20,13 @@ class Admin(Account):
   
       
 class User(Account):
-  def __init__(self, username, password, email, phone_number, person_data, address=[], cart = Cart(), order=[],  order_history=[], coupon=[]):
+  def __init__(self, username, password, email, phone_number = "", person_data = "", address = []):
     Account.__init__(self, username, password, email, phone_number)
     self.__person_data = person_data
     self.__address = address # List of Shipping_Address Object 
-    self.__cart = cart # Cart object
-    self.__order_history = order_history # OrderHistory object
-    self.__coupons = coupon # List for store Coupon object
+    self.__cart = Cart() # Cart object
+    self.__order_history = [] # OrderHistory object
+    self.__coupons = [] # List for store Coupon object
   
   def get_user_data():
     pass
@@ -40,5 +40,5 @@ class User(Account):
   
   def add_item_to_cart(self, product, quantity):
     item = Item(product, quantity)
-    self.__cart.add_item_to_cart(item)
+    self.__cart.add_item(item)
     return self.__cart

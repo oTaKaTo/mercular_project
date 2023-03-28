@@ -1,20 +1,5 @@
 from Product import Item
 
-class CartManager:
-  def add_item(items, items_list: list):
-    items_list.pop(items)
-      
-  def delete_item(items, items_list: list) -> str:
-    if(len(items_list) != 0):
-      items_list.pop(items)
-    else:
-      return "Cart is empty"
-    return "Success"
-  
-  def edit_amount_item(items: Item, quantity):
-    items.set_quantity(quantity)
-
-
 class Cart:
   def __init__(self, items = [], coupon = None):
     self.__items = items # List for store Item object 
@@ -22,16 +7,19 @@ class Cart:
     self.__coupon = coupon # Coupon object (use a coupon for discount)
     self.__total_item = 0
     self.__selected_item = []
-    self.__cart_manager = CartManager()
     
   def add_item(self, items):
-    self.__cart_manager.add_item(items, self.__item)
+      self.__items.append(items)
       
-  def delete_item(self, items) -> str:
-    return self.__cart_manager.delete_item(items, self.__item)
+  def delete_item(self, items: Item) -> str:
+    if(len(self.__items) != 0):
+      self.__items.pop(items)
+    else:
+      return "Cart is empty"
+    return "Success"
   
-  def edit_amount_item(self, items, quantity):
-    self.__cart_manager.edit_amount_item(items, quantity)
+  def edit_amount_item(items: Item, quantity):
+    items.set_quantity(quantity)
     
   def __update_cart(self, items): #update_total_item(self)
     item_quantity = [item.get_quantity() for item in self.__selected_item]
@@ -45,17 +33,17 @@ class Cart:
     items_info = ""
     for item in self.__items:
         items_info += item.get_item() + '\n'
-    items_info[:-1] = ''
+    items_info = items_info[:-1]
     return items_info
   
-  def get_item_in_cart(self) -> str:
+  def get_items_in_cart(self) -> str:
     if(len(self.__items) != 0):
       result = self.__get_item()
     else:
       result = "Cart is empty"
     return result
   
-  def select_item(self, item: Item):
+  def select_items(self, item: Item):
     self.__selected_item.append(item)
     self.__update_cart()
     
