@@ -62,18 +62,30 @@ class User(Account):
      
      def get_user_data(self):
           return self.__person_data
+
      def get_user_coupon(self):
           return self.__coupons
+
      def get_address(self):
           return self.__address
+
      def get_person_data(self):
           return self.__person_data
-     def get_cart(self):
+
+     def get_user_cart(self):
           return self.__cart
+
      def get_order_history(self):
           return self.__order_history
+
      def get_coupons(self):
           return self.__coupons
+     
+     def add_coupon(self,coupon_Id,system_coupon_catalog):
+          for ID in system_coupon_catalog:
+               if ID.get_id() == coupon_Id:
+                    self.__coupons.append(copy)
+
      def add_address(self,name_surname, phone_number, address, sub_district, district, province, postal_code):
           self.__address.append(Shipping_Address(name_surname,phone_number,address,sub_district,district,province,postal_code))
           return True
