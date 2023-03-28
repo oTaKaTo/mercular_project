@@ -67,7 +67,10 @@ class Coupon(Promotion):
             if data["brand"] in self.__brands:
                 return True
         if data["type"] in self.__types:
-            return True
+            if self.__brands == "All":
+                return True
+            if data["brand"] in self.__brands:
+                return True
         return False
 
 class FlatCoupon(FlatDiscount, Coupon):
