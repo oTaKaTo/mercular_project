@@ -53,7 +53,7 @@ class ID():
 
     def generateID(self):
         self.__id_count += 1
-        return self.__id_count
+        return str(self.__id_count)
     
 id_gen_coupon = ID()
 
@@ -141,14 +141,13 @@ class CouponCatalog:
         del self.__coupons[id]
         return True
 
-# data = {"type": "keyboard", "brand": "razor", "id": 1234}
-# price = 300
-
-# my_coupon = FlatCoupon("26-4-2023", 100, 50, 1)
-# my_pc_coupon = PercentageCoupon("23-4-2023", 100, 20, 10, 1)
-# my_coupon_catalog = CouponCatalog()
-# my_coupon_catalog.add_coupon(my_coupon)
-# my_coupon_catalog.add_coupon(my_pc_coupon)
-# print([x.get_discount(price) for x in my_coupon_catalog.get_available_coupon(price, data)])
+data = {"type": "keyboard", "brand": "razor", "id": 1234}
+price = 300
+my_coupon = FlatCoupon("26-4-2023", 100, 50, 1)
+my_pc_coupon = PercentageCoupon("23-4-2023", 100, 20, 10, 1)
+my_coupon_catalog = CouponCatalog()
+my_coupon_catalog.add_coupon(my_coupon)
+my_coupon_catalog.add_coupon(my_pc_coupon)
+print([x.get_discount(price) for x in my_coupon_catalog.get_available_coupon(price, data)])
 
 
