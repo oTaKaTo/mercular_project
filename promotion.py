@@ -126,8 +126,16 @@ class CouponCatalog:
         return available_coupon
 
     def add_coupon(self, coupon):
+        if coupon.get_id() in self.__coupons:
+            return False
         self.__coupons[coupon.get_id()] = coupon
         return True
+    
+    def edit_coupon(self, coupon):
+        if coupon.get_id() in self.__coupons:
+            self.__coupons[coupon.get_id()] = coupon
+            return True
+        return False
 
     def delete_coupon(self, id):
         del self.__coupons[id]
