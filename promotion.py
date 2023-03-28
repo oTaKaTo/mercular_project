@@ -66,6 +66,10 @@ class Coupon(Promotion):
     def get_id(self):
         return self.__code_id
 
+    def use_coupon(self):
+        self.__quantity -= 1
+        return self.__quantity
+
     def is_available_type(self, data):
         if self.__quantity < 1:
             return False
