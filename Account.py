@@ -59,13 +59,14 @@ class User(Account):
         self.__address = [] # List of Shipping_Address Object 
         self.__cart = cart # Cart object
         self.__order_history = order_history # OrderHistory object
-        self.__coupons = [] # List for store Coupon object
+        self.__user_coupons = [] # List for store Coupon object
+        self.__used_user_coupons = []
      
      def get_user_data(self):
           return self.__person_data
 
      def get_user_coupon(self):
-          return self.__coupons
+          return self.__user_coupons
 
      def get_address(self):
           return self.__address
@@ -76,17 +77,23 @@ class User(Account):
      def get_user_cart(self):
           return self.__cart
 
+     def add_item_to_cart(self, product, quantity):
+         item = Item(product, quantity)
+         self.__cart.add_item(item)
+         return self.__cart
+
      def get_order_history(self):
           return self.__order_history
 
-     def get_coupons(self):
+     def get_user_coupons(self):
           return self.__coupons
      
-     def add_coupon(self,coupon_Id,system_coupon_catalog):
-          for ID in system_coupon_catalog:
-               if ID.get_id() == coupon_Id:
-                    self.__coupons.append(copy(ID))
-
+     def add_user_coupon(self,coupon_Id,system_coupon_catalog):
+          if coupon_Id in system_coupon_catalog:
+               self.__user_coupons.append(copy(system_coupon_catalog[coupon_Id]))
+          else:
+               return "Invaild Coupon ID"
+     
      def add_address(self,name_surname, phone_number, address, sub_district, district, province, postal_code):
           self.__address.append(Shipping_Address(name_surname,phone_number,address,sub_district,district,province,postal_code))
           return True

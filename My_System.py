@@ -1,10 +1,14 @@
 from Account import *
+from promotion import *
 class System:
     def __init__(self):
         self.__user_lst = []
+        self.__coupon_catalog = CouponCatalog()
 
     def get_user_lst(self):
         return self.__user_lst
+    def get_coupon_catalog(self):
+        return self.__coupon_catalog
         
     def create_account(self,username, password, email, phone_number=None):
             if self.check_exists_account(email)==True:
@@ -40,7 +44,9 @@ class System:
 mySystem = System()
 #create Account
 mySystem.create_account("momo","1234","MOMO@gmail.com")
-#print(mySystem.get_user_lst())
+#mySystem.get_user_lst()[0].add_user_coupon("1",mySystem.get_coupon_catalog().get_coupons())
+#mySystem.get_user_lst()[0].get_coupon()
+#print(mySystem.get_user_lst()) 
 #print(mySystem.create_account("momo","1234","MOMO@gmail.com"))
 #login
 #print(mySystem.create_account("momo","1234","MOMO@gmail.com"))
@@ -48,11 +54,12 @@ mySystem.create_account("momo","1234","MOMO@gmail.com")
 #print(mySystem.login("MOMO3@gmail.com","1234"))
 #print(mySystem.login("MOMO@gmail.com","12345678"))
 #logout
-account_list = mySystem.get_user_lst()
-print(account_list[0].get_online_status())
-mySystem.logout(mySystem.get_user_lst()[0])
-print(account_list[0].get_online_status())
+#account_list = mySystem.get_user_lst()
+#print(account_list[0].get_online_status())
+#mySystem.logout(mySystem.get_user_lst()[0])
+#print(account_list[0].get_online_status())
 """  
+
     def Register(email,username,password):
             for ID in self.user_lst:
                 if ID.get_Email() == email:
@@ -84,3 +91,13 @@ Register("momo@gmail.com","momo","1234")
 Register("momo@gmail.com","momo","1234")
 Login("momo@gmail.com","1234")
 """
+#test coupon
+a = {}
+price= 300
+my_coupon = FlatCoupon("26-4-2023", 100, 50, 1)
+my_pc_coupon = PercentageCoupon("23-4-2023", 100, 20, 10, 1)
+my_coupon_catalog = CouponCatalog()
+my_coupon_catalog.add_coupon(my_coupon)
+my_coupon_catalog.add_coupon(my_pc_coupon)
+mySystem.get_user_lst()[0].add_user_coupon("2",my_coupon_catalog.get_coupon())
+print(mySystem.get_user_lst()[0].get_user_coupon()[1].get_id())
