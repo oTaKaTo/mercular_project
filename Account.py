@@ -62,6 +62,9 @@ class User(Account):
         self.__user_coupons = [] # List for store Coupon object
         self.__used_user_coupons = []
      
+     def get_used_user_coupons(self):
+          return self.__used_user_coupons
+     
      def get_user_data(self):
           return self.__person_data
 
@@ -87,7 +90,15 @@ class User(Account):
 
      def get_user_coupons(self):
           return self.__coupons
-     
+    
+     def user_used_coupon(self,Coupon):
+          if Coupon in self.__user_coupons:
+               self.__used_user_coupons.append(copy(Coupon))
+               self.__user_coupons.remove(Coupon)
+               return True
+          else:
+               return False
+               
      def add_user_coupon(self,coupon_Id,system_coupon_catalog):
           if coupon_Id in system_coupon_catalog:
                self.__user_coupons.append(copy(system_coupon_catalog[coupon_Id]))
