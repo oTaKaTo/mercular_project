@@ -1,8 +1,9 @@
 from Product import *
 from Shipping_Address import *
+from cart import *
 from copy import copy
 class Account:
-     def __init__(self, username, password, email, phone_number,online_status:bool=None):
+     def __init__(self, username, password, email, phone_number="",online_status:bool=False):
           self.__username = username
           self.__password = password #must be hash before store
           self.__email = email
@@ -17,7 +18,7 @@ class Account:
      
      def get_online_status(self):
           return self.__online_status
-    
+     
      def set_online_status(self,new_online_status):
           if isinstance(new_online_status,bool):
                self.__online_status = new_online_status
@@ -45,15 +46,22 @@ class Account:
          
 class Admin(Account):
      __product_catalog = []
-     def __init__(self, username, password, email, phone_number, product_catalog, coupon, promotion, order):
+     def __init__(self, username, password, email, phone_number="", product_catalog={}, coupon={}, promotion ={}, order=[]):
             Account.__init__(self, username, password, email, phone_number)
             self.__product_catalog = product_catalog # ProductCataog object
             self.__coupon = coupon # Coupon object
             self.__promotion = promotion # Promotion object
             self.__order = order # Order object (specific user) 
-          
+     
+     def add_item_to_product_catalog(self,product:Product,product_catalog:dict):
+          product_catalog[product.get_product_id()] = product
+     
+     def edit_item_in_product_catalog(self,product:Product,product_catalog:dict):
+          pass
+     def del_item_in_product_catalog(self,product:Product,product_catalog:dict):
+          product_catalog.pop(product_catalog[product.get_product_id()])   
 class User(Account):
-     def __init__(self, username, password, email, phone_number:int=None, person_data=None, address=None, cart=None, order=None,  order_history=None, coupon=None):
+     def __init__(self, username, password, email, phone_number:int="", person_data="", address=[], cart="", order=[],  order_history=[], coupon=[]):
         Account.__init__(self, username, password, email, phone_number)
         self.__person_data = person_data
         self.__address = [] # List of Shipping_Address Object 
@@ -128,4 +136,3 @@ class User(Account):
                return "Remove address success"
           else:
                return"You must have at least 1 address for delivery"
-
