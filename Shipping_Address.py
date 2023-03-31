@@ -7,7 +7,7 @@ class Shipping_Address:
         self.__district = district
         self.__province = province
         self.__postal_code = postal_code
-    def set_shipping_address(self,new_name_surname,new_phone_number,new_address,new_sub_district,new_district,new_provine,new_postal_code):
+    def edit_shipping_address(self,new_name_surname,new_phone_number,new_address,new_sub_district,new_district,new_provine,new_postal_code):
         self.__name_surname= new_name_surname
         self.__phone_number = new_phone_number
         self.__address= new_address
