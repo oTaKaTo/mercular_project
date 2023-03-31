@@ -1,27 +1,33 @@
 from Account import *
 from promotion import *
+from Product import *
+from fastapi import FastAPI
+from typing import Union
 class System:
     def __init__(self):
         self.__user_lst = []
         self.__coupon_catalog = CouponCatalog()
+        self.__product_catalog = ProductCatalog()
 
     def get_user_lst(self):
         return self.__user_lst
+    
     def get_coupon_catalog(self):
         return self.__coupon_catalog
         
     def create_account(self,username, password, email, phone_number=None):
-            if self.check_exists_account(email)==True:
+            if self.check_exists_account(email)!=False:
                 return "already has account using this email"
             else:
                 self.__user_lst.append(User(username,password,email,phone_number))
                 self.login(email,password)
                 return "Create account successfully"
-            
+    def get_product_catalog(self):
+        return self.__product_catalog        
     def check_exists_account(self,email):
             for ID in self.__user_lst:
                 if ID.get_Email() == email:
-                    return True
+                    return ID
             return False
    
     def login(self,email,password):
@@ -42,9 +48,8 @@ class System:
             return True
             
 mySystem = System()
-#create Account
 mySystem.create_account("momo","1234","MOMO@gmail.com")
-#mySystem.get_user_lst()[0].add_user_coupon("1",mySystem.get_coupon_catalog().get_coupons())
+"""#mySystem.get_user_lst()[0].add_user_coupon("1",mySystem.get_coupon_catalog().get_coupons())
 #mySystem.get_user_lst()[0].get_coupon()
 #print(mySystem.get_user_lst()) 
 #print(mySystem.create_account("momo","1234","MOMO@gmail.com"))
@@ -58,6 +63,7 @@ mySystem.create_account("momo","1234","MOMO@gmail.com")
 #print(account_list[0].get_online_status())
 #mySystem.logout(mySystem.get_user_lst()[0])
 #print(account_list[0].get_online_status())
+# """
 """  
 
     def Register(email,username,password):
@@ -92,7 +98,8 @@ Register("momo@gmail.com","momo","1234")
 Login("momo@gmail.com","1234")
 """
 #test coupon
-a = {}
+"""
+#test admin class
 price= 300
 my_coupon = FlatCoupon("26-4-2023", 100, 50, 1)
 my_pc_coupon = PercentageCoupon("23-4-2023", 100, 20, 10, 1)
@@ -100,4 +107,26 @@ my_coupon_catalog = CouponCatalog()
 my_coupon_catalog.add_coupon(my_coupon)
 my_coupon_catalog.add_coupon(my_pc_coupon)
 mySystem.get_user_lst()[0].add_user_coupon("2",my_coupon_catalog.get_coupon())
-print(mySystem.get_user_lst()[0].get_user_coupon()[1].get_id())
+print(mySystem.get_user_lst()[0].add_user_coupon("2",my_coupon_catalog.get_coupon()))
+print(mySystem.get_user_lst()[0].get_user_coupon()[0].get_id())
+print(mySystem.get_user_lst()[0].user_used_coupon(mySystem.get_user_lst()[0].get_user_coupon()[0]))
+print(mySystem.get_user_lst()[0].get_used_user_coupons())
+mySystem.get_user_lst().append(Admin("Admin","Admin","Admin@gmail.com"))
+"""
+
+app = FastAPI()
+
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: str = "Hi"):
+    return {"item_id": item_id, "q": q}
+
+@app.get("/account/profile")
+def read_user_infor():
+    return {mySystem.get_user_lst()[0]}
+
