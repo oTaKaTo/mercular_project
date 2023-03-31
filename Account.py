@@ -57,7 +57,7 @@ class User(Account):
         Account.__init__(self, username, password, email, phone_number)
         self.__person_data = person_data
         self.__address = [] # List of Shipping_Address Object 
-        self.__cart = cart # Cart object
+        self.__cart = Cart()# Cart object
         self.__order_history = order_history # OrderHistory object
         self.__user_coupons = [] # List for store Coupon object
         self.__used_user_coupons = []
@@ -91,17 +91,30 @@ class User(Account):
      def get_user_coupons(self):
           return self.__coupons
     
+     def check_coupon_id_in_user_coupon(self,coupon_id):
+          for coupon in self.__user_coupons:
+               if coupon.get_id()==coupon_id:
+                    return coupon
+          else:
+               return False
+       
      def user_used_coupon(self,Coupon):
-          if Coupon in self.__user_coupons:
-               self.__used_user_coupons.append(copy(Coupon))
-               self.__user_coupons.remove(Coupon)
+          if self.check_coupon_id_in_user_coupon(Coupon.get_id())!=False:
+               if Coupon.use_coupon()<1:
+                    self.__used_user_coupons.append(copy(Coupon))
+                    self.__user_coupons.remove(Coupon)
+               print(Coupon.get_quantity())
                return True
           else:
                return False
                
      def add_user_coupon(self,coupon_Id,system_coupon_catalog):
           if coupon_Id in system_coupon_catalog:
-               self.__user_coupons.append(copy(system_coupon_catalog[coupon_Id]))
+               if self.check_coupon_id_in_user_coupon(coupon_Id)!=False:
+                    return "This coupon has in already in your coupon"
+               else:
+                    self.__user_coupons.append(copy(system_coupon_catalog[coupon_Id]))
+                    return True     
           else:
                return "Invaild Coupon ID"
      
@@ -116,16 +129,3 @@ class User(Account):
           else:
                return"You must have at least 1 address for delivery"
 
-"""momo = User("momo","1234","65010244@gmail.com")
-momo.add_address("ที่อยู่แรก","adsad","Sdadsad","ASdasdsa","asdasdsa","asdasdsa","Adsadsa")
-momo.add_address("ที่อยู่2","adsad","Sdadsad","ASdasdsa","asdasdsa","asdasdsa","Adsadsa")
-print([i.get_name_surname() for i in momo.get_address()])
-print("-----------Add Address-----------")
-momo.get_address()[0].set_shipping_address("ที่อยู่3","adsad","Sdadsad","ASdasdsa","asdasdsa","asdasdsa","Adsadsa")
-print([i.get_name_surname() for i in momo.get_address()])
-print("-----------Set Address-----------")
-momo.delete_address(momo.get_address()[0])
-print([i.get_name_surname() for i in momo.get_address()])
-print(momo.delete_address(momo.get_address()[0]))
-print([i.get_name_surname() for i in momo.get_address()])
-print("-----------Delete Address-----------")"""
