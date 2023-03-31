@@ -10,23 +10,24 @@ class Cart:
     
   def add_item(self, items):
       self.__items.append(items)
+      self.__total_item += items.get_quantity()
       
   def delete_item(self, items: Item) -> str:
     if(len(self.__items) != 0):
-      self.__items.pop(items)
+      self.__total_item -= items.get_quantity()
+      self.__items.remove(items)
     else:
       return "Cart is empty"
     return "Success"
   
-  def edit_amount_item(items: Item, quantity):
+  def edit_amount_item(self, items: Item, quantity):
     items.set_quantity(quantity)
     
-  def __update_cart(self, items): #update_total_item(self)
-    item_quantity = [item.get_quantity() for item in self.__selected_item]
-    self.__total_item = sum(item_quantity)
+    
+  def __update_total_price(self): #update_total_item(self)
     self.__total_price = 0
     for item in self.__selected_item:
-      price = items.get_price()
+      price = item.get_price()
       self.__total_price += price
   
   def __get_item(self) -> str:
@@ -45,17 +46,13 @@ class Cart:
   
   def select_items(self, item: Item):
     self.__selected_item.append(item)
-    self.__update_cart()
+    self.__update_total_price()
     
-  def get_selected_item(self, selected_item: list):
-    result = []
+  def get_selected_item(self):
     if(len(self.__item) != 0):
-        for item in selected_item:
-          if((item in self.__selected_item) and (isinstance(selected_item, item))):
-            result.append(item)
+        return self.__selected_item
     else:
       return "Cart is empty" 
-    return result
 
   def get_total_price(self) -> float:
     return self.__total_price
