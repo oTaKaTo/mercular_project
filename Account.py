@@ -71,7 +71,7 @@ class User(Account):
         self.__order_history = order_history # OrderHistory object
         self.__user_coupons = [] # List for store Coupon object
         self.__used_user_coupons = []
-        self.__
+        self.__expire_user_coupons = []
      
      def get_used_user_coupons(self):
           return self.__used_user_coupons
