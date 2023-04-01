@@ -43,7 +43,6 @@ class Account:
                return True
           return False          
 
-         
 class Admin(Account):
      __product_catalog = []
      def __init__(self, username, password, email, phone_number="", product_catalog={}, coupon={}, promotion ={}, order=[]):
@@ -58,9 +57,12 @@ class Admin(Account):
      
      def edit_item_in_product_catalog(self,product:Product,product_catalog:dict):
           pass
+     
      def del_item_in_product_catalog(self,product:Product,product_catalog:dict):
           product_catalog.pop(product_catalog[product.get_product_id()])   
+          
 class User(Account):
+     
      def __init__(self, username, password, email, phone_number:int="", person_data="", address=[], cart="", order=[],  order_history=[], coupon=[]):
         Account.__init__(self, username, password, email, phone_number)
         self.__person_data = person_data
@@ -69,6 +71,7 @@ class User(Account):
         self.__order_history = order_history # OrderHistory object
         self.__user_coupons = [] # List for store Coupon object
         self.__used_user_coupons = []
+        self.__
      
      def get_used_user_coupons(self):
           return self.__used_user_coupons
