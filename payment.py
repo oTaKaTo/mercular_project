@@ -4,8 +4,8 @@ class Payment:
     self.__status = status
     self.__create_date = create_date
   
-  def get_status():
-    pass
+  def get_status(self):
+    return self.__status
 
 
 class CreditCardTransaction(Payment):
@@ -16,10 +16,16 @@ class CreditCardTransaction(Payment):
     self.__CVC = CVC
     self.__due_date = due_date
 
+  def process(self):
+    return True
+
 
 class CashOnDeliveryTransaction(Payment):
   def __init__(self, transaction_id, status, create_date):
     Payment.__init__(self, transaction_id, status, create_date)
+
+  def process(self):
+    return True
 
 class QRCodeTransaction(Payment):
   def __init__(self, transaction_id, stauts, create_date):
