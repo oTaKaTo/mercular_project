@@ -97,6 +97,10 @@ class Product:
     def name(self):
         return self.__name 
     
+    @quantity.setter
+    def quantity(self,value):
+        self.__quantity = value
+
     # decreasing stock
     def update_quantity(self,amount):
         self.__quantity -= amount
