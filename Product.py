@@ -1,21 +1,27 @@
 class ProductCatalog:
     def __init__(self):
-        self.__products = {}
+        self.__products = []
 
+    @property
+    def products(self):
+        return self.__products
+    
     def add_product(self, product):
-        if product.get_product_id() in self.__products:
-            return False
-        self.__products[product.get_product_id()] = product
+        for i in self.__products:
+            if product.product_id in i.product_id:
+                return False
+        self.__products.append(product)
         return True
 
     def remove_product(self, product_id):
-        if product_id in self.__products:
-            del self.__products[product_id]
-            return True
+        for i in self.__products:
+            if product_id in i.product_id:
+                del self.__products[product_id]
+                return True
         return False
 
     def edit_product(self, product):
-        id = product.get_product_id()
+        id = product.product_id
         if id in self.__products:
             self.__products[id] = product
             return True
@@ -24,43 +30,27 @@ class ProductCatalog:
     def add_promotion(self, product_id, promotion):
         self.__products[product_id].add_promotion(promotion)
         return True
-
-    def get_product_info(self):
-        return [self.__products[x].get_name() for x in self.__products]
-
-    # Checkout then decrease stock
-    def update_quantity(self,product_id,amount):
-        if self.__products[product_id].get_quantity() < amount:
-            return False
-        elif self.__products[product_id].get_quantity() >= amount:
-            self.__products[product_id].update_quantity(amount)
-            return True
     
-    def check_quantity(self,product_id,amount):
-        if self.__products[product_id].get_quantity() < amount:
-            return False
-        elif self.__products[product_id].get_quantity() >= amount:
-            return True
+    def get_product_info(self):
+        return [x.name for x in self.__products]
 
-
+    # search box that can search by id, name
     def search_keyword(self, keyword=""):
         search_result = []
         for i in self.__products:
-            if keyword.lower() in (self.__products[i].get_name()).lower():
-                search_result.append(self.__products[i])
-            if keyword.lower() == self.__products[i].get_product_id():
-                return self.__products[i]
+            if keyword.lower() == i.product_id:
+                return i
+            if keyword.lower() in (i.name).lower():
+                search_result.append(i)     
         return search_result
 
-    def search_by_id(self, product_id:str):
-        return self.__products[product_id]
     
     def search_by_catagories(self,keyword=""):
         search_result = []
         for i in self.__products:
-            for t in reversed((self.__products[i].get_type())):
+            for t in reversed(i.type):
                 if keyword == t:
-                    search_result.append(self.__products[i])
+                    search_result.append(i)
         return search_result
 
 
@@ -83,22 +73,28 @@ class Product:
         self.__promotion.append(promotion)
         return True
     
-    def get_price(self):
+    @property    
+    def price(self):
         return self.__price
     
-    def get_product_id(self):
+    @property 
+    def product_id(self):
         return str(self.__product_id)
     
-    def get_quantity(self):
+    @property 
+    def quantity(self):
         return self.__quantity
     
-    def get_type(self):
+    @property 
+    def type(self):
         return self.__type
 
-    def get_type_brand_id(self):
+    @property 
+    def type_brand_id(self):
         return {"type": self.__type, "brand": self.__brand, "id": self.__product_id}
 
-    def get_name(self):
+    @property 
+    def name(self):
         return self.__name 
     
     # decreasing stock
