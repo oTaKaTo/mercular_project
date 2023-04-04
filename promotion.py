@@ -92,27 +92,21 @@ class Coupon(Promotion):
             if data["brand"] in self.__brands:
                 return True
         return False
+    
+    def is_available(self, price, data):
+        if self.is_available_price(price) and self.is_available_type(data) and self.is_available_date():
+            return True
+        return False
 
 class FlatCoupon(FlatDiscount, Coupon):
     def __init__(self, due_date, minimum_price, discount, quantity, code_id=id_gen_coupon.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
         FlatDiscount.__init__(self, due_date, minimum_price, discount, description)
         Coupon.__init__(self, quantity, code_id, ban_products, ban_types, types, brands)
-    
-    def is_available(self, price, data):
-        if self.is_available_price(price) and self.is_available_type(data) and self.is_available_date():
-            return True
-        return False
 
 class PercentageCoupon(PercentageDiscount, Coupon):
     def __init__(self, due_date, minimum_price, discount_percent, max_discount, quantity, code_id=id_gen_coupon.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
         PercentageDiscount.__init__(self, due_date, minimum_price, discount_percent, max_discount, description)
         Coupon.__init__(self, quantity, code_id, ban_products, ban_types, types, brands)
-    
-    def is_available(self, price, data):
-        if self.is_available_price(price) and self.is_available_type(data) and self.is_available_date():
-            return True
-        return False
-
 
 class CouponCatalog:
     def __init__(self):
@@ -141,13 +135,13 @@ class CouponCatalog:
         del self.__coupons[id]
         return True
 
-data = {"type": "keyboard", "brand": "razor", "id": 1234}
-price = 300
-my_coupon = FlatCoupon("26-4-2023", 100, 50, 1)
-my_pc_coupon = PercentageCoupon("23-4-2023", 100, 20, 10, 1)
-my_coupon_catalog = CouponCatalog()
-my_coupon_catalog.add_coupon(my_coupon)
-my_coupon_catalog.add_coupon(my_pc_coupon)
-print([x.get_discount(price) for x in my_coupon_catalog.get_available_coupon(price, data)])
+# data = {"type": "keyboard", "brand": "razor", "id": 1234}
+# price = 300
+# my_coupon = FlatCoupon("26-4-2023", 100, 50, 1)
+# my_pc_coupon = PercentageCoupon("23-4-2023", 100, 20, 10, 1)
+# my_coupon_catalog = CouponCatalog()
+# my_coupon_catalog.add_coupon(my_coupon)
+# my_coupon_catalog.add_coupon(my_pc_coupon)
+# print([x.get_discount(price) for x in my_coupon_catalog.get_available_coupon(price, data)])
 
 
