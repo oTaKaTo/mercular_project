@@ -1,3 +1,24 @@
+from fastapi import FastAPI
+
+payment = FastAPI()
+
+
+@payment.get("/")
+async def root():
+  return {"message": "Hello World"}
+
+@payment.get("/requestQRpayment")
+async def request_QRcode():
+  return True
+
+@payment.get("/requestCOD")
+async def request_COD():
+  return True
+
+@payment.get("/requestcreditdebit")
+async def request_credit_debit():
+  return True
+
 class Payment:
   def __init__(self, transaction_id, status, create_date):
     self.__transaction_id = transaction_id
