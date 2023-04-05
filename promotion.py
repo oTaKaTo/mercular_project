@@ -49,16 +49,16 @@ class PercentageDiscount(Promotion):
     
 class ID():
     def __init__(self):
-        self.__id_count = 0
+        self.__id_count = -1
 
     def generateID(self):
         self.__id_count += 1
         return str(self.__id_count)
     
-id_gen_coupon = ID()
+coupon_id_gen = ID()
 
 class Coupon(Promotion):
-    def __init__(self, quantity, code_id=id_gen_coupon.generateID(), ban_products=[], ban_types=[], types="All", brands="All"):
+    def __init__(self, quantity, code_id, ban_products=[], ban_types=[], types="All", brands="All"):
         self.__quantity = quantity
         self.__code_id = code_id
         self.__ban_products = ban_products
@@ -99,49 +99,44 @@ class Coupon(Promotion):
         return False
 
 class FlatCoupon(FlatDiscount, Coupon):
-    def __init__(self, due_date, minimum_price, discount, quantity, code_id=id_gen_coupon.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
+    def __init__(self, due_date, minimum_price, discount, quantity, code_id=coupon_id_gen.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
         FlatDiscount.__init__(self, due_date, minimum_price, discount, description)
         Coupon.__init__(self, quantity, code_id, ban_products, ban_types, types, brands)
 
 class PercentageCoupon(PercentageDiscount, Coupon):
-    def __init__(self, due_date, minimum_price, discount_percent, max_discount, quantity, code_id=id_gen_coupon.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
+    def __init__(self, due_date, minimum_price, discount_percent, max_discount, quantity, code_id=coupon_id_gen.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
         PercentageDiscount.__init__(self, due_date, minimum_price, discount_percent, max_discount, description)
         Coupon.__init__(self, quantity, code_id, ban_products, ban_types, types, brands)
 
 class CouponCatalog:
     def __init__(self):
-        self.__coupons = {}
+        self.__coupons = []
 
     def get_available_coupon(self, price, data):
         available_coupon = []
         for coupon in self.__coupons:
-            if self.__coupons[coupon].is_available(price, data):
-                available_coupon.append(self.__coupons[coupon])
+            if coupon.is_available(price, data):
+                available_coupon.append(coupon)
         return available_coupon
+    
+    def get_coupons(self):
+        return self.__coupons
 
     def add_coupon(self, coupon):
-        if coupon.get_id() in self.__coupons:
+        if int(coupon.get_id()) < len(self.__coupons):
             return False
-        self.__coupons[coupon.get_id()] = coupon
+        self.__coupons.append(coupon)
         return True
     
     def edit_coupon(self, coupon):
-        if coupon.get_id() in self.__coupons:
-            self.__coupons[coupon.get_id()] = coupon
+        id = int(coupon.get_id())
+        if id < len(self.__coupons):
+            self.__coupons[id] = coupon
             return True
         return False
 
     def delete_coupon(self, id):
-        del self.__coupons[id]
+        self.__coupons[int(id)] = None
         return True
-
-# data = {"type": "keyboard", "brand": "razor", "id": 1234}
-# price = 300
-# my_coupon = FlatCoupon("26-4-2023", 100, 50, 1)
-# my_pc_coupon = PercentageCoupon("23-4-2023", 100, 20, 10, 1)
-# my_coupon_catalog = CouponCatalog()
-# my_coupon_catalog.add_coupon(my_coupon)
-# my_coupon_catalog.add_coupon(my_pc_coupon)
-# print([x.get_discount(price) for x in my_coupon_catalog.get_available_coupon(price, data)])
 
 
