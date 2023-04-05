@@ -1,5 +1,3 @@
-from enum import Enum
-
 class AccountNotFoundException(Exception):
     msg = "Account Not Found"
     

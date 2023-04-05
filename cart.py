@@ -17,12 +17,16 @@ class Cart:
     if(len(self.__items) != 0):
       self.__total_item -= items.get_quantity()
       self.__items.remove(items)
+    else:
+      raise CartEmptyException
   
   def edit_amount_item(self, items: Item, quantity):
     if(self.__items > 1):
       delta_quantity = quantity - items.get_quantity()
       self.__total_item += delta_quantity
       items.set_quantity(quantity)
+    else:
+      raise CartEmptyException
     
   def __update_total_price(self): #update_total_item(self)
     self.__total_price = 0
@@ -58,7 +62,7 @@ class Cart:
   def get_total_price(self) -> float:
     return self.__total_price
   
-  def get_discounted_price(self) -> float:
+  def get_discounted_price(self, coupon) -> float:
     return self.__discounted_price
 
   def cal_discount_price(self): # def update_total_price(self, coupon):
@@ -84,5 +88,5 @@ class Cart:
   
   def select_coupon(self, coupon):
     self.__coupon = coupon
-    self.cal_discount_price()
+    self.__update_total_price()
     return True
