@@ -1,4 +1,4 @@
-from Order import Order
+from order import Order
 
 class OrderHistory:
      def __init__(self, orders = []):
