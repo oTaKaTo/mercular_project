@@ -6,6 +6,7 @@ class Cart:
     self.__selected_item = []
     self.__total_price = 0
     self.__total_item = 0
+    self.__discounted_price = 0
     
   def add_item(self, items: Item):
       self.__items.append(items)
@@ -27,36 +28,35 @@ class Cart:
     for item in self.__selected_item:
       price = item.get_price()
       self.__total_price += price
+    self.cal_discount_price()
     
   def get_items_in_cart(self):
     if(len(self.__items) != 0):
       return self.__items
+    return {"status": "Cart is empty"}
   
   def select_items(self, items: Item):
       if(len(self.__items) != 0):
         self.__selected_item.append(items)
         self.__update_total_price()
+      return {"status": "Cart is empty"}
   
   def deselect_items(self, items: Item):
       if(len(self.__items) != 0):
         self.__selected_item.remove(items)
         self.__update_total_price()
+      return {"status": "Cart is empty"}
    
   def get_selected_item(self):
     if(len(self.__selected_item) != 0):
-        return self.__selected_item 
+        return self.__selected_item
+    return {"status": "Doesn't select any item"}
 
   def get_total_price(self) -> float:
     return self.__total_price
-
-  def cal_discount_price(self, coupon): # def update_total_price(self, coupon):
-    self.__total_price -= coupon.get_discount(self.__total_price)
   
   def get_discounted_price(self) -> float:
     return self.__discounted_price
-  
-  def get_total_price(self):
-    return self.__total_price
 
   def cal_discount_price(self): # def update_total_price(self, coupon):
     price = self.get_total_price()
@@ -73,9 +73,7 @@ class Cart:
     price = self.get_total_price()
     try:
       for item in self.get_selected_item():
-        if not self.__coupon.is_available(price, item.get_type_brand_id()):
-          return False
-        if item.get_quantity() > item.get_amount():
+        if (not self.__coupon.is_available(price, item.get_type_brand_id())) or item.get_quantity() > item.get_amount():
           return False
       return True
     except:
