@@ -36,27 +36,27 @@ class ProductCatalog:
 
     # search box that can search by id, name
     def search_keyword(self, keyword=""):
-        search_result = []
-        for i in self.__products:
-            if keyword.lower() == i.product_id:
-                return i
-            if keyword.lower() in (i.name).lower():
-                search_result.append(i)     
+        search_result = {}
+        # for i in self.__products:
+        #     if keyword.lower() == i.product_id:
+        #         return i
+        #     if keyword.lower() in (i.name).lower():
+        #         search_result[i.product_id] = i.name  
         return search_result
 
     
     def search_by_catagories(self,keyword=""):
-        search_result = []
+        search_result = {}
         for i in self.__products:
             for t in reversed(i.type):
                 if keyword == t:
-                    search_result.append(i)
+                    search_result[i.product_id] = i.name
         return search_result
 
 
 class Product:
     # type MUST order by big --> small catagory 
-    def __init__(self, product_id:str, object_id:str, name:str, type:list, brand:str, price:int, quantity:int, detail="",image=[], option=[]):
+    def __init__(self, product_id:str, object_id:str, name:str, type:list, brand:str, price:int, quantity:int, detail="",image=[], option=""):
         self.__product_id = product_id
         self.__object_id = object_id
         self.__name = name
@@ -88,11 +88,13 @@ class Product:
     @property 
     def type(self):
         return self.__type
-
-    @property 
-    def type_brand_id(self):
+ 
+    def get_type_brand_id(self):
         return {"type": self.__type, "brand": self.__brand, "id": self.__product_id}
 
+    @property
+    def option(self):
+        return self.__option
     @property 
     def name(self):
         return self.__name 
@@ -119,7 +121,15 @@ class Item:
         return self.__product.get_price() * self.__quantity
     
     def get_item(self):
-        return str(self.__product.get_name()) + ' ' + str(self.__quantity)
+            item_info = {
+                "product_option": self.product.get_type(), 
+                "quantity": self.quantity
+                }
+            brand_id = self.product.get_type_brand_id()
+            for KEY in brand_id.keys():
+                item_info[KEY] = brand_id[KEY]
+
+            return {self.product.get_name() : item_info}
     
     def get_quantity(self):
         return self.__quantity
@@ -127,4 +137,10 @@ class Item:
     def set_quantity(self, quantity):
         self.__quantity = quantity
         return True
+    
+    def get_type_brand_id(self):
+        return self.__product.get_type_brand_id()
+    
+    def get_amount(self):
+        return self.__product.get_quantity()
     
