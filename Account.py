@@ -1,7 +1,8 @@
-from Product import *
-from Shipping_Address import *
-from cart import *
+from Product import Product
+from shipping_address import shipping_adress
+from cart import Cart
 from copy import copy
+from uuid import uuid4
 class Account:
      def __init__(self, username, password, email, phone_number="",online_status:bool=False):
           self.__username = username
@@ -9,10 +10,14 @@ class Account:
           self.__email = email
           self.__phone_number = phone_number
           self.__online_status = online_status
-    
-     def get_Email(self):
+          self.__user_id = uuid4()
+     
+     def get_email(self):
           return self.__email
-    
+     
+     def get_id(self):
+          return self.__user_id
+     
      def get_username(self):
           return self.__username
      
@@ -51,7 +56,8 @@ class Admin(Account):
             self.__coupon = coupon # Coupon object
             self.__promotion = promotion # Promotion object
             self.__order = order # Order object (specific user) 
-     
+            
+          
      def add_item_to_product_catalog(self,product:Product,product_catalog:dict):
           product_catalog[product.get_product_id()] = product
      
@@ -92,7 +98,7 @@ class User(Account):
           return self.__cart
 
      def add_item_to_cart(self, product, quantity):
-         item = Item(product, quantity)
+         item = item(product, quantity)
          self.__cart.add_item(item)
          return self.__cart
 
@@ -130,7 +136,7 @@ class User(Account):
                return "Invaild Coupon ID"
      
      def add_address(self,name_surname, phone_number, address, sub_district, district, province, postal_code):
-          self.__address.append(Shipping_Address(name_surname,phone_number,address,sub_district,district,province,postal_code))
+          self.__address.append(shipping_adress(name_surname,phone_number,address,sub_district,district,province,postal_code))
           return True
      
      def delete_address(self,address):
