@@ -1,7 +1,10 @@
 from enum import Enum
 
 class AccountNotFoundException(Exception):
-    msg = "User Not Found"
-     
-class CartErrorException(Exception):
-     msg = "Cart is empty"
+    msg = "Account Not Found"
+    
+class CartEmptyException(Exception):
+    msg = "Cart is empty"
+
+class ItemNotFoundException(Exception):
+    msg = "Item not found"

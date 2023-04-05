@@ -1,5 +1,5 @@
 from Product import Item
-from exception import CartErrorException
+from exception import CartEmptyException, ItemNotFoundException
 
 class Cart:
   def __init__(self):
@@ -34,26 +34,26 @@ class Cart:
   def get_items_in_cart(self):
     if(len(self.__items) != 0):
       return self.__items
-    raise CartErrorException
+    raise CartEmptyException
   
   def select_items(self, items: Item):
     if(len(self.__items) != 0):
       self.__selected_item.append(items)
       self.__update_total_price()
     else:
-      raise CartErrorException
+      raise CartEmptyException
   
   def deselect_items(self, items: Item):
     if(len(self.__items) != 0):
       self.__selected_item.remove(items)
       self.__update_total_price()
     else:
-      raise CartErrorException
+      raise CartEmptyException
    
   def get_selected_item(self):
     if(len(self.__selected_item) != 0):
         return self.__selected_item
-    return {"status": "Doesn't select any item"}
+    raise ItemNotFoundException
 
   def get_total_price(self) -> float:
     return self.__total_price
