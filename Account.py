@@ -30,7 +30,7 @@ class Account:
                return True
           return False
      
-     def set_username(self,new_username):
+     def edit_username(self,new_username):
           if isinstance(new_username,str):
                self.__username = new_username
                return True
@@ -42,7 +42,7 @@ class Account:
      def get_phone_number(self):
           return self.__phone_number
      
-     def set_phone_number(self,new_phone_number):
+     def edit_phone_number(self,new_phone_number):
           if isinstance(new_phone_number,int):
                self.__phone_number = new_phone_number
                return True
@@ -142,6 +142,6 @@ class User(Account):
      def delete_address(self,address):
           if len(self.__address)>1:
                self.__address.remove(address)
-               return "Remove address success"
+               return True
           else:
-               return"You must have at least 1 address for delivery"
+               return False
