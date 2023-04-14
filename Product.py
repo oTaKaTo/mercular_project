@@ -2,8 +2,7 @@ class ProductCatalog:
     def __init__(self):
         self.__products = []
 
-    @property
-    def products(self):
+    def get_products(self):
         return self.__products
     
     def add_product(self, product):
@@ -72,35 +71,29 @@ class Product:
     def add_promotion(self, promotion):
         self.__promotion.append(promotion)
         return True
-    
-    @property    
-    def price(self):
+            
+    def get_price(self):
         return self.__price
-    
-    @property 
-    def product_id(self):
+         
+    def get_product_id(self):
         return str(self.__product_id)
-    
-    @property 
-    def quantity(self):
+      
+    def get_quantity(self):
         return self.__quantity
-    
-    @property 
-    def type(self):
+     
+    def get_type(self):
         return self.__type
  
     def get_type_brand_id(self):
         return {"type": self.__type, "brand": self.__brand, "id": self.__product_id}
-
-    @property
-    def option(self):
+    
+    def get_option(self):
         return self.__option
-    @property 
-    def name(self):
+     
+    def get_name(self):
         return self.__name 
     
-    @quantity.setter
-    def quantity(self,value):
+    def edit_quantity(self,value):
         self.__quantity = value
 
     # decreasing stock
