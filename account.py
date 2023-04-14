@@ -43,10 +43,10 @@ class Account:
           return self.__phone_number
      
      def edit_phone_number(self,new_phone_number):
-          if isinstance(new_phone_number,int):
+          if isinstance(new_phone_number,str):
                self.__phone_number = new_phone_number
                return True
-          return False          
+          return False
 
 class Admin(Account):
      __product_catalog = []
@@ -87,6 +87,10 @@ class User(Account):
 
      def get_user_coupon(self):
           return self.__user_coupons
+     def get_used_user_coupon(self):
+          return self.__used_user_coupons
+     def get_expire_coupon(self):
+          return self.__expire_user_coupons
 
      def get_address(self):
           return self.__address
@@ -96,44 +100,48 @@ class User(Account):
 
      def get_user_cart(self):
           return self.__cart
-
+     
      def add_item_to_cart(self, product, quantity):
          item = item(product, quantity)
          self.__cart.add_item(item)
          return self.__cart
-
+     
      def get_order_history(self):
           return self.__order_history
-
-     def get_user_coupons(self):
-          return self.__coupons
-    
+     
+     
      def check_coupon_id_in_user_coupon(self,coupon_id):
           for coupon in self.__user_coupons:
                if coupon.get_id()==coupon_id:
                     return coupon
+          for coupon in self.__used_user_coupons:
+               if coupon_id.get_id()== coupon_id:
+                    return coupon
+          for coupon in self.__expire_user_coupons:
+               if coupon_id.get_id()== coupon_id:
+                    return coupon
           else:
                return False
-       
-     def user_used_coupon(self,Coupon):
-          if self.check_coupon_id_in_user_coupon(Coupon.get_id())!=False:
-               if Coupon.use_coupon()<1:
-                    self.__used_user_coupons.append(copy(Coupon))
-                    self.__user_coupons.remove(Coupon)
-               print(Coupon.get_quantity())
-               return True
+     def user_used_coupon(self,used_Coupon):
+          used_Coupon_id = used_Coupon.get_id()
+          for Coupon in self.__user_coupons:
+               if used_Coupon_id == Coupon.get_id():
+                    if Coupon.use_coupon()<1:
+                         self.__used_user_coupons.append(copy(Coupon))
+                         self.__user_coupons.remove(Coupon)
+                    return True
           else:
                return False
                
-     def add_user_coupon(self,coupon_Id,system_coupon_catalog):
-          if coupon_Id in system_coupon_catalog:
-               if self.check_coupon_id_in_user_coupon(coupon_Id)!=False:
-                    return "This coupon has in already in your coupon"
-               else:
-                    self.__user_coupons.append(copy(system_coupon_catalog[coupon_Id]))
-                    return True     
-          else:
-               return "Invaild Coupon ID"
+     def add_user_coupon(self,coupon_id,system_coupon_catalog):
+          for coupon in system_coupon_catalog:
+               if coupon.get_id() == coupon_id:
+                    if self.check_coupon_id_in_user_coupon(coupon_id)!=False:
+                         return "This coupon has in already in your coupon"
+                    else:
+                         self.__user_coupons.append(copy(coupon))
+                         return True
+          return "Invaild Coupon ID"
      
      def add_address(self,name_surname, phone_number, address, sub_district, district, province, postal_code):
           self.__address.append(shipping_adress(name_surname,phone_number,address,sub_district,district,province,postal_code))
