@@ -22,6 +22,9 @@ class Promotion:
     
     def get_description(self):
         return self.__description
+    
+    def get_minimum_price(self):
+        return self.__minimum_price
 
 class FlatDiscount(Promotion):
     def __init__(self, due_date, minimum_price, discount, description=""):
@@ -32,6 +35,9 @@ class FlatDiscount(Promotion):
         if self.is_available_price(price):
             return self.__discount
         return 0
+    
+    def get_discount_str(self):
+        return self.__discount
 
 class PercentageDiscount(Promotion):
     def __init__(self, due_date, minimum_price, discount_percent, max_discount, description=""):
@@ -46,6 +52,9 @@ class PercentageDiscount(Promotion):
                 return self.__max_discount
             return discount
         return 0
+    
+    def get_discount_str(self):
+        return str(self.__discount_percent) + '%'
     
 class ID():
     def __init__(self):
@@ -106,23 +115,11 @@ class FlatCoupon(FlatDiscount, Coupon):
     def __init__(self, due_date, minimum_price, discount, quantity, coupon_type, code_id=coupon_id_gen.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
         FlatDiscount.__init__(self, due_date, minimum_price, discount, description)
         Coupon.__init__(self, quantity, code_id, coupon_type, ban_products, ban_types, types, brands)
-    
-    def get_discount(self):
-        return self.__discount
-    
-    def get_minimum_price(self):
-        return self.__minimum_price
 
 class PercentageCoupon(PercentageDiscount, Coupon):
     def __init__(self, due_date, minimum_price, discount_percent, max_discount, quantity, coupon_type, code_id=coupon_id_gen.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
         PercentageDiscount.__init__(self, due_date, minimum_price, discount_percent, max_discount, description)
         Coupon.__init__(self, quantity, code_id, coupon_type, ban_products, ban_types, types, brands)
-
-    def get_discount(self):
-        return str(self.__discount_percent) + '%'
-    
-    def get_minimum_price(self):
-        return self.__minimum_price
 
 class CouponCatalog:
     def __init__(self):
