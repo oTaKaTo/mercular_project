@@ -142,6 +142,15 @@ class CouponCatalog:
     def delete_coupon(self, id):
         self.__coupons[int(id)] = None
         return True
+    
+    def get_coupons_sorted_by_coupon_type(self):
+        sorted_coupon = {'exclusive':[], 'speaker':[], 'gaming':[], 'computer':[], 'table':[]}
+        for coupon in self.__coupons:
+            coupon_type = coupon.get_coupon_type()
+            if coupon_type in sorted_coupon:
+                sorted_coupon[coupon_type].append(coupon)
+        return sorted_coupon
+            
 
 
 
