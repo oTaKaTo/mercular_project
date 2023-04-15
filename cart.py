@@ -1,5 +1,5 @@
 from Product import Item
-from exception import CartEmptyException, ItemNotFoundException
+from exception import CartErrorException
 
 class Cart:
   def __init__(self):
@@ -10,15 +10,23 @@ class Cart:
     self.__discounted_price = 0
     
   def add_item(self, items: Item):
+    items_quantity = items.get_quantity()
+    if(items not in self.__items):
       self.__items.append(items)
-      self.__total_item += items.get_quantity()
+    else:
+      exisited_item_no = self.__items.index(items)
+      exisited_item = self.__items[exisited_item_no]
+      exisited_item_quantity = exisited_item.get_quantity()
+      exisited_item.set_quantity(exisited_item_quantity + items_quantity)
+    self.__total_item += items_quantity
+      
       
   def delete_item(self, items: Item) -> str:
     if(len(self.__items) != 0):
       self.__total_item -= items.get_quantity()
       self.__items.remove(items)
     else:
-      raise CartEmptyException
+      raise CartErrorException("Cart is empty")
   
   def edit_amount_item(self, items: Item, quantity):
     if(self.__items > 1):
@@ -26,7 +34,7 @@ class Cart:
       self.__total_item += delta_quantity
       items.set_quantity(quantity)
     else:
-      raise CartEmptyException
+      raise CartErrorException("Cart is empty")
     
   def __update_total_price(self): #update_total_item(self)
     self.__total_price = 0
@@ -38,26 +46,26 @@ class Cart:
   def get_items_in_cart(self):
     if(len(self.__items) != 0):
       return self.__items
-    raise CartEmptyException
+    raise CartErrorException("Cart is empty")
   
   def select_items(self, items: Item):
     if(len(self.__items) != 0):
       self.__selected_item.append(items)
       self.__update_total_price()
     else:
-      raise CartEmptyException
+      raise CartErrorException("Cart is empty")
   
   def deselect_items(self, items: Item):
     if(len(self.__items) != 0):
       self.__selected_item.remove(items)
       self.__update_total_price()
     else:
-      raise CartEmptyException
+      raise CartErrorException("Cart is empty")
    
   def get_selected_item(self):
     if(len(self.__selected_item) != 0):
         return self.__selected_item
-    raise ItemNotFoundException
+    raise CartErrorException("Item not found")
 
   def get_total_price(self) -> float:
     return self.__total_price
