@@ -103,14 +103,14 @@ class Coupon(Promotion):
         return False
 
 class FlatCoupon(FlatDiscount, Coupon):
-    def __init__(self, due_date, minimum_price, discount, quantity, code_id=coupon_id_gen.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
+    def __init__(self, due_date, minimum_price, discount, quantity, coupon_type, code_id=coupon_id_gen.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
         FlatDiscount.__init__(self, due_date, minimum_price, discount, description)
-        Coupon.__init__(self, quantity, code_id, ban_products, ban_types, types, brands)
+        Coupon.__init__(self, quantity, code_id, coupon_type, ban_products, ban_types, types, brands)
 
 class PercentageCoupon(PercentageDiscount, Coupon):
-    def __init__(self, due_date, minimum_price, discount_percent, max_discount, quantity, code_id=coupon_id_gen.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
+    def __init__(self, due_date, minimum_price, discount_percent, max_discount, quantity, coupon_type, code_id=coupon_id_gen.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
         PercentageDiscount.__init__(self, due_date, minimum_price, discount_percent, max_discount, description)
-        Coupon.__init__(self, quantity, code_id, ban_products, ban_types, types, brands)
+        Coupon.__init__(self, quantity, code_id, coupon_type, ban_products, ban_types, types, brands)
 
 class CouponCatalog:
     def __init__(self):
