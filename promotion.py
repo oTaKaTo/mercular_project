@@ -58,16 +58,20 @@ class ID():
 coupon_id_gen = ID()
 
 class Coupon(Promotion):
-    def __init__(self, quantity, code_id, ban_products=[], ban_types=[], types="All", brands="All"):
+    def __init__(self, quantity, code_id, coupon_type, ban_products=[], ban_types=[], types="All", brands="All"):
         self.__quantity = quantity
         self.__code_id = code_id
         self.__ban_products = ban_products
         self.__ban_types = ban_types
         self.__types = types
         self.__brands = brands
+        self.__coupon_type = coupon_type
 
     def get_id(self):
         return self.__code_id
+    
+    def get_coupon_type(self):
+        return self.__coupon_type
 
     def use_coupon(self):
         self.__quantity -= 1
@@ -138,5 +142,6 @@ class CouponCatalog:
     def delete_coupon(self, id):
         self.__coupons[int(id)] = None
         return True
+
 
 
