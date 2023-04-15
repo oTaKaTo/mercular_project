@@ -119,7 +119,7 @@ class PercentageCoupon(PercentageDiscount, Coupon):
         Coupon.__init__(self, quantity, code_id, coupon_type, ban_products, ban_types, types, brands)
 
     def get_discount(self):
-        return str(self.__discount) + '%'
+        return str(self.__discount_percent) + '%'
     
     def get_minimum_price(self):
         return self.__minimum_price
