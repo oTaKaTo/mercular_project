@@ -42,7 +42,6 @@ class ProductCatalog:
         #     if keyword.lower() in (i.name).lower():
         #         search_result[i.product_id] = i.name  
         return search_result
-
     
     def search_by_catagories(self,keyword=""):
         search_result = {}
