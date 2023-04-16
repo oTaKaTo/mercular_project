@@ -1,4 +1,4 @@
-from Product import Product
+from product import Product
 from shipping_address import shipping_adress
 from cart import Cart
 from copy import copy

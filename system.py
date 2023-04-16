@@ -1,6 +1,6 @@
 from account import Account,User,Admin,shipping_adress
 from promotion import Promotion,Coupon,CouponCatalog
-from Product import Product,Item,ProductCatalog
+from product import Product,Item,ProductCatalog
 from tkinter import Tk
 from fastapi import FastAPI
 from typing import Union
