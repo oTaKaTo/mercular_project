@@ -37,7 +37,7 @@ class FlatDiscount(Promotion):
         return 0
     
     def get_discount_str(self):
-        return self.__discount + '.-'
+        return str(self.__discount) + '.-'
 
 class PercentageDiscount(Promotion):
     def __init__(self, due_date, minimum_price, discount_percent, max_discount, description=""):
