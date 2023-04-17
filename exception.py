@@ -1,8 +1,15 @@
 class AccountNotFoundException(Exception):
-    msg = "Account Not Found"
+    def __init__(self):
+        self.__msg = "Account Not Found"
     
-class CartEmptyException(Exception):
-    msg = "Cart is empty"
-
-class ItemNotFoundException(Exception):
-    msg = "Item not found"
+    @property
+    def msg(self):
+        return self.__msg
+    
+class CartErrorException(Exception):
+    def __init__(self, msg: str):
+        self.__msg = msg
+    
+    @property
+    def msg(self):
+        return self.__msg
