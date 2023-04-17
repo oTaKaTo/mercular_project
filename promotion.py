@@ -27,6 +27,9 @@ class Promotion:
     def get_minimum_price(self):
         return self.__minimum_price
     
+    def get_minimum_price_str(self):
+        return str(self.__minimum_price) + '.-'
+    
     def get_title(self):
         return self.__title
 
