@@ -2,9 +2,12 @@ from account import Account,User,Admin,shipping_adress
 from promotion import Promotion,Coupon,CouponCatalog,PercentageCoupon,PercentageDiscount,FlatCoupon,FlatDiscount
 from Product import Product,Item,ProductCatalog
 from tkinter import Tk
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from typing import Union
 import json
+from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
+
 class System:
 
     def __init__(self):
@@ -32,12 +35,13 @@ class System:
         
     def create_account(self ,email,password, phone_number=None,username=""):
             if self.search_user_by_email(email)!=False:
+                
                 return False
             else:
                 self.__user_lst.append(User(username,password,email,phone_number))
                 self.login(email,password)
                 return True
-        
+
     def get_product_catalog(self):
         return self.__product_catalog        
     
@@ -61,7 +65,7 @@ class System:
             ID.set_online_status(False)
             return True
         
-        
+templates = Jinja2Templates(directory="templates/")        
 x = shipping_adress("HO","225","SAdasd","asdsad","sada","ASDASDS","asdasdsad")
 Coupon_test = FlatCoupon("26-4-2023", 100, 50, 1)
 my_pc_coupon = PercentageCoupon("23-4-2023", 100, 20, 10, 1)
@@ -69,32 +73,50 @@ mySystem = System()
 mySystem.get_coupon_catalog().add_coupon(Coupon_test)
 mySystem.get_coupon_catalog().add_coupon(my_pc_coupon)
 mySystem.create_account("MOMO@gmail.com","1234")
-print(mySystem.search_user_by_email("MOMO@gmail.com").add_user_coupon("2",mySystem.get_coupon_catalog().get_coupons()))
+print(mySystem.search_user_by_email("MOMO@gmail.com").edit_phone_number("1234"))
+
 app = FastAPI()
+origins = [
+    "http://localhost/",
+    "http://localhost:8000/"
+    "http://localhost:5173/",
+    "http://localhost:8000/login.html"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+templates = Jinja2Templates(directory="")
 @app.get("/")
 def read_root():
     return {"Hello": "World My friend"}
 
 @app.get("/{email}/account/profile",tags=["account"])
-def read_user_infor(email:str):
+def read_user_infor(request:Request,email:str):
     id = mySystem.search_user_by_email(email)
     if id!=False:
-        return {
-                "Username":id.get_username(),
-                "PhoneNumber":id.get_phone_number(),
-                "Email":id.get_email()
-                }
+        username = id.get_username()
+        email = id.get_email()
+        phone_number=id.get_phone_number()
+        return {'username': username,'email':email,'phone':phone_number}
+    #templates.TemplateResponse('profile.html', context={'request': request, 'username': username,'email':email,'phone':phone_number})
     else:
-        return {"Failed":"ID not Found"}
+        return {'result': "failed"}
+    #templates.TemplateResponse('profile.html', context={'request': request, 'result': "failed"})
 
-@app.get("/{email}/account/shipping_address",tags=["account"])
+@app.get("/{email}/account/view_shipping_address",tags=["account"])
 def read_user_shipping_address_infor(email:str):
     shipping_address_dict = {}
     id = mySystem.search_user_by_email(email)
     if id!=False:
         k= 1
         for i in id.get_address():
-            x = {"name_surname" : i.get_name_surname(),
+            x = {
+                "name_surname" : i.get_name_surname(),
                 "phone_number":i.get_phone_number(),
                 "address":i.get_address(),
                 "sub_district":i.get_sub_district(),
@@ -108,14 +130,16 @@ def read_user_shipping_address_infor(email:str):
         return {"failed":"ID not found"} 
 
 @app.post("/login",tags=["account"])
-def  login(data:dict):
+def  login(request:Request,data:dict):
      email = data["email"]
      password = data["password"]
      x = mySystem.login(email,password)
      if x != False:
-         return {"Login":f"{email} Login Success"}
+         return {'result': "success"}
      else:
-         return {"Login":"email or password invaild"}
+         return {'result': "failed"}
+
+     #templates.TemplateResponse('login.html', context={'request': "failed", 'result': "failed"})
 
 @app.post("/register",tags=["account"])
 def register(data:dict):
@@ -123,9 +147,9 @@ def register(data:dict):
     password = data["password"]
     x = mySystem.create_account(email,password)
     if x == True :
-        return {"Register":len(mySystem.get_user_lst())}
+         return {'request': "success", 'result': "success"}
     else :
-        return {"Register":"failed email is already use"}
+        return {'request': "failed", 'result': "failed"}
 
 @app.post("/{email}/account/add_shipping_address" , tags=["account"])
 def add_shipping_address(email:str,data:dict):
@@ -184,11 +208,11 @@ def edit_username(email:str,data:dict):
     id = mySystem.search_user_by_email(email)
     if id!= False:
         if id.edit_username(new_username):
-            return {"Success":f"edit username from {email}"}
+            return {"result":"success"}
         else:
-            return {"failed":"Something but i dont know"}
+            return {"result":"Something but i dont know"}
     else:
-        return {"failed":"email not found"}
+        return {"result":"email not found"}
 
 @app.put("/{email}/account/edit_phonenumber",tags=["account"])
 def edit_phonenumber(email:str,data:dict):
@@ -196,9 +220,9 @@ def edit_phonenumber(email:str,data:dict):
     id = mySystem.search_user_by_email(email)
     if id!=False:
         if id.edit_phone_number(new_phone_number):
-            return {"Success":f"edit Phone-Number form {email}"}
+            return {"result":f"success"}
         else:
-            return{"Failed":f"Phone_Number False"}
+            return{"result":f"failed"}
     else:
         return{"Failed":"Email not found"}
 
@@ -249,5 +273,14 @@ def  user_used_coupon(email:str,data:dict):
                 return {"Failed":f"you has already used this coupon"}
         else:
             return {"Failed":"Coupon Not Found"}
+    else:
+        return {"Failed":"Email Not Found"}
+    
+@app.get("/{email}/account/view_order",tags=["account"])
+def view_order(email:str):
+    id = mySystem.search_user_by_email(email)
+    if id!=False:
+        response = id.get_order_history().get_order_info()
+        return {"Order":response}
     else:
         return {"Failed":"Email Not Found"}
