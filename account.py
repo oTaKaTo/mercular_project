@@ -3,6 +3,9 @@ from shipping_address import shipping_adress
 from cart import Cart
 from copy import copy
 from uuid import uuid4
+from Order import Order
+from OrderHistory import OrderHistory
+
 class Account:
      def __init__(self, username, password, email, phone_number="",online_status:bool=False):
           self.__username = username
@@ -69,7 +72,7 @@ class Admin(Account):
           
 class User(Account):
      
-     def __init__(self, username, password, email, phone_number:int="", person_data="", address=[], cart="", order=[],  order_history=[], coupon=[]):
+     def __init__(self, username, password, email, phone_number:int="", person_data="", address=[], cart="", order=[],  order_history=OrderHistory(), coupon=[]):
         Account.__init__(self, username, password, email, phone_number)
         self.__person_data = person_data
         self.__address = [] # List of Shipping_Address Object 
@@ -87,8 +90,10 @@ class User(Account):
 
      def get_user_coupon(self):
           return self.__user_coupons
+     
      def get_used_user_coupon(self):
           return self.__used_user_coupons
+     
      def get_expire_coupon(self):
           return self.__expire_user_coupons
 
@@ -108,8 +113,7 @@ class User(Account):
      
      def get_order_history(self):
           return self.__order_history
-     
-     
+          
      def check_coupon_id_in_user_coupon(self,coupon_id):
           for coupon in self.__user_coupons:
                if coupon.get_id()==coupon_id:
@@ -153,4 +157,4 @@ class User(Account):
                return True
           else:
                return False
-
+     
