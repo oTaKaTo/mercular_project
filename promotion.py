@@ -2,10 +2,11 @@ from datetime import date
 
 class Promotion:
     # due_date format = DD-MM-YYYY
-    def __init__(self, due_date, minimum_price, description=""):
+    def __init__(self, due_date, minimum_price, title="", description=""):
         self.__due_date = due_date
         self.__minimum_price = minimum_price
         self.__description = description
+        self.__title = title
 
     def is_available_date(self):
         today = date.today()
@@ -25,10 +26,13 @@ class Promotion:
     
     def get_minimum_price(self):
         return self.__minimum_price
+    
+    def get_title(self):
+        return self.__title
 
 class FlatDiscount(Promotion):
-    def __init__(self, due_date, minimum_price, discount, description=""):
-        Promotion.__init__(self, due_date, minimum_price, description)
+    def __init__(self, due_date, minimum_price, discount, title="", description=""):
+        Promotion.__init__(self, due_date, minimum_price, title, description)
         self.__discount = discount
 
     def get_discount(self, price):
@@ -40,8 +44,8 @@ class FlatDiscount(Promotion):
         return str(self.__discount) + '.-'
 
 class PercentageDiscount(Promotion):
-    def __init__(self, due_date, minimum_price, discount_percent, max_discount, description=""):
-        Promotion.__init__(self, due_date, minimum_price, description)
+    def __init__(self, due_date, minimum_price, discount_percent, max_discount, title="", description=""):
+        Promotion.__init__(self, due_date, minimum_price, title, description)
         self.__discount_percent = discount_percent
         self.__max_discount = max_discount
     
@@ -112,13 +116,13 @@ class Coupon(Promotion):
         return False
 
 class FlatCoupon(FlatDiscount, Coupon):
-    def __init__(self, due_date, minimum_price, discount, quantity, coupon_type, code_id=coupon_id_gen.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
-        FlatDiscount.__init__(self, due_date, minimum_price, discount, description)
+    def __init__(self, due_date, minimum_price, discount, quantity, coupon_type, code_id=coupon_id_gen.generateID(), title="", description="", ban_products=[], ban_types=[], types="All", brands="All"):
+        FlatDiscount.__init__(self, due_date, minimum_price, discount, title, description)
         Coupon.__init__(self, quantity, code_id, coupon_type, ban_products, ban_types, types, brands)
 
 class PercentageCoupon(PercentageDiscount, Coupon):
-    def __init__(self, due_date, minimum_price, discount_percent, max_discount, quantity, coupon_type, code_id=coupon_id_gen.generateID(), description="", ban_products=[], ban_types=[], types="All", brands="All"):
-        PercentageDiscount.__init__(self, due_date, minimum_price, discount_percent, max_discount, description)
+    def __init__(self, due_date, minimum_price, discount_percent, max_discount, quantity, coupon_type, code_id=coupon_id_gen.generateID(), title="", description="", ban_products=[], ban_types=[], types="All", brands="All"):
+        PercentageDiscount.__init__(self, due_date, minimum_price, discount_percent, max_discount, title, description)
         Coupon.__init__(self, quantity, code_id, coupon_type, ban_products, ban_types, types, brands)
 
 class CouponCatalog:
@@ -136,7 +140,7 @@ class CouponCatalog:
         return self.__coupons
 
     def add_coupon(self, coupon):
-        if int(coupon.get_id()) < len(self.__coupons):
+        if int(coupon.get_id()) + 1 < len(self.__coupons):
             return False
         self.__coupons.append(coupon)
         return True
