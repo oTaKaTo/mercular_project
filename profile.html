@@ -3,7 +3,7 @@
   <head>
     <link rel="stylesheet" href="font.css">
     <meta charset="UTF-8">
-    <title>User Information</title>
+    <title>mercule</title>
     <style>
       *{margin: 0;
       padding: 0;}
@@ -84,21 +84,6 @@
         cursor: pointer;
       }
        
-       .popup-container{
-        background-color: rgb(255, 255, 255);
-        color: rgb(33, 43, 54);
-        transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-        border-radius: 4px;
-        box-shadow: none;
-        margin: 32px;
-        position: relative;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        max-height: calc(100% - 64px);
-        max-width: 600px;
-        }
-       
       .close {
         color: #aaa;
         float: right;
@@ -124,7 +109,7 @@
         transform: translate(-50%, -50%);
         z-index: 4;
         width: 400px;
-        height: 200px;
+        height: 160px;
         border-radius: 10px;
         background-color: white;
       }
@@ -139,22 +124,23 @@
         background-color: gray;
       }
     </style>
+    <center><img src="https://i0.wp.com/learn.onemonth.com/wp-content/uploads/2017/08/1-10.png?fit=845%2C503&ssl=1"  style="display: none;" id="error_img"></center>
   </head>
   <div class="popup-container" style="display: none;" id="popup-contain-user">
-    <div style="padding-right: 60%;font-size: 30px;">ชื่อโปรไฟล์</div>
-    <input type="whiteblock" value="Hi" id="new_name" style="padding-right: 10%;" required>
-    <button type="bluebutton" style="left: 250px ;top: 62px;background-color: rgb(255, 255, 255);color: rgb(15, 99, 233);border: 0.5px solid rgb(15, 99, 233);" onclick="hidePopup_username()">ยกเลิก</button>
-    <button type="bluebutton" style="left: 320px ;top:20px;" onclick="submit_change_username()">บันทึก</button>
+    <div style="padding-left: 5%;font-size: 30px;">ชื่อโปรไฟล์</div>
+    <input type="whiteblock" value="Hi" id="new_name" style="margin-left: 5%;" required>
+    <button type="bluebutton" style="left: 250px ;top: 20px;background-color: rgb(255, 255, 255);color: rgb(15, 99, 233);border: 0.5px solid rgb(15, 99, 233);" onclick="hidePopup_username()">ยกเลิก</button>
+    <button type="bluebutton" style="left: 320px ;top:-20px;" onclick="submit_change_username()">บันทึก</button>
   </div>
   <div class="popup-container" style="display: none;" id="popup-contain-phone">
-    <div style="padding-right: 40%;font-size: 20px;">หมายเลขโทรศัพท์</div>
-    <input type="whiteblock" value="Hi" id="new_phone_number" style="left:100px;" required>
-    <button type="bluebutton" style="left: 250px ;top: 62px;background-color: rgb(255, 255, 255);color: rgb(15, 99, 233);border: 0.5px solid rgb(15, 99, 233);" onclick="hidePopup_phone()">ยกเลิก</button>
-    <button type="bluebutton" style="left: 320px ;top:20px;" onclick="submit_change_phone()">บันทึก</button>
+    <div style="padding-left: 5%;font-size: 30px;">หมายเลขโทรศัพท์</div>
+    <input type="whiteblock" value="Hi" id="new_phone_number" style="margin-left:5%;" required>
+    <button type="bluebutton" style="left: 250px ;top: 20px;background-color: rgb(255, 255, 255);color: rgb(15, 99, 233);border: 0.5px solid rgb(15, 99, 233);" onclick="hidePopup_phone()">ยกเลิก</button>
+    <button type="bluebutton" style="left: 320px ;top:-20px;" onclick="submit_change_phone()">บันทึก</button>
   </div>
   <div class="popup-background" style="display: none;" id="popup-bg"></div>
   <body>
-    <div class="container">
+    <div class="container" style="display: none;" id="profile_display">
       <h1>ข้อมูลส่วนบุคคล</h1>
       <p>ข้อมูลส่วนบุคคลและตัวเลือกในการจัดการ</p>
       <ul>
@@ -162,28 +148,36 @@
         <hr width="100%">
         <li><strong style="padding-right: 21.2%;">หมายเลขโทรศัพท์:</strong> <p style="display: inline;" id = "phone_display"></p> <button onclick="openPopup_phone()">แก้ไข</button></li>
         <hr width="100%">
-        <li><strong style="padding-right: 34.5%;">อีเมล:</strong><p style="display: inline;" id = "email_display"></li>
+        <li><strong style="padding-right: 35%;">อีเมล:</strong><p style="display: inline;" id = "email_display"></li>
         <hr width="100%">
-        <li><strong style="padding-right: 30%;">Address:</strong> 123 Main St, Anytown USA
+        <li><strong style="padding-right: 35%;">ที่อยู่:</strong> 123 ไทย 0014
       </ul>
     </div>
-    <div id="name-popup" class="popup">
-      <div class="popup-content">
-        <span class="close" onclick="closePopup('name')">&times;</span>
-        
+         
     <script>
-      email = "MOMO@gmail.com";
-      var gobal =1;
-      fetch("http://127.0.0.1:8000/"+email+"/account/profile").then(response=>response.json()).then(data=>{ 
-        gobal= data;
-        var a = document.getElementById('username_display');
-        a.innerHTML = data.username;
-        a = document.getElementById('phone_display');
-        a.innerHTML = data.phone;
-        a = document.getElementById('email_display');
-        a.innerHTML = data.email;
-        
-      })
+      const myVariable = sessionStorage.getItem("username");
+      console.log(myVariable)
+      if(myVariable!=null)
+        { var gobal =1;
+          email = myVariable;
+          b = document.getElementById("profile_display");
+          
+          fetch("http://127.0.0.1:8000/"+email+"/account/profile").then(response=>response.json()).then(data=>{ 
+          gobal= data;
+          var a = document.getElementById('username_display');
+          a.innerHTML = data.username;
+          a = document.getElementById('phone_display');
+          a.innerHTML = data.phone;
+          a = document.getElementById('email_display');
+          a.innerHTML = data.email;
+          b.style.display = 'block' ;
+          })
+      }
+      else
+        {
+          a = document.getElementById("error_img");
+          a.style.display = 'block';
+        }
       function hidePopup_username()
       {
         var a = document.getElementById("popup-contain-user");
@@ -210,8 +204,8 @@
         { 
         if (data.result == "success")
         {
-          y.innerHTML = x
-          gobal.phone =x
+          y.innerHTML = x ;
+          gobal.phone =x ;
           hidePopup_phone()
         }
         })
