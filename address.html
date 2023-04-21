@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="font.css">
+    <meta charset="UTF-8">
+    <title>mercule</title>
+    <style>
+      *{margin: 0;
+      padding: 0;}
+      body {
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        }
+      button[type = "bluebutton"]
+          {
+            position: absolute;
+            display: flex;
+              align-items:center;
+              justify-content:right;
+              position: relative;
+              box-sizing: border-box;
+              border: 5px;
+              cursor: pointer;
+              font-size: 14px;
+              color: rgb(255, 255, 255);
+              background-color: rgb(15, 99, 233);
+              border-radius: 8px;
+              font-weight: bold;
+              height: 40px;
+        }
+      input[type ="whiteblock"] {
+        color: currentcolor;
+        border: 20px;
+        border-radius: 5px;
+        border-color: black;
+        box-sizing: content-box;
+        background: none;
+        height: 10px;
+        margin: 0px;
+        -webkit-tap-highlight-color: transparent;
+        display: block;
+        width: 320px;
+        animation-name: mui-auto-fill-cancel;
+        animation-duration: 10ms;
+        padding: 16.5px 14px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+      }
+      .container {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #ffffff;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 30px;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        font-size: 20px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        position: relative;
+      }
+      strong {
+        font-weight: 700;
+      }
+      button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-color: transparent;
+        color: rgba(28, 6, 194, 0.884);
+        border: none;
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+       
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .popup-container{
+        padding-top: 20px;
+        padding-left: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-grow: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 4;
+        width: 410px;
+        height: 650px;
+        border-radius: 10px;
+        background-color: white;
+      }
+      .popup-background{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        opacity: 0.4;
+        z-index: 3;
+        background-color: gray;
+      }
+    </style>
+    <script>
+      function hidePopup_username()
+      {
+        var a = document.getElementById("popup-contain-user");
+        var b =document.getElementById("popup-bg");
+        a.style.display = 'none';      
+        b.style.display = 'none';
+      }
+      function hidePopup_add()
+      {
+        var a = document.getElementById("popup_contain_add_address");
+        var b =document.getElementById("popup-bg");
+        a.style.display = 'none';      
+        b.style.display = 'none';
+      }
+      function submit_change_edit()
+      {
+        new_name=document.getElementById("new_name").value;
+        new_phone=document.getElementById("new_phone").value;
+        new_address=document.getElementById("new_address").value;
+        new_sub_district=document.getElementById("new_sub_district").value;
+        new_district=document.getElementById("new_district").value;
+        new_province=document.getElementById("new_province").value;
+        new_postal_code=document.getElementById("new_postal_code").value;
+        console.log(address_id);
+        fetch("http://127.0.0.1:8000/"+email+'/account/'+address_id+"/edit_shipping_address",
+        {method: 'PUT',
+           body:JSON.stringify({
+          "new_name_surname":new_name,
+          "new_phone_number":new_phone,
+          "new_address":new_address,
+          "new_sub_district":new_sub_district,
+          "new_district":new_district,
+          "new_province":new_province,
+          "new_postal_code":new_postal_code
+        }),
+        headers :{'Content-Type': 'application/json'}
+      }).then(response=>response.json()).then(data=>
+        { 
+          console.log(address_id);
+          console.log(data);
+        if (data.result == "success")
+        {
+          fetch("http://127.0.0.1:8000/"+email+"/account/view_shipping_address").then(response=>response.json()).then(data=>{ 
+            global = data;})
+            location.reload()
+          hidePopup_username()
+        }
+        })
+      }
+      function submit_change_add()
+      {
+        new_name=document.getElementById("add_new_name").value;
+        new_phone=document.getElementById("add_new_phone").value;
+        new_address=document.getElementById("add_new_address").value;
+        new_sub_district=document.getElementById("add_new_sub_district").value;
+        new_district=document.getElementById("add_new_district").value;
+        new_province=document.getElementById("add_new_province").value;
+        new_postal_code=document.getElementById("add_new_postal_code").value;
+        fetch("http://127.0.0.1:8000/"+email+"/account/add_shipping_address",
+           {method: 'POST',
+           body:JSON.stringify({
+          "new_name_surname":new_name,
+          "new_phone_number":new_phone,
+          "new_address":new_address,
+          "new_sub_district":new_sub_district,
+          "new_district":new_district,
+          "new_province":new_province,
+          "new_postal_code":new_postal_code
+        }),
+        headers :{'Content-Type': 'application/json'}
+      }).then(response=>response.json()).then(data=>
+        { 
+          if (data.result == "success")
+        {
+            fetch("http://127.0.0.1:8000/"+email+"/account/view_shipping_address").then(response=>response.json()).then(data=>{ 
+            global = data;
+            i = Object.keys(global).length
+            location.reload()
+            hidePopup_add()
+          })
+        }
+        })
+      }
+      function openPopup_edit(i)
+      {
+        var a = document.getElementById("popup-contain-user");
+        var b =document.getElementById("popup-bg");
+        document.getElementById("new_name").value = global[i].name_surname
+        document.getElementById("new_phone").value = global[i].phone_number
+        document.getElementById("new_address").value = global[i].address
+        document.getElementById("new_sub_district").value = global[i].sub_district
+        document.getElementById("new_district").value = global[i].district
+        document.getElementById("new_province").value = global[i].province
+        document.getElementById("new_postal_code").value = global[i].postal_code
+        address_id = i;
+        console.log(address_id);
+        a.style.display = 'block';
+        b.style.display = 'block';
+      }
+      function openPopup_add()
+      {
+        var a = document.getElementById("popup_contain_add_address");
+        var b =document.getElementById("popup-bg");
+        document.getElementById("new_name").value = ""
+        document.getElementById("new_phone").value = ""
+        document.getElementById("new_address").value = ""
+        document.getElementById("new_sub_district").value =  ""
+        document.getElementById("new_district").value =  ""
+        document.getElementById("new_province").value =  ""
+        document.getElementById("new_postal_code").value =  ""
+        a.style.display = 'block';      
+        b.style.display = 'block';
+      }
+      function delete_address(i)
+      {
+        fetch("http://127.0.0.1:8000/"+email+"/account/"+i+"/delete_shipping_address",
+        {method: 'PUT',headers :{'Content-Type': 'application/json'}}).then(response=>response.json()).then(data=>{ 
+          location.reload()
+        })
+      }
+      ///<li><strong style="padding-right: 30%;">ชื่อโปรไฟล์</strong> <p style="display: inline;" id = "username_display"></p> <button onclick="openPopup_username()">แก้ไข</button></li><hr width="100%">
+      {
+      email = "MOMO@gmail.com";
+      var global = 1;
+      var address_id
+      var ui_display = document.getElementById("my_address")
+      fetch("http://127.0.0.1:8000/"+email+"/account/view_shipping_address").then(response=>response.json()).then(data=>{ 
+      global = data;
+      for (let i in global)
+      {
+        a = document.getElementById('my_address');
+        a.innerHTML += '<li><strong  id=\"surname'+i+'\">'+global[i].name_surname+'</strong> <div style=\"padding-left:50px;display:inline\;" id =\"address' + i+'\">'+global[i].address+'</div> <button onclick=\"openPopup_edit('+i+')\" style=\"padding-right: 5%;\">แก้ไข</button><button onclick=\"delete_address('+i+')\">ลบ</button></li>'
+        a.innerHTML += '<strong style=\"padding-right: 30%;font-size: 20px;\" id=\"phone_number'+i+'\">'+global[i].phone_number+'</strong>'
+        a.innerHTML +='<hr width=\"100%\">'
+      }
+      })
+    }
+    </script>
+  </head>
+  <div class="popup-container" style="display: none;" id="popup-contain-user">
+    <span class="close" style="color: red;padding-right: 5%;margin-top: -8px;"  onclick="hidePopup_username()">&times;</span>
+    <div style="padding-left: 5%;font-size: 30px;">ที่อยู่จัดส่งสินค้า</div>
+    <p  style="margin-left: 5%;padding-top: 2%;">ชื่อ</p><input type="whiteblock" value="Hi" id="new_name" style="margin-left: 5%;" required>
+    <p style="margin-left: 5%;padding-top: 2%;">หมายเลขโทรศัพท์</p><input type="whiteblock" value="Hi" id="new_phone" style="margin-left: 5%;" required>
+    <p  style="margin-left: 5%;padding-top: 2%;">ที่อยู่</p><input type="whiteblock" value="Hi" id="new_address" style="margin-left: 5%;" required>
+    <p style="margin-left: 5%;padding-top: 2%;">ตำบล</p><input type="whiteblock" value="Hi" id="new_sub_district" style="margin-left: 5%;" required>
+    <p style="margin-left: 5%;padding-top: 2%;">เขต</p><input type="whiteblock" value="Hi" id="new_district" style="margin-left: 5%;" required>
+    <p style="margin-left: 5%;padding-top: 2%;">อำเภอ</p><input type="whiteblock" value="Hi" id="new_province" style="margin-left: 5%;" required>
+    <p style="margin-left: 5%;padding-top: 2%;">รหัสไปรษณีย์</p><input type="whiteblock" value="Hi" id="new_postal_code" style="margin-left: 5%;" required>
+    <button type="bluebutton" style="left: 250px ;top: 20px;background-color: rgb(255, 255, 255);color: rgb(15, 99, 233);border: 0.5px solid rgb(15, 99, 233);" onclick="hidePopup_username()">ยกเลิก</button>
+    <button type="bluebutton" style="left: 320px ;top:-20px;" onclick="submit_change_edit()">บันทึก</button>
+  </div>
+  <div class="popup-container" style="display: none;" id="popup_contain_add_address">
+    <span class="close" style="color: red;padding-right: 5%;margin-top: -8px;"  onclick="hidePopup_add()">&times;</span>
+    <div style="padding-left: 5%;font-size: 30px;">ที่อยู่จัดส่งสินค้า</div>
+    <p  style="margin-left: 5%;padding-top: 2%;">ชื่อ</p><input type="whiteblock" value="" id="add_new_name" style="margin-left: 5%;" required>
+    <p style="margin-left: 5%;padding-top: 2%;">หมายเลขโทรศัพท์</p><input type="whiteblock" value="" id="add_new_phone" style="margin-left: 5%;" required>
+    <p  style="margin-left: 5%;padding-top: 2%;">ที่อยู่</p><input type="whiteblock" value="" id="add_new_address" style="margin-left: 5%;" required>
+    <p style="margin-left: 5%;padding-top: 2%;">ตำบล</p><input type="whiteblock" value="" id="add_new_sub_district" style="margin-left: 5%;" required>
+    <p style="margin-left: 5%;padding-top: 2%;">เขต</p><input type="whiteblock" value="" id="add_new_district" style="margin-left: 5%;" required>
+    <p style="margin-left: 5%;padding-top: 2%;">อำเภอ</p><input type="whiteblock" value="" id="add_new_province" style="margin-left: 5%;" required>
+    <p style="margin-left: 5%;padding-top: 2%;">รหัสไปรษณีย์</p><input type="whiteblock" value="" id="add_new_postal_code" style="margin-left: 5%;" required>
+    <button type="bluebutton" style="left: 250px ;top: 20px;background-color: rgb(255, 255, 255);color: rgb(15, 99, 233);border: 0.5px solid rgb(15, 99, 233);" onclick="hidePopup_username()">ยกเลิก</button>
+    <button type="bluebutton" style="left: 320px ;top:-20px;" onclick="submit_change_add()">บันทึก</button>
+  </div>
+  <div class="popup-background" style="display: none;" id="popup-bg"></div>
+  <body>
+    <div class="container">
+      <h1>ที่อยู่จัดส่งสินค้า</h1>
+      <button style="display: flex;position: absolute;top: 110px;right: 20px;" onclick="openPopup_add()"> เพิ่มที่อยู่</button>
+      <p>จัดการที่อยู่จัดส่ง สำหรับการสั่งซื้อสินค้า  </p>
+            <ul id = "my_address"></ul>
+    </div>
+</html>
