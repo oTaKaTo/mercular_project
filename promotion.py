@@ -82,6 +82,11 @@ class Coupon(Promotion):
         self.__brands = brands
         self.__coupon_type = coupon_type
 
+    def use(self):
+        if self.__quantity > 0:
+            self.__quantity -= 1
+        return True
+
     def get_id(self):
         return self.__code_id
     
