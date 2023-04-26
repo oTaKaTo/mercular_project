@@ -1,3 +1,5 @@
+from promotion import *
+
 class ProductCatalog:
     def __init__(self):
         self.__products = []
@@ -7,20 +9,20 @@ class ProductCatalog:
     
     def add_product(self, product):
         for i in self.__products:
-            if product.product_id in i.product_id:
+            if product.get_product_id() in i.get_product_id():
                 return False
         self.__products.append(product)
         return True
 
     def remove_product(self, product_id):
         for i in self.__products:
-            if product_id in i.product_id:
+            if product_id in i.get_product_id():
                 del self.__products[product_id]
                 return True
         return False
 
     def edit_product(self, product):
-        id = product.product_id
+        id = product.get_product_id()
         if id in self.__products:
             self.__products[id] = product
             return True
@@ -30,8 +32,18 @@ class ProductCatalog:
         self.__products[product_id].add_promotion(promotion)
         return True
     
-    def get_product_info(self):
-        return [x.name for x in self.__products]
+    def get_promotional_products(self,type:str):
+        promotional_products = []
+        for i in self.__products:
+            if i.get_type() == type:
+                if i.get_promotions() != None:
+                    promotional_products.append(i)
+        return promotional_products
+
+    def get_product_info(self,product_id):
+         for i in self.__products:
+            if product_id in i.get_product_id():
+                return i
 
     # search box that can search by id, name
     def search_keyword(self, keyword=""):
@@ -46,15 +58,14 @@ class ProductCatalog:
     def search_by_catagories(self,keyword=""):
         search_result = {}
         for i in self.__products:
-            for t in reversed(i.type):
-                if keyword == t:
-                    search_result[i.product_id] = i.name
+                if keyword == i:
+                    search_result[i.get_product_id()] = i.get_name()
         return search_result
 
 
 class Product:
     # type MUST order by big --> small catagory 
-    def __init__(self, product_id:str, object_id:str, name:str, type:list, brand:str, price:int, quantity:int, detail="",image=[], option=""):
+    def __init__(self, product_id:str, object_id:str, name:str, type:str, brand:str, price:int, quantity:int, detail="",image=[], option="",promotion=None):
         self.__product_id = product_id
         self.__object_id = object_id
         self.__name = name
@@ -65,10 +76,14 @@ class Product:
         self.__image = image
         self.__option = option
         self.__detail = detail
-        self.__promotion = []
+        self.__promotion = promotion
     
-    def add_promotion(self, promotion):
-        self.__promotion.append(promotion)
+    def convert_dict(self):
+        return {}
+
+    
+    def add_promotion(self, promotion:Promotion):
+        self.__promotion = promotion
         return True
             
     def get_price(self):
@@ -79,7 +94,10 @@ class Product:
       
     def get_quantity(self):
         return self.__quantity
-     
+    
+    def get_image(self):
+        return self.__image
+    
     def get_type(self):
         return self.__type
  
@@ -92,6 +110,9 @@ class Product:
     def get_name(self):
         return self.__name 
     
+    def get_promotion(self):
+        return self.__promotion
+
     def edit_quantity(self,value):
         self.__quantity = value
 
@@ -110,7 +131,7 @@ class Item:
         self.__quantity = quantity
 
     def get_price(self):
-        return self.__product.get_price() * self.__quantity
+        return self.__product.get_price()
     
     def get_item(self):
             item_info = {
