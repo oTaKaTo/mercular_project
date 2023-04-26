@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('htmldirectory', path='grid.css') }}">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        
+        <a href="index.html"><img src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=128&q=75" style="height: 36px;width: 112px; ; margin-left: 2%; margin-top: 0.5%;" alt="Mercular"></a>
+        
+        {% for row in products %}
+            <div class="row-container">
+                {% for product in row %}
+                    
+                <div class="item-container">
+
+                        <a href="/{{product.get_product_id()}}">
+                            <div class="product-img-container">
+                                <img src="{{product.get_image()[0]}}">
+                            </div>
+                            <div class="product-name">{{product.get_name()}}</div>
+                            <div class="price-container">
+                                <div class="product-discount">-12%</div>
+                                <div class="product-price">{{product.get_price()}} .-</div>
+                            </div>
+                            </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+    </body>
+</html>
