@@ -1,35 +1,44 @@
 <header>
-    <nav className="nav-bar">
-        <div className='logo'>
-            <a href="/">
-                <img src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=256&q=75">
-            </a>   
-        </div>
-        <div className="search-bar">
-            <input type="text" name='search' id="search-input" placeholder='Search' autoComplete="off"></input>
-            <button type="submit" ><img className='search-img' src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
-        </div>
-        <div className="product-type-component">
-            <ul>
-                <li className="hover">
-                    <a href="/">คอมพิวเตอร์</a>
-                </li>
-                <li>
-                    <a href="/">หูฟัง/ลำโพง</a>
-                </li>
-                <li>
-                    <a href="/">เกมมิ่ง</a>
-                </li>
-                <li>
-                    <a href="/">อุปกรณ์มือถือ </a>
-                </li>
-            </ul>
-        </div>
-        <div className="cart">
-            <a href="cart.html"><img src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
-        </div>
-        <div className="user">
-            <a href="cart.html"><img src="https://www.mercular.com/icons/me.png"></img></a>
-        </div>
-  </nav>
-</header> 
+        <nav>
+            <div class="logo">
+                <a href="/">
+                    <img class="logo-img" src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=256&q=75">
+                </a>   
+            </div>
+            <div class="search-bar">
+                <input type="text" name="search" id="search-input" placeholder="Search" autoComplete="off"></input>
+                <button type="submit" ><img class="search-img" src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
+            </div>
+            <div class="product-type-component">
+                <ul>
+                    <li>
+                        <a href="/">คอมพิวเตอร์</a>
+                    </li>
+                    <li>
+                        <a href="/">หูฟัง/ลำโพง</a>
+                    </li>
+                    <li>
+                        <a href="/">เกมมิ่ง</a>
+                    </li>
+                    <li>
+                        <a href="/">อุปกรณ์มือถือ </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="cart">
+                {% if email != "" %} 
+                    <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+                {% else %} 
+                    <a href= "/"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+                {% endif %}
+            </div>
+            <div class="user">
+                {% if email != "" %} 
+                    <a href= "{{email}}/cart"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
+
+                {% else %} 
+                    <a class="user-img" href= "/">Login/Register</img></a>
+                {% endif %}
+            </div>
+        </nav>
+</header>

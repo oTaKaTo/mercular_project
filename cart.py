@@ -63,7 +63,7 @@ class Cart:
     else:
       raise HTTPException(status_code=204, detail="Cart is empty")
 
-  def get_selected_item(self):
+  def get_selected_items(self):
     if(len(self.__selected_item) != 0):
         return self.__selected_item
     raise HTTPException(status_code=404, detail="Item not found")

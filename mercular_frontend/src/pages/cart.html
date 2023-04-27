@@ -1,39 +1,85 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <base href="/" />
-    <link rel="icon" type="image/png" href="https://www.mercular.com/icons/me.png" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('styles', path='font.css') }}" >
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mercular</title>
+    {% include 'global_head.html' %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('styles', path='item_list.css') }}" >
+    <link rel="stylesheet" type="text/css" href="{{ url_for('styles', path='item.css') }}" >
   </head>
   <body>
-    <div id="cart-page">
-      {% for item in items_info %}
-        <div className="Item">
-          <div>
-              <input 
-                type="checkbox" 
-                id = "{{list(items_info.keys()).index(item)}}"
-              >
-            </input>
-              <span>
-                  <img className="item-image" src="https://www.mercular.com/icons/me.png"></img>
-                  <tr>
-                      <p>item_name : {{item}}</p>
-                      <p>item_option : {{items_info[item].option}}</p>
-                  </tr>
-              </span>
+    {% set total_price = dict_price['total_price'] %}
+    {% set discount_price = dict_price['discount_price'] %}
+    {% include 'nav-bar.html' %}
+    <form method="put" action = /{{email}}/cart>
+      <div class="item-list">
+        {% for item in items_info %}
+          {% set index = list(items_info.keys()).index(item) %}
+          <div class="item">
+            <div>
+              {% if item in selected_info %}
+                <input  type = "checkbox" 
+                        id = {{index}}
+                        value = {{index}}
+                        checked = true
+                        onchange="checkbox_handle(this, {{items_info[item].price}}, {{index}})">
+              {% else %}
+                <input  type = "checkbox" 
+                        id = {{index}}
+                        value = {{index}}
+                        onchange="checkbox_handle(this, {{items_info[item].price}}, {{index}})">
+                        
+              {% endif %}
+                <span>
+                    <img class="item-image" src="https://www.mercular.com/icons/me.png"></img>
+                    <tr>
+                        <p>item_name : {{item}}</p>
+                        <p>item_option : {{items_info[item].option}}</p>
+                    </tr>
+                </span>
+            </div>
+            <div>
+                <p>item_price : {{items_info[item].price}}</p>
+                <p>item_quantity : {{items_info[item].quantity}}</p>
+            </div>
           </div>
-          <div>
-              <p>item_price : {{items_info[item].price}}</p>
-              <p>item_quantity : {{items_info[item].quantity}}</p>
-          </div>
-        </div>
-        <hr>
-      {%endfor%}
+          <hr>
+        {%endfor%}
+        <p id = "Total">Total price: {{total_price}}<p>
+        <p id = "Discounted">Discounted price: {{discount_price}}</p>
+        <input class="submit" type="submit" value="checkbox">
+      </div>
+    </form>
+    <script>
+      var temp_total_price
+      document.addEventListener("DOMContentLoaded", (event) => {
+        temp_total_price = {{total_price}};
+      });
       
-    </div>
+        function selecting(index){
+          fetch("/{{email}}/cart/selecting_item_and_coupon",
+          {method: 'PUT',
+          body:JSON.stringify({
+                                "selected_item_idx": index
+                              }),
+          headers :{'Content-Type': 'application/json'}
+        })
+      }
+      
+      function checkbox_handle(this_checkbox, item_price, item_no){
+        
+        if (this_checkbox.checked == true){
+          temp_total_price = temp_total_price + item_price;
+          total = "Total price: " + (temp_total_price).toString() + "";
+          discount = "Discounted price: {{discount_price}}";
+          selecting(item_no)
+        }
+        else{
+          temp_total_price = temp_total_price - item_price;
+          total = "Total price: " + (temp_total_price).toString() + "";
+          discount = "Discounted price: {{discount_price}}";
+        }
+        document.getElementById("Total").innerText = total;
+        document.getElementById("Discounted").innerText = discount;
+      }
+    </script>
   </body>
 </html>

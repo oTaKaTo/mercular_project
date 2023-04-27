@@ -1,11 +1,16 @@
-.Item {
+.item-list .item {
     flex-wrap: wrap;
     height: unset;
     padding-left: 8px;
     padding-right: 16px;
     border-bottom: 1px solid rgb(221, 221, 221);
+    background-color: red;
 }
 
-.Item .checkbox {
+.item .checkbox {
     padding: 0px 20%;
+}
+
+.item .item-image{
+    background-color: yellow;
 }

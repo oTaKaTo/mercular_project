@@ -48,39 +48,50 @@ async def index(request: Request):
 
 @app.get('/{email}/cart', tags=["Page"], response_class=HTMLResponse)
 async def cart(email: str, request: Request):
-        response = {}
+        items_info = {}
+        selected_info = {}
         user = system.check_exists_account(email)
         user_cart = user.get_user_cart()
+        dict_price = {   "total_price": user_cart.get_total_price(),
+                        "discount_price": user_cart.get_discounted_price(None)}
         items = user_cart.get_items_in_cart()
+        selected_item = user_cart.get_selected_items()
+        for selected in selected_item:
+            selected_info.update(selected.get_item())
+            
         for item in items:
-            response.update(item.get_item())
-        return templates.TemplateResponse("cart.html", {"request": request, "items_info": response, "list": list})
+            items_info.update(item.get_item())
+        return templates.TemplateResponse("cart.html", {"request": request, 
+                                                        "items_info": items_info, 
+                                                        "list": list,
+                                                        "email": user.get_Email(), 
+                                                        "dict_price": dict_price, 
+                                                        "selected_info": selected_info})
 
 
 @app.put("/{email}/cart/selecting_item_and_coupon", tags = ["View Cart"])
-async def select_item(email: str, selected_item_idx: list, selected_coupon: Optional[str] = None):
+async def select_item(email: str, selected_item_idx: int, selected_coupon: Optional[str] = None):
     user = system.check_exists_account(email)
     user_cart = user.get_user_cart()
     cart_items = user_cart.get_items_in_cart()
-    if(len(cart_items) >= max(selected_item_idx)):
-        for idx in selected_item_idx:
-            user_cart.select_items(cart_items[idx])
+    if(selected_item_idx < len(cart_items)):
+        user_cart.select_items(cart_items[selected_item_idx])
     
     
 @app.get("/{email}/checkout/make_payment", tags = ["Checkout"])
-async def make_payment(email: str, selected_items: dict) -> dict:
+async def make_payment(email: str, selected_info: dict) -> dict:
         user = system.check_exists_account(email)
         user_cart = user.get_user_cart()
-        selected_items = user_cart.get_items_in_cart()
+        selected_info = user_cart.get_items_in_cart()
 
 @app.get("/{email}/checkout/pre_checkout", tags = ["Checkout"])
 async def summarize(email: str) -> dict:
     response = {}
     user = system.check_exists_account(email)
     user_cart = user.get_user_cart()
-    selected_items = user_cart.get_selected_item()
-    if(isinstance(selected_items, list)):
-        for item in selected_items:
+    selected_info = user_cart.get_selected_info()
+    if(isinstance(selected_info, list)):
+        for item in selected_info:
             response.update(item.get_item())
         response.update({
                         "total_price": user_cart.get_total_price(),

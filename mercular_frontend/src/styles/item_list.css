@@ -4,3 +4,7 @@
     box-sizing: border-box;
 }
 
+.item-list {
+    top: 50%;
+    left: 50%;
+}
