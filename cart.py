@@ -1,5 +1,6 @@
 from Product import Item
-from exception import CartErrorException
+import main
+from fastapi.exceptions import HTTPException
 
 class Cart:
   def __init__(self):
@@ -26,7 +27,7 @@ class Cart:
       self.__total_item -= items.get_quantity()
       self.__items.remove(items)
     else:
-      raise CartErrorException("Cart is empty")
+      raise HTTPException(status_code=204, detail="Cart is empty")
   
   def edit_amount_item(self, items: Item, quantity):
     if(self.__items > 1):
@@ -34,7 +35,7 @@ class Cart:
       self.__total_item += delta_quantity
       items.set_quantity(quantity)
     else:
-      raise CartErrorException("Cart is empty")
+      raise HTTPException(status_code=204, detail="Cart is empty")
     
   def __update_total_price(self): #update_total_item(self)
     self.__total_price = 0
@@ -46,26 +47,26 @@ class Cart:
   def get_items_in_cart(self):
     if(len(self.__items) != 0):
       return self.__items
-    raise CartErrorException("Cart is empty")
+    raise HTTPException(status_code=204, detail="Cart is empty")
   
   def select_items(self, items: Item):
     if(len(self.__items) != 0):
       self.__selected_item.append(items)
       self.__update_total_price()
     else:
-      raise CartErrorException("Cart is empty")
+      raise HTTPException(status_code=204, detail="Cart is empty")
   
   def deselect_items(self, items: Item):
     if(len(self.__items) != 0):
       self.__selected_item.remove(items)
       self.__update_total_price()
     else:
-      raise CartErrorException("Cart is empty")
-   
+      raise HTTPException(status_code=204, detail="Cart is empty")
+
   def get_selected_item(self):
     if(len(self.__selected_item) != 0):
         return self.__selected_item
-    raise CartErrorException("Item not found")
+    raise HTTPException(status_code=404, detail="Item not found")
 
   def get_total_price(self) -> float:
     return self.__total_price
@@ -86,10 +87,16 @@ class Cart:
 
   def checkout(self):
     price = self.get_total_price()
+    product_catalog = main.product_catalog.remove_product()
+    coupon_catalog = main.coupoun_catalog()
+    coupon = self.__coupon
     try:
       for item in self.get_selected_item():
-        if (not self.__coupon.is_available(price, item.get_type_brand_id())) or item.get_quantity() > item.get_amount():
+        if (self.coupon and not coupon.is_available(price, item.get_type_brand_id())) or item.get_quantity() > item.get_amount():
           return False
+        for _ in item.get_quantity():
+          product_catalog.remove_product(item.get_product().get_product_id())
+        coupon_catalog.delete_coupon(coupon.get_id())
       return True
     except:
       return False

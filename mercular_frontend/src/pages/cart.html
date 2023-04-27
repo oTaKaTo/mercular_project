@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <base href="/" />
+    <link rel="icon" type="image/png" href="https://www.mercular.com/icons/me.png" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('styles', path='font.css') }}" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mercular</title>
+  </head>
+  <body>
+    <div id="cart-page">
+      {% for item in items_info %}
+        <div className="Item">
+          <div>
+              <input 
+                type="checkbox" 
+                id = "{{list(items_info.keys()).index(item)}}"
+              >
+            </input>
+              <span>
+                  <img className="item-image" src="https://www.mercular.com/icons/me.png"></img>
+                  <tr>
+                      <p>item_name : {{item}}</p>
+                      <p>item_option : {{items_info[item].option}}</p>
+                  </tr>
+              </span>
+          </div>
+          <div>
+              <p>item_price : {{items_info[item].price}}</p>
+              <p>item_quantity : {{items_info[item].quantity}}</p>
+          </div>
+        </div>
+        <hr>
+      {%endfor%}
+      
+    </div>
+  </body>
+</html>

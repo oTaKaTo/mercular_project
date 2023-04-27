@@ -1,0 +1,26 @@
+.nav-bar .search-bar {
+    background-color: whitesmoke;
+    border: none;
+    position: relative;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    background: rgb(222, 221, 221);
+    border-radius: 10px;
+}
+
+.search-bar button {
+    border: none;
+    background: rgb(222, 221, 221);
+    border-radius: 10px;
+    size: 2em;
+}
+
+button .search-img {
+    position: relative;
+    top: 2px;
+    border-radius: 10px;
+    size: 2em
+}

@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    position: sticky;
+    top: 0;
+}
+
+.nav-bar .logo {
+    size: 1em;
+}
+
+.nav-bar .logo .logo-img{
+    width: 40%;
+    height: 40%;
+}
+
+.user-img {
+    width: 40%;
+    height: 40%;
+}
+
+.nav-bar {
+    background-color: whitesmoke;
+    display: flex;
+    align-items: center;
+    justify-content:  space-between;
+    padding: 0px 15.43px 0px 4vw;
+    position: relative;
+}
+
+.nav-bar ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.nav-bar a {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+}
+
+.nav-bar li {
+    display: inline-block;
+    margin: 1vw;
+}
+
+.cart img{
+    padding: 2% 0px;
+    position: relative;
+    height: 1em;
+    width: 1em;
+}

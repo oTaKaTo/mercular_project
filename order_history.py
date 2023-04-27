@@ -7,7 +7,7 @@ class OrderHistory:
      def get_order_info(self):
           result = ""
           for order in self.__orders:
-              result += f"{order.get_order()}" + '\n'
+               result += f"{order.get_order()}" + '\n'
           result = result[:-1]
           return result
      
