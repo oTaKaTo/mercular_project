@@ -10,20 +10,28 @@
                 <button class = "search-button" type="submit" ><img class="search-img" src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
             </div>
             <div class="product-type-component">
-                <ul>
-                    <div class = "type">
-                        <a href="/">คอมพิวเตอร์</a>
-                    </div>
-                    <div class = "type">
-                        <a href="/">หูฟัง/ลำโพง</a>
-                    </div>
-                    <div class = "type">
-                        <a href="/">เกมมิ่ง</a>
-                    </div>
-                    <div class = "type">
-                        <a href="/">อุปกรณ์มือถือ </a>
-                    </div>
-                </ul>
+                <div class = "list">
+                    <form class = "types" action="/">
+                        <button class = "type">
+                            <p>คอมพิวเตอร์</p>
+                        </button>
+                    </form>
+                    <form class = "types" action="/">
+                        <button class = "type">
+                            <p>หูฟัง/ลำโพง</p>
+                        </button>
+                    </form>
+                    <form class = "types" action="/">
+                        <button class = "type">
+                            <p>เกมมิ่ง</p>
+                        </button>
+                    </form>
+                    <form class = "types" action="/">
+                        <button class = "type">
+                            <p>อุปกรณ์มือถือ </p>
+                        </button>
+                    </form>
+                </div>
             </div>
             <div class="utility">
                 {% if email != "" %} 
@@ -60,6 +68,6 @@
                 {
                   window.location.href = "http://localhost:8000/template/profile.html";
                 }
-              </script>
+            </script>
         </nav>
 </header>

@@ -67,3 +67,48 @@ body .cart-contrainer {
     width: 95%;
 }
 
+.item-NotFound {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    width: 50%;
+}
+
+.item-list .item-NotFound{
+    transform: translate(50%, 0);
+    top: -50%;
+    right: -50%;
+    width: 50%;
+} 
+
+#upper-item-NotFound {
+    margin: 0px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 700;
+}
+
+.item-NotFound #upper-item-NotFound {
+    transform: translate(50%, 0);
+    right: -50%;
+    width: 105%;
+}
+
+.item-NotFound #cart-item-NotFound {
+    transform: translate(40%, 0);
+    right: -50%;
+}
+
+#lower-item-NotFound {
+    margin: 0px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+}
+
+.item-NotFound #lower-item-NotFound {
+    transform: translate(50%, 0);
+    right: -50%;
+    width: 75%;
+}

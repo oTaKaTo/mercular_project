@@ -52,42 +52,49 @@ nav .product-type-component {
     width: 40%;
 }
 
-.product-type-component ul {
+.product-type-component .list {
     list-style: none;
-    width: 100%;
     display: inline-flex;
     align-items: center;
-    justify-content:  space-between;
+    justify-content: space-between;
+    width: 100%;
 }
 
-.product-type-component ul .type {
-    border-radius: 10px;
+.product-type-component .list .types {
+    border-radius: 5px;
+    justify-content: space-between;
+    border: 0 solid;
     background-color: rgb(222, 221, 221);
+    font-size: 16px;
     width: 20%;
     height: 25px;
-    margin: 0 6px;
 }
 
-.product-type-component .type{
-    display: flex;
-}
-
-
-.product-type-component ul .type a {
-    color: rgb(0, 0, 0);
-    text-decoration: none;
-    text-align: center;
+.types .type{
     position: relative;
-    margin: 0 auto;
+    transform: translate(-50%, 0);
+    right: -50%;
+    
+    border-radius: 5px;
+    justify-content: space-between;
+    border: 0 solid;
+    background-color: rgb(222, 221, 221);
+    font-size: 16px;
+    width: 100%;
+    height: 25px;
 }
 
-.product-type-component ul .type:hover {
+.product-type-component .types {
+    display: inline-flex;
+}
+
+.product-type-component .list .type:hover {
     background-color: rgb(15, 99, 233);
     transition: 500ms;
 }
 
-.product-type-component ul .type:hover a {
-    color: rgb(255, 255, 255);
+.product-type-component .list .type:hover p{
+    color: white;
 }
 
 nav .search-bar {
@@ -117,7 +124,7 @@ nav .search-bar {
     top: 5px;
 }
 
-button .search-img {
+.search-button .search-img {
     transform: transform(-50%, 50%);
     width: 1.5em;
     height: 1.5em;

@@ -7,7 +7,7 @@ class Cart:
     self.__items = [] # List for store Item object 
     self.__selected_item = []
     self.__total_price = 0
-    self.__total_item = 0
+    self.__total_items = 0
     self.__discounted_price = 0
     
   def add_item(self, items: Item):
@@ -19,12 +19,11 @@ class Cart:
       exisited_item = self.__items[exisited_item_no]
       exisited_item_quantity = exisited_item.get_quantity()
       exisited_item.set_quantity(exisited_item_quantity + items_quantity)
-    self.__total_item += items_quantity
-      
+    self.__total_items += items_quantity
       
   def delete_item(self, items: Item) -> str:
     if(len(self.__items) != 0):
-      self.__total_item -= items.get_quantity()
+      self.__total_items -= items.get_quantity()
       self.__items.remove(items)
     else:
       raise HTTPException(status_code=204, detail="Cart is empty")
@@ -32,7 +31,7 @@ class Cart:
   def edit_amount_item(self, items: Item, quantity):
     if(self.__items > 1):
       delta_quantity = quantity - items.get_quantity()
-      self.__total_item += delta_quantity
+      self.__total_items += delta_quantity
       items.set_quantity(quantity)
     else:
       raise HTTPException(status_code=204, detail="Cart is empty")
@@ -45,9 +44,7 @@ class Cart:
     self.cal_discount_price()
     
   def get_items_in_cart(self):
-    if(len(self.__items) != 0):
       return self.__items
-    raise HTTPException(status_code=204, detail="Cart is empty")
   
   def select_items(self, items: Item):
     if(len(self.__items) != 0):
@@ -64,9 +61,8 @@ class Cart:
       raise HTTPException(status_code=204, detail="Cart is empty")
 
   def get_selected_items(self):
-    if(len(self.__selected_item) != 0):
-        return self.__selected_item
-    raise HTTPException(status_code=404, detail="Item not found")
+    return self.__selected_item
+    
 
   def get_total_price(self) -> float:
     return self.__total_price
