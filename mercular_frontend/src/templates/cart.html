@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include 'global_head.html' %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('styles', path='item_list.css') }}?v=1" >
+    <link rel="stylesheet" type="text/css" href="{{ url_for('styles', path='item.css') }}?v=1" >
+  </head>
+  <body>
+    {% set total_price = dict_price['total_price'] %}
+    {% set discount_price = dict_price['discount_price'] %}
+    {% include 'nav-bar.html' %}
+    <form class= "cart-contrainer" method="put" action = /{{email}}/checkout>
+      <div class="item-list">
+        <p>รถเข็นของฉัน</p>
+        {% for item in items_info %}
+        {% set index = list(items_info.keys()).index(item) %}
+        <div class="item">
+            <div class = "left-item-component">
+              {% if item in selected_info %}
+              <input  type = "checkbox" 
+                      id = {{index}}
+                      value = {{index}}
+                      checked = true
+                      onchange="checkbox_handle(this, {{items_info[item].price}}, {{index}})">
+              {% else %}
+                <input  type = "checkbox" 
+                        id = {{index}}
+                        value = {{index}}
+                        onchange="checkbox_handle(this, {{items_info[item].price}}, {{index}})">
+                        
+              {% endif %}
+              <img src="https://www.mercular.com/icons/me.png"></img>
+              <div>
+                <p id = 'name'>item_name : {{item}}</p>
+                <p id = 'option'>item_option : {{items_info[item].option}}</p>
+              </div>
+            </div>
+            <div class = "middle-item-component">
+              <p>item_price : {{items_info[item].price}}</p>
+            </div>
+            <div class = "right-item-component">
+              <div class = "item-quantity-component">
+                  <button id = "quantity_handler" type="button" onclick="delete_item()">-</button>
+                  <p id = "item-quantity">{{items_info[item].quantity}}</p>
+                  <button id = "quantity_handler" type="button" onclick="add_item()">+</button>
+              </div>
+            </div>
+        </div>
+        <hr>
+        {%endfor%}
+      </div>
+      <div class = "checkout">
+        <div class = "price-contrainer">
+          <div class = 'price-text'>
+            <p id = "order-conclusion">สรุปการสั่งซื้อ</p>
+            <p id = "Total">ยอดรวมสินค้า: {{total_price}}<p>
+            <p id = "Discounted">ยอดรวมส่วนลด: {{discount_price}}</p>
+          </div>
+          <br><hr>
+          <input class="submit" type="submit" value="ทำการสั่งซื้อ">
+        </div>
+      </div>
+    </form>
+    <script>
+      var temp_total_price
+      document.addEventListener("DOMContentLoaded", (event) => {
+        temp_total_price = {{total_price}};
+      });
+      
+      function checkbox_handle(this_checkbox, item_price, item_no){
+        if (this_checkbox.checked == true){
+          temp_total_price = temp_total_price + item_price;
+          total = "ยอดรวมสินค้า: " + (temp_total_price).toString() + "";
+          discount = "ยอดรวมส่วนลด: {{discount_price}}";
+        }
+        else{
+          temp_total_price = temp_total_price - item_price;
+          total = "ยอดรวมสินค้า: " + (temp_total_price).toString() + "";
+          discount = "ยอดรวมส่วนลด: {{discount_price}}";
+        }
+        document.getElementById("Total").innerText = total;
+        document.getElementById("Discounted").innerText = discount;
+      }
+      
+      /*function add_item(){
+        
+      }
+      
+      function delete_item(){
+        
+      }*/
+    </script>
+  </body>
+</html>

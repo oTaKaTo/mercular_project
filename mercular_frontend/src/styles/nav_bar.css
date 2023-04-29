@@ -15,46 +15,86 @@ nav {
     align-items: center;
     justify-content:  space-between;
 }
+nav .logo {
+    width: 10%;
+}
 
-nav .logo-img{
+.logo-img{
     position: relative;
     cursor: pointer;
     margin-right: auto;
-    width: 40%;
-    height: 40%;
-    margin: 0px 100px 0px 100px;
+    width: 50%;
+    height: 50%;
 }
 
-.cart .cart-img {
+.logo .logo-img {
+    align-items: center;
+    margin: 0px auto;
+    transform: translate(-50%, 0%);
+    right: -50%;
+    padding-top: 2px;
+}
+
+nav .cart{
+    width: 10%;
+}
+
+.utility .cart-img {
     position: relative;
-    width: 1.5em;
-    height: 1.5em;
-    margin: 0px 60px 0px 60px;
+    width: 1em;
+    height: 1em;
+    transform: translate(-50%, 0);
+    right: -90%;
+    top: 50%
 }
 
-.product-type-component ul{
+nav .product-type-component {
+    width: 40%;
+}
+
+.product-type-component ul {
     list-style: none;
-    width: 30vw;
+    width: 100%;
     display: inline-flex;
+    align-items: center;
+    justify-content:  space-between;
 }
 
-.product-type-component li{
-    display: inline-flex;
-    margin: 1vw;
-    padding-left: 10px;
+.product-type-component ul .type {
+    border-radius: 10px;
+    background-color: rgb(222, 221, 221);
+    width: 20%;
+    height: 25px;
+    margin: 0 6px;
 }
 
-.product-type-component a {
+.product-type-component .type{
+    display: flex;
+}
+
+
+.product-type-component ul .type a {
     color: rgb(0, 0, 0);
     text-decoration: none;
     text-align: center;
+    position: relative;
+    margin: 0 auto;
+}
+
+.product-type-component ul .type:hover {
+    background-color: rgb(15, 99, 233);
+    transition: 500ms;
+}
+
+.product-type-component ul .type:hover a {
+    color: rgb(255, 255, 255);
 }
 
 nav .search-bar {
     position: relative;
     background-color: whitesmoke;
     border: none;
-    width: 30vw;
+    width: 25%;
 }
 
 .search-bar input {
@@ -63,8 +103,8 @@ nav .search-bar {
     background: rgb(222, 221, 221);
     border-radius: 10px;
     text-align: center;
-    width: 90%;
     height: 1.5em;
+    width: 90%;
 }
 
 .search-bar button {
@@ -84,7 +124,15 @@ button .search-img {
     align-items: center;
 }
 
-.user .user-img {
-    width: 50%;
-    height: 50%;
+nav .user {
+    width: 15%;
+}
+
+.user-img {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    transform: translate(-50%, 0);
+    right: -70%;
+    top: 50%
 } 

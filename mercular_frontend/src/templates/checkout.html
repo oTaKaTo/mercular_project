@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% include 'global_head.html' %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('styles', path='checkout.css') }}?v=1" >
+    </head>
+    <body>
+        {% include 'nav-bar.html' %}
+    <form>
+        <div class = "summarize">
+            <div class = "price-contrainer">
+                <div class = 'price-text'>
+                    <p id = "order-conclusion">ตรวจสอบยอด</p>
+                    <p id = "Total">ยอดรวมสินค้า: {{total_price}}<p>
+                    <p id = "Discounted">ยอดรวมส่วนลด: {{discount_price}}</p>
+                </div>
+                <br><hr>
+            </div>
+                <input class="submit" type="submit" value="ชำระเงิน">
+            </div>
+        </form>
+    </body>
+</html>

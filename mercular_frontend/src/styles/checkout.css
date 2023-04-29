@@ -4,26 +4,6 @@
     box-sizing: border-box;
 }
 
-body .cart-contrainer {
-    margin: 0 auto;
-    width: 70%;
-}
-.cart-contrainer {
-    top: 0;
-    margin: 30px;
-    display: flex;
-}
-
-.cart-contrainer .item-list {
-    padding-top: 20px;
-    width: 70%;
-}
-
-.cart-contrainer .checkout {
-    width: 30%;
-    padding: 5% 5%;
-}
-
 .price-contrainer {
     border-style: solid;
     border-radius: 10px;
@@ -66,4 +46,3 @@ body .cart-contrainer {
 .price-contrainer .submit {
     width: 95%;
 }
-

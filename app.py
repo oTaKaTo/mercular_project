@@ -40,11 +40,15 @@ app.add_middleware(
 )
 app.mount("/mercular_frontend/src/styles/", StaticFiles(directory="mercular_frontend/src/styles"), name="styles")
 
-templates = Jinja2Templates(directory = 'mercular_frontend\src\pages')
+templates = Jinja2Templates(directory = 'mercular_frontend\src\\templates')
 
 @app.get('/', tags=["Page"], response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "email": "65010244@gmail.com"})
+
+@app.get('/{email}/checkout', tags=["Page"], response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("checkout.html", {"request": request, "email": "65010244@gmail.com"})
 
 @app.get('/{email}/cart', tags=["Page"], response_class=HTMLResponse)
 async def cart(email: str, request: Request):
@@ -100,21 +104,19 @@ async def summarize(email: str) -> dict:
         return response
                 
 @app.post("/{email}/checkout/creating_order", tags = ["Checkout"])
-async def create_order(email: str, data: list):
+async def create_order(email: str, data: dict):
     status = OrderStatus.pending_payment
     user = system.check_exists_account(email)
     user_order_history = user.get_order_history()
-    order_list = []
-    for item_data in data:
-        payment_method = item_data["payment_method"]
-        tracking_number = item_data["tracking_number"]
-        total_price = item_data["total_price"]
-        discounted_price = item_data["discounted_price"]
-        order_id = item_data["order_id"]
-        order_list.append(Order(payment_method, tracking_number,
-                                total_price, discounted_price,
-                                order_id, status))
-    user_order_history.insert(0, order_list)
+    payment_method = data["payment_method"]
+    tracking_number = data["tracking_number"]
+    total_price = data["total_price"]
+    discounted_price = data["discounted_price"]
+    order_id = data["order_id"]
+    items_list = data["item_list"]
+    user_order_history.append(Order(payment_method, tracking_number,
+                            total_price, discounted_price,
+                            order_id, status, items_list))
     return user_order_history
 
 

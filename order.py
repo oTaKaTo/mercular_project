@@ -8,7 +8,7 @@ class OrderStatus(str, Enum):
     cancelled_refunded = "Cancelled/Refunded"
     
 class Order:
-      def __init__(self, payment_method = "", tracking_number = "", total_price = 0, discounted_price = 0, order_id = "", status = ""):
+      def __init__(self, payment_method = "", tracking_number = "", total_price = 0, discounted_price = 0, order_id = "", status = "", items: list = []):
         self.__order_date = date.today()
         self.__delivery_expect_date = self.__order_date + timedelta(days = 4)
         self.__payment_method = payment_method
@@ -17,6 +17,7 @@ class Order:
         self.__discounted_price = discounted_price
         self.__order_id = order_id
         self.__status = status
+        self.__items_list = items
           
       def get_order(self):
           return {"order_date": self.__order_date,
@@ -26,5 +27,6 @@ class Order:
                   "total_price": self.__total_price,
                   "discounted_price": self.__discounted_price,
                   "order_id": self.__order_id,
-                  "status": self.__status
+                  "status": self.__status,
+                  "items_list": self.__items_list
                   }
