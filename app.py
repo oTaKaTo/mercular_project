@@ -114,7 +114,7 @@ async def create_order(email: str, data: dict):
     discounted_price = data["discounted_price"]
     order_id = data["order_id"]
     items_list = data["item_list"]
-    user_order_history.append(Order(payment_method, tracking_number,
+    user_order_history.add_order(Order(payment_method, tracking_number,
                             total_price, discounted_price,
                             order_id, status, items_list))
     return user_order_history

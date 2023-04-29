@@ -11,7 +11,6 @@ class OrderHistory:
           result = result[:-1]
           return result
      
-     def add_order(self, orders: list):
-          for order in orders:
-               if(isinstance(order, Order)):
-                    self.__orders.append(order)
+     def add_order(self, order: Order):
+          if(isinstance(order, Order)):
+               self.__orders.append(order)
