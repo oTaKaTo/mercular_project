@@ -14,7 +14,7 @@ html {
 body{
   display: flex;
   flex-direction: column;
-  /* align-items:center; */
+  align-items:center;
 }
 
 .row-container{
@@ -49,7 +49,7 @@ body{
   transition-duration: 0.4s;
   cursor: pointer;
   border: 1px solid #dadadab0;
-
+  border-radius: 15px;
 }
 
 .product-img-container{
