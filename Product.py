@@ -7,6 +7,27 @@ class ProductCatalog:
     def get_products(self):
         return self.__products
     
+    def get_object_products(self):
+        product_list = []
+        product_list.append(self.__products[0])
+        for i in self.__products:
+            status = False
+            for j in product_list:
+                if i.get_object_id() in  j.get_object_id():
+                    status = True
+            if status == True:
+                status = False
+                continue
+            product_list.append(i)
+        return product_list    
+
+    def get_option(self,object_id):
+        option=[]
+        for i in self.__products:
+            if object_id in i.get_object_id():
+                option.append({"product_id" : i.get_product_id(), "option": i.get_option()})
+        return option 
+    
     def add_product(self, product):
         for i in self.__products:
             if product.get_product_id() in i.get_product_id():
@@ -40,10 +61,17 @@ class ProductCatalog:
                     promotional_products.append(i)
         return promotional_products
 
-    def get_product_info(self,product_id):
+    def get_product_info(self,object_id:str):
          for i in self.__products:
-            if product_id in i.get_product_id():
+            if object_id in i.get_object_id():
                 return i
+    
+    def get_product_by_brand(self,brand:str):
+         branded_product = []
+         for i in self.__products:
+            if brand.lower() in (i.get_brand()).lower():
+                branded_product.append(i)
+         return branded_product   
 
     # search box that can search by id, name
     def search_keyword(self, keyword=""):
@@ -78,20 +106,19 @@ class Product:
         self.__detail = detail
         self.__promotion = promotion
     
-    def convert_dict(self):
-        return {}
-
-    
-    def add_promotion(self, promotion:Promotion):
-        self.__promotion = promotion
-        return True
             
     def get_price(self):
         return self.__price
          
     def get_product_id(self):
         return str(self.__product_id)
-      
+    
+    def get_object_id(self):
+        return str(self.__object_id)
+    
+    def get_brand(self):
+        return self.__brand
+    
     def get_quantity(self):
         return self.__quantity
     
@@ -110,8 +137,15 @@ class Product:
     def get_name(self):
         return self.__name 
     
+    def get_detail(self):
+        return self.__detail
+    
     def get_promotion(self):
         return self.__promotion
+
+    def add_promotion(self, promotion:Promotion):
+        self.__promotion = promotion
+        return True
 
     def edit_quantity(self,value):
         self.__quantity = value
@@ -135,15 +169,18 @@ class Item:
     
     def get_item(self):
             item_info = {
-                "product_option": self.product.get_type(), 
-                "quantity": self.quantity
+                "product_option": self.__product.get_type(), 
+                "quantity": self.__quantity
                 }
-            brand_id = self.product.get_type_brand_id()
+            brand_id = self.__product.get_type_brand_id()
             for KEY in brand_id.keys():
                 item_info[KEY] = brand_id[KEY]
 
-            return {self.product.get_name() : item_info}
+            return {self.__product.get_name() : item_info}
     
+    def get_product(self):
+        return self.__product
+
     def get_quantity(self):
         return self.__quantity
     

@@ -9,7 +9,7 @@ data = { "data" :
             "price" : 5490  , 
             "quantity" : 20 , 
             "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/06/Product/razer-viper-v2-pro-wireless-gaming-mouse-black-icon.jpg"] , 
-            "option":"" ,
+            "option":"Black" ,
             "detail": "",
             "promotion":None
         },    
@@ -34,7 +34,7 @@ data = { "data" :
             "brand":"Razer" , 
             "price" : 1090  , 
             "quantity" : 20 , 
-            "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2018/10/13-HyperX-Cloud-Earbud.jpg"] , 
+            "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2018/02/10-Razer-Hammerhead-Pro-v_2-In-Ear.jpg"] , 
             "option":"" ,
             "detail": "",
             "promotion":None
@@ -70,7 +70,7 @@ data = { "data" :
             "object_id": "105700" , 
             "name": "คีย์บอร์ด Keychron V1 Mechanical Keyboard (EN/TH)" , 
             "type": "เกมมิ่ง" , 
-            "brand":"Razer" , 
+            "brand":"Keychron" , 
             "price" : 3990  , 
             "quantity" : 20 , 
             "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2023/01/Product/keychron-v1-mechanical-keyboard-en-th-icon.jpg"] , 
@@ -141,6 +141,58 @@ data = { "data" :
             "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/08/hammerhead%20TWS%202%20gen.jpg"] , 
             "option":"" ,
             "detail": "",
+            "promotion":None
+        },
+        {
+            "product_id": "1532129000002" , 
+            "object_id": "89698" , 
+            "name": "เมาส์ Logitech G102 LIGHTSYNC Gaming Mouse" , 
+            "type": "เกมมิ่ง" , 
+            "brand":"Logitech" , 
+            "price" : 990  , 
+            "quantity" : 20 , 
+            "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2020/06/logitech-g102-lightsync-gaming-mouse-white-icon(1).jpg"] , 
+            "option": "White" ,
+            "detail": "",
+            "promotion":None
+        },
+        {
+            "product_id": "1516241000001" , 
+            "object_id": "102641" , 
+            "name": "เมาส์ Razer Viper V2 Pro Wireless Gaming Mouse" , 
+            "type": "เกมมิ่ง" , 
+            "brand":"Razer" , 
+            "price" : 5690  , 
+            "quantity" : 20 , 
+            "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/05/razer-viper-v2-pro-wireless-gaming-mouse-white-icon.jpg"] , 
+            "option": "White" ,
+            "detail": "",
+            "promotion":None
+        },
+        {
+            "product_id": "2156095000001" , 
+            "object_id": "101117" , 
+            "name": "โต๊ะปรับระดับ Ergotrend Sit2stand RGB L-Shape 60x140 Adjustable Desk" , 
+            "type": "โต๊ะคอม" , 
+            "brand":"Ergotrend" , 
+            "price" : 22900  , 
+            "quantity" : 20 , 
+            "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/03/ergotrend-sit2stand-rgb-l-shape-60-140-adjustable-desk-front-view.jpg"] , 
+            "option": "" ,
+            "detail": "โต๊ะปรับระดับ Ergotrend Sit2stand RGB L-Shape 60x140 Adjustable Desk โต๊ะปรับระดับได้จากแบรนด์ Ergotrend ที่คราวนี้ได้เปลี่ยนลุคจากโต๊ะทำงานสุดน่าใช้ มาเป็นโต๊ะเกมมิ่งสุดเท่ น่าเล่นน่าลอง ด้วยท๊อปโต๊ะทรงตัว L ขนาด 60x140x106 เซนติเมตร ที่เคลือบผิวด้วยเคฟล่าที่เพิ่มความเท่แบบสุดๆ และขาโต๊ะเหล็ก 2 ชั้นที่ปรับความสูงได้ตั้งแต่ 73-123 เซนติเมตร และรองรับน้ำหนักได้ถึง 120 กิโลกรัม บอกเลยว่า สำหรับเกมเมอร์ท่านใดที่กำลังมองหาโต๊ะปรับระดับที่ตอบโจทย์ทั้งผั่ง Ergonimic และ Gaming ละก็ โต๊ะปรับระดับ Ergotrend Sit2stand RGB L-Shape 60x140 Adjustable Desk รุ่นนี้ก็เป็นโต๊ะเกมมิ่งสุดเยี่ยมยอด ที่บ่งบอกความเป็นตัวคุณสุดๆ",
+            "promotion":None
+        },
+        {
+            "product_id": "2242054000001" , 
+            "object_id": "104162" , 
+            "name": "โต๊ะเกมมิ่ง Furradec CT-2013 Gaming Desk" , 
+            "type": "โต๊ะคอม" , 
+            "brand":"Furradec" , 
+            "price" : 5480  , 
+            "quantity" : 20 , 
+            "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/07/Product/furradec-ct-2013-gaming-desk-cover-view.jpg"] , 
+            "option": "" ,
+            "detail": {"ขนาดท็อปโต๊ะ":"60 x 120 cm","วัสดุขาโต๊ะ":"เหล็ก" ,"รองรับน้ำหนัก (kg)":"40 กก."},
             "promotion":None
         }
     ]

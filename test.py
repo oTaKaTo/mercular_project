@@ -6,9 +6,9 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from jinja2 import Environment, FileSystemLoader
 import productdata
 import numpy as np
+
 
 pd_catalog = ProductCatalog()
 
@@ -52,37 +52,70 @@ for i in productdata.data["data"]:
     print(i["product_id"])
     pd_catalog_dict.add_product(x)
 
-print(pd_catalog_dict.get_products())
+print(pd_catalog_dict.get_object_products())
 
-def handle_products_page_request():
+def handle_products_page_request(brand=""):
     list = []
     cnt = 0
     inner_list = []
-    for i in pd_catalog_dict.get_products():
-        if cnt == 4:
-            list.append(inner_list)  
-            inner_list = []
-            cnt = 0 
-        inner_list.append(i)
-        cnt += 1
-    list.append(inner_list)
+    if brand == "":
+        for i in pd_catalog_dict.get_object_products():
+            if cnt == 4:
+                list.append(inner_list)  
+                inner_list = []
+                cnt = 0 
+            inner_list.append(i)
+            cnt += 1
+        list.append(inner_list)
+    else:
+        for i in pd_catalog_dict.get_product_by_brand(brand):
+            if cnt == 4:
+                list.append(inner_list)  
+                inner_list = []
+                cnt = 0 
+            inner_list.append(i)
+            cnt += 1
+        list.append(inner_list)
     
     return list
+
+print(pd_catalog_dict.get_option("89698"))
+
+
+class ProductModel(BaseModel):
+    product_id:str
+    object_id:str
+    name:str
+    type:str
+    brand:str
+    price:int
+    quantity:int
+    image:list
+    option:str
+    detail:dict
+    promotion:dict
+
 
 template = Jinja2Templates(directory="htmldirectory")
 app = FastAPI()
 app.mount('/htmldirectory', StaticFiles(directory='htmldirectory'), name='htmldirectory')
 
-@app.get("/")
+
+
+@app.get("/",response_class=HTMLResponse)
 async def get_products(request: Request):
     return template.TemplateResponse("index.html",{"request":request,"products": handle_products_page_request()})
 
-@app.get("/{product_id}")
-async def get_product(request: Request, product_id:str):
+@app.get("/products/{brand}",response_class=HTMLResponse)
+async def get_brand(request: Request, brand:str):
+    return template.TemplateResponse("productbrand.html",{"request":request, "products":handle_products_page_request(brand),"brand": brand})
 
-    return template.TemplateResponse("product.html",{"request":request,"product": pd_catalog_dict.get_product_info(product_id)})
+@app.get("/{object_id}",response_class=HTMLResponse)
+async def get_product(request: Request, object_id:str):
+    print(pd_catalog_dict.get_option(object_id))
+    return template.TemplateResponse("product.html",{"request":request, "product": pd_catalog_dict.get_product_info(object_id),"option": pd_catalog_dict.get_option(object_id)})
 
-@app.post("/product")
+@app.post("/createproduct")
 async def add_products(product:dict):
     product_id = product["product_id"]
     object_id = product["object_id"]
