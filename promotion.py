@@ -155,7 +155,7 @@ class CouponCatalog:
         self.__coupons.append(coupon)
         return True
     
-    def edit_coupon(self, coupon):
+    def edit_coupon(self, id, coupon):
         id = int(coupon.get_id())
         if id < len(self.__coupons):
             self.__coupons[id] = coupon
