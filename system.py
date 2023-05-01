@@ -59,10 +59,10 @@ class System:
     
     def login(self,email,password):
         
-        ID = self.check_id_password(email,password)
+        id = self.check_id_password(email,password)
         
-        if ID != False:
-            ID.set_online_status(True)
+        if id != False:
+            id.set_online_status(True)
             if isinstance(id,Admin):
                 return "Admin"
             return True
