@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{{ url_for('styles', path='coupon.css?v=1') }}" >
+  <link rel="stylesheet" href="{{ url_for('styles', path='nav_bar.css?v=1') }}" >
+</head>
+<body>
+  <header>
+    <nav>
+        <div class="logo">
+            <a href="/">
+                <img class="logo-img" src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=256&q=75">
+            </a>   
+        </div>
+        <div class="search-bar">
+            <input type="text" name="search" id="search-input" placeholder="Search" autoComplete="off"></input>
+            <button class = "search-button" type="submit" ><img class="search-img" src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
+        </div>
+        <div class="product-type-component">
+            <div class = "list">
+                <form class = "types" action="/">
+                    <button class = "type">
+                        <p>คอมพิวเตอร์</p>
+                    </button>
+                </form>
+                <form class = "types" action="/">
+                    <button class = "type">
+                        <p>หูฟัง/ลำโพง</p>
+                    </button>
+                </form>
+                <form class = "types" action="/">
+                    <button class = "type">
+                        <p>เกมมิ่ง</p>
+                    </button>
+                </form>
+                <form class = "types" action="/">
+                    <button class = "type">
+                        <p>อุปกรณ์มือถือ </p>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="utility">
+            {% if email != "" %} 
+                <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+            {% else %} 
+                <a href= "/"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+            {% endif %}
+        </div>
+        <div class="user">
+            {% if email != "" %} 
+                <a onclick="go_to_profile()"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
+
+            {% else %} 
+            <div id="login_display" style="display: inline-flex;">
+                <button class="login_button" onclick="window.location.href='login.html'">Login</button>
+                <button class="login_button" onclick="window.location.href='register.html'">Register</button>
+            </div>
+            {% endif %}
+        </div>
+        
+        <script>
+            session = sessionStorage.getItem("username")
+            console.log(session)
+            if (session == null)
+            {
+              document.getElementById("login_display").style.display = 'block'
+            }
+            else
+            {
+              document.getElementById("account_display").style.display = 'block'
+              document.getElementById("account").innerHTML += session[0] +session[1]
+            }
+            function go_to_profile()
+            {
+              window.location.href = "http://localhost:8000/template/profile.html";
+            }
+        </script>
+    </nav>
+</header>
+  <div class="popup-background" id="popup-background" onclick="close_popup()"></div>
+  {% for type in coupons %}
+    {% for coupon in coupons[type] %}
+      <div class="popup-container" id="popup-{{coupon.get_id()}}">
+        <div class="coupon-container">
+          <div class="circle-top"></div>
+          <div class="coupon-discount">
+            <div class="text">
+              ลดเพิ่ม
+            </div>
+            <div class="discount">
+              {{coupon.get_discount_str()}}
+            </div>
+          </div>
+          <div class="coupon-description">
+            <div class="title">{{coupon.get_title()}}</div>
+            <div class="description">เมื่อซื้อครบ {{coupon.get_minimum_price_str()}}</div>
+            <div class="due-date">หมดอายุ : {{coupon.get_due_date_str()}}</div>
+          </div>
+          <div class="coupon-button"></div>
+          <div class="circle-bottom"></div>
+        </div>
+        <div class="description-container">
+          <div class="description-title">เงื่อนไขการใช้คูปอง</div>
+          <div class="condition">คูปองส่วนลด {{coupon.get_discount_str()}} ต่อใบเสร็จ เมื่อมียอดซื้อขั้นต่ำ {{coupon.get_minimum_price_str()}}</div>
+          <div class="description-title">ระยะเวลา</div>
+          <div class="condition">วันนี้ - {{coupon.get_due_date_str()}}</div>
+          <div class="description-title">หมวดสินค้าที่สามารถใช้ร่วมกับคูปองได้</div>
+          {% for type in coupon.get_types() %}
+          <div class="condition">{{type}}</div>
+          {% endfor %}
+          <div class="button-container">
+            <div class="get-code-button" id="B{{coupon.get_id()}}" onclick="get_coupon(this.id, '{{email}}')">เก็บคูปอง</div>
+            <div class="close-button" onclick="close_popup()">ปิด</div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% endfor %}
+  <div class="img-container">
+    <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/08/brand%20page/Coupon_special/Coupon_LDP-01.jpg">
+  </div>
+  <div class="img-container">
+    <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/08/brand%20page/Coupon_special/Coupon_LDP-05.jpg">
+  </div>
+  <div class="row-container">
+    {% for coupon in coupons['exclusive'] %}
+      <div class="coupon-container" onclick="show_popup({{coupon.get_id()}})" id="{{coupon.get_id()}}">
+        <div class="circle-top"></div>
+        <div class="coupon-discount">
+          <div class="text">
+            ลดเพิ่ม
+          </div>
+          <div class="discount">
+            {{coupon.get_discount_str()}}
+          </div>
+        </div>
+        <div class="coupon-description">
+          <div class="title">{{coupon.get_title()}}</div>
+          <div class="description">เมื่อซื้อครบ {{coupon.get_minimum_price_str()}}</div>
+          <div class="due-date">หมดอายุ : {{coupon.get_due_date_str()}}</div>
+        </div>
+        <div class="coupon-button"></div>
+        <div class="circle-bottom"></div>
+        <div class="button"><div class="text">เก็บคูปอง</div></div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="img-container">
+    <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/11/coupon_special/Always-on%20-%20Coupon%20Special_7.jpg">
+  </div>
+  <div class="row-container">
+    {% for coupon in coupons['speaker'] %}
+      <div class="coupon-container" onclick="show_popup({{coupon.get_id()}})" id="{{coupon.get_id()}}">
+        <div class="circle-top"></div>
+        <div class="coupon-discount">
+          <div class="text">
+            ลดเพิ่ม
+          </div>
+          <div class="discount">
+            {{coupon.get_discount_str()}}
+          </div>
+        </div>
+        <div class="coupon-description">
+          <div class="title">{{coupon.get_title()}}</div>
+          <div class="description">เมื่อซื้อครบ {{coupon.get_minimum_price_str()}}</div>
+          <div class="due-date">หมดอายุ : {{coupon.get_due_date_str()}}</div>
+        </div>
+        <div class="coupon-button"></div>
+        <div class="circle-bottom"></div>
+        <div class="button"><div class="text">เก็บคูปอง</div></div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="img-container">
+    <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/11/coupon_special/Always-on%20-%20Coupon%20Special_9.jpg">
+  </div>
+  <div class="row-container">
+    {% for coupon in coupons['gaming'] %}
+      <div class="coupon-container" onclick="show_popup({{coupon.get_id()}})" id="{{coupon.get_id()}}">
+        <div class="circle-top"></div>
+        <div class="coupon-discount">
+          <div class="text">
+            ลดเพิ่ม
+          </div>
+          <div class="discount">
+            {{coupon.get_discount_str()}}
+          </div>
+        </div>
+        <div class="coupon-description">
+          <div class="title">{{coupon.get_title()}}</div>
+          <div class="description">เมื่อซื้อครบ {{coupon.get_minimum_price_str()}}</div>
+          <div class="due-date">หมดอายุ : {{coupon.get_due_date_str()}}</div>
+        </div>
+        <div class="coupon-button"></div>
+        <div class="circle-bottom"></div>
+        <div class="button"><div class="text">เก็บคูปอง</div></div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="img-container">
+    <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/11/coupon_special/Always-on%20-%20Coupon%20Special_11.jpg">
+  </div>
+  <div class="row-container">
+    {% for coupon in coupons['computer'] %}
+      <div class="coupon-container" onclick="show_popup({{coupon.get_id()}})" id="{{coupon.get_id()}}">
+        <div class="circle-top"></div>
+        <div class="coupon-discount">
+          <div class="text">
+            ลดเพิ่ม
+          </div>
+          <div class="discount">
+            {{coupon.get_discount_str()}}
+          </div>
+        </div>
+        <div class="coupon-description">
+          <div class="title">{{coupon.get_title()}}</div>
+          <div class="description">เมื่อซื้อครบ {{coupon.get_minimum_price_str()}}</div>
+          <div class="due-date">หมดอายุ : {{coupon.get_due_date_str()}}</div>
+        </div>
+        <div class="coupon-button"></div>
+        <div class="circle-bottom"></div>
+        <div class="button"><div class="text">เก็บคูปอง</div></div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="img-container">
+    <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/11/coupon_special/Always-on%20-%20Coupon%20Special_13.jpg">
+  </div>
+  <div class="row-container">
+    {% for coupon in coupons['table'] %}
+      <div class="coupon-container" onclick="show_popup({{coupon.get_id()}})" id="{{coupon.get_id()}}">
+        <div class="circle-top"></div>
+        <div class="coupon-discount">
+          <div class="text">
+            ลดเพิ่ม
+          </div>
+          <div class="discount">
+            {{coupon.get_discount_str()}}
+          </div>
+        </div>
+        <div class="coupon-description">
+          <div class="title">{{coupon.get_title()}}</div>
+          <div class="description">เมื่อซื้อครบ {{coupon.get_minimum_price_str()}}</div>
+          <div class="due-date">หมดอายุ : {{coupon.get_due_date_str()}}</div>
+        </div>
+        <div class="coupon-button"></div>
+        <div class="circle-bottom"></div>
+        <div class="button"><div class="text">เก็บคูปอง</div></div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="img-container">
+    <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/11/coupon_special/Always-on%20-%20Coupon%20Special_5.jpg">
+  </div>
+  <script>
+    var current_popup_id = 0
+
+    function get_coupon(id, email){
+      id = id.slice(1)
+      fetch('http://127.0.0.1:8000/' + email + '/get-coupon', {method: 'POST',
+      body: JSON.stringify({'email': email, 'id': id}),
+      headers: {'Content-Type': 'application/json'}
+      }).then(response => response.json()).then(data => {alert(data)})
+    }
+    
+    function show_popup(id){
+      current_popup_id = id
+      document.getElementById("popup-" + id).style.display = "flex"
+      document.getElementById("popup-background").style.display = "block"
+      document.body.style.overflowY = "hidden"
+    }
+    function close_popup(){
+      document.getElementById("popup-" + current_popup_id).style.display = "none"
+      document.getElementById("popup-background").style.display = "none"
+      document.body.style.overflowY = "scroll"
+    }
+  </script>
+</body>
+</html>
