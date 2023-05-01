@@ -42,12 +42,12 @@ class ProductCatalog:
                 return True
         return False
 
-    def edit_product(self, product):
-        id = product.get_product_id()
-        if id in self.__products:
-            self.__products[id] = product
-            return True
-        return False
+    def edit_product(self, product_id,new_product):
+        for pd in self.__products:
+            if product_id in pd.get_product_id():
+                pd = new_product
+                return {"status":"edited success"}
+        return {"status": "No product"}
 
     def add_promotion(self, product_id, promotion):
         self.__products[product_id].add_promotion(promotion)
