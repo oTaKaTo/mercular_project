@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('styles', path='promotion.css?v=1') }}">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="products-container">
+    {% for product in products %}
+    <div class="item-container">
+
+      <a href="/{{email}}/{{product.get_product_id()}}">
+        <div class="product-img-container">
+          <img src="{{product.get_image()[0]}}">
+        </div>
+        <div class="product-name">{{product.get_name()}}</div>
+        <div class="price-container">
+          <div class="product-discount">{{product.get_promotion()}}</div>
+          <div class="product-price">{{product.get_price()}} .-</div>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+
+</html>

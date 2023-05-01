@@ -66,9 +66,6 @@ class PercentageDiscount(Promotion):
             return discount
         return 0
     
-    def get_discount_percent(self):
-        return self.__discount_percent
-    
     def get_discount_str(self):
         return str(self.__discount_percent) + '%'
     
@@ -91,7 +88,7 @@ class Coupon(Promotion):
         return True
 
     def get_id(self):
-        return self.__code_id
+        return str(self.__code_id)
     
     def get_coupon_type(self):
         return self.__coupon_type

@@ -8,11 +8,16 @@
   <link rel="stylesheet" href="{{ url_for('styles', path='coupon.css?v=1') }}" >
 </head>
 <body>
-  <div class="popup-background" id="popup-background" onclick="close_popup()"></div>
-  {% for type in coupons %}
-    {% for coupon in coupons[type] %}
-      <div class="popup-container" id="popup-{{coupon.get_id()}}">
-        <div class="coupon-container">
+  <div class="img-container">
+    <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/08/brand%20page/Coupon_special/Coupon_LDP-01.jpg">
+  </div>
+  <div class="img-container">
+    <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/08/brand%20page/Coupon_special/Coupon_LDP-05.jpg">
+  </div>
+  <div class="row-container">
+    {% for coupon in coupons['exclusive'] %}
+      <a href="/monthly-promotion">
+        <div class="coupon-container" id="{{coupon.get_id()}}">
           <div class="circle-top"></div>
           <div class="coupon-discount">
             <div class="text">
@@ -29,51 +34,9 @@
           </div>
           <div class="coupon-button"></div>
           <div class="circle-bottom"></div>
+          <div class="button"><div class="text">เก็บคูปอง</div></div>
         </div>
-        <div class="description-container">
-          <div class="description-title">เงื่อนไขการใช้คูปอง</div>
-          <div class="condition">คูปองส่วนลด {{coupon.get_discount_str()}} ต่อใบเสร็จ เมื่อมียอดซื้อขั้นต่ำ {{coupon.get_minimum_price_str()}}</div>
-          <div class="description-title">ระยะเวลา</div>
-          <div class="condition">วันนี้ - {{coupon.get_due_date_str()}}</div>
-          <div class="description-title">หมวดสินค้าที่สามารถใช้ร่วมกับคูปองได้</div>
-          {% for type in coupon.get_types() %}
-          <div class="condition">{{type}}</div>
-          {% endfor %}
-          <div class="button-container">
-            <div class="get-code-button" id="B{{coupon.get_id()}}" onclick="get_coupon(this.id, '{{email}}')">เก็บคูปอง</div>
-            <div class="close-button" onclick="close_popup()">ปิด</div>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-  {% endfor %}
-  <div class="img-container">
-    <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/08/brand%20page/Coupon_special/Coupon_LDP-01.jpg">
-  </div>
-  <div class="img-container">
-    <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/08/brand%20page/Coupon_special/Coupon_LDP-05.jpg">
-  </div>
-  <div class="row-container">
-    {% for coupon in coupons['exclusive'] %}
-      <div class="coupon-container" onclick="show_popup({{coupon.get_id()}})" id="{{coupon.get_id()}}">
-        <div class="circle-top"></div>
-        <div class="coupon-discount">
-          <div class="text">
-            ลดเพิ่ม
-          </div>
-          <div class="discount">
-            {{coupon.get_discount_str()}}
-          </div>
-        </div>
-        <div class="coupon-description">
-          <div class="title">{{coupon.get_title()}}</div>
-          <div class="description">เมื่อซื้อครบ {{coupon.get_minimum_price_str()}}</div>
-          <div class="due-date">หมดอายุ : {{coupon.get_due_date_str()}}</div>
-        </div>
-        <div class="coupon-button"></div>
-        <div class="circle-bottom"></div>
-        <div class="button"><div class="text">เก็บคูปอง</div></div>
-      </div>
+      </a>
     {% endfor %}
   </div>
   <div class="img-container">
@@ -81,7 +44,8 @@
   </div>
   <div class="row-container">
     {% for coupon in coupons['speaker'] %}
-      <div class="coupon-container" onclick="show_popup({{coupon.get_id()}})" id="{{coupon.get_id()}}">
+    <a href="/monthly-promotion">
+      <div class="coupon-container" id="{{coupon.get_id()}}">
         <div class="circle-top"></div>
         <div class="coupon-discount">
           <div class="text">
@@ -100,6 +64,7 @@
         <div class="circle-bottom"></div>
         <div class="button"><div class="text">เก็บคูปอง</div></div>
       </div>
+    </a>
     {% endfor %}
   </div>
   <div class="img-container">
@@ -107,7 +72,8 @@
   </div>
   <div class="row-container">
     {% for coupon in coupons['gaming'] %}
-      <div class="coupon-container" onclick="show_popup({{coupon.get_id()}})" id="{{coupon.get_id()}}">
+    <a href="/monthly-promotion">
+      <div class="coupon-container" id="{{coupon.get_id()}}">
         <div class="circle-top"></div>
         <div class="coupon-discount">
           <div class="text">
@@ -126,6 +92,7 @@
         <div class="circle-bottom"></div>
         <div class="button"><div class="text">เก็บคูปอง</div></div>
       </div>
+    </a>
     {% endfor %}
   </div>
   <div class="img-container">
@@ -133,7 +100,8 @@
   </div>
   <div class="row-container">
     {% for coupon in coupons['computer'] %}
-      <div class="coupon-container" onclick="show_popup({{coupon.get_id()}})" id="{{coupon.get_id()}}">
+    <a href="/monthly-promotion">
+      <div class="coupon-container" id="{{coupon.get_id()}}">
         <div class="circle-top"></div>
         <div class="coupon-discount">
           <div class="text">
@@ -152,6 +120,7 @@
         <div class="circle-bottom"></div>
         <div class="button"><div class="text">เก็บคูปอง</div></div>
       </div>
+    </a>
     {% endfor %}
   </div>
   <div class="img-container">
@@ -159,7 +128,8 @@
   </div>
   <div class="row-container">
     {% for coupon in coupons['table'] %}
-      <div class="coupon-container" onclick="show_popup({{coupon.get_id()}})" id="{{coupon.get_id()}}">
+    <a href="/monthly-promotion">
+      <div class="coupon-container" id="{{coupon.get_id()}}">
         <div class="circle-top"></div>
         <div class="coupon-discount">
           <div class="text">
@@ -178,33 +148,11 @@
         <div class="circle-bottom"></div>
         <div class="button"><div class="text">เก็บคูปอง</div></div>
       </div>
+    </a>
     {% endfor %}
   </div>
   <div class="img-container">
     <img src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/11/coupon_special/Always-on%20-%20Coupon%20Special_5.jpg">
   </div>
-  <script>
-    var current_popup_id = 0
-
-    function get_coupon(id, email){
-      id = id.slice(1)
-      fetch('http://127.0.0.1:8000/' + email + '/get-coupon', {method: 'POST',
-      body: JSON.stringify({'email': email, 'id': id}),
-      headers: {'Content-Type': 'application/json'}
-      }).then(response => response.json()).then(data => {alert(data)})
-    }
-    
-    function show_popup(id){
-      current_popup_id = id
-      document.getElementById("popup-" + id).style.display = "flex"
-      document.getElementById("popup-background").style.display = "block"
-      document.body.style.overflowY = "hidden"
-    }
-    function close_popup(){
-      document.getElementById("popup-" + current_popup_id).style.display = "none"
-      document.getElementById("popup-background").style.display = "none"
-      document.body.style.overflowY = "scroll"
-    }
-  </script>
 </body>
 </html>
