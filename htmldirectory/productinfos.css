@@ -213,9 +213,6 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 20px
 }
 
-.action-container button{
-  width: ;
-}
 
 .buy-button{
   background-color: white;
@@ -259,8 +256,25 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
-
 /* Detail !!! */
-.detail-container{
-  font-size: 20px;
+
+.detail-box{
+  margin: 10px 0;
+  width: 80%;
+
 }
+.spec-container{
+  margin-top: 5px;
+  display: inline-block;
+  padding-bottom: 2px;
+  
+  width: 300px;
+}
+
+.detail-container{
+  font-size: 18px;
+  margin: 10px;
+  display: block;
+  flex-direction: row;
+}
+

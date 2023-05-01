@@ -26,7 +26,7 @@
                     <div class="option-container">
                         <p style="line-height: 20px;font-weight: 700; font-size: 14px;">ตัวเลือก :</p>
                     <div class="select" style="width:40%;">
-                    <select>
+                    <select id="option-select">
                     {% for i in option %}
                         <option id= "{{i["product_id"]}}"> {{i["option"]}} </option>                   
                     {% endfor %}
@@ -67,8 +67,36 @@
                     <button class="cart-button" id="cart">ใส่รถเข็น</button>
                 </div>
             </div>
-        </div>    
+        </div> 
+        <div class="detail-box">
+            <p style="line-height: 40px;font-weight: 700; font-size: 40px; margin-top: 10px;">สเปคสินค้า</p>
+                {% for k,v in product.get_detail().items() %}
+                <div class="detail-container">
+                    <div class="spec-container" style="font-weight: 700;">{{k}}</div>
+                    <div class="spec-container">{{v}}</div>
+                </div>
+                {% endfor %}
             
+
+        </div> 
+        <!-- <script>
+            function add_to_cart(){
+                if()
+                var e = document.getElementById("option-selector");
+                var value = e.value;
+                var quantity = document.getElementById("number").value
+                var text = e.options[e.selectedIndex].text;
+                fetch("http://127.0.0.1:8000/{{email}}/addtocart",{
+                    method:"PUT",
+                    body:JSON.stringify({'email':{{email}},'password': password1}),
+                }
+                )
+                {
+
+                }
+            }
+           
+        </script> -->
 
         
     </body>
