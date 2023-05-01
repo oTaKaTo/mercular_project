@@ -14,11 +14,12 @@
           <div class="condition">ราคา : {{Order[coupon]["discounted_price"]}}</div>
           <div class="condition">เลขรายการ : {{Order[coupon]["order_id"]}}</div>
           <div class="condition">สถานะ : {{Order[coupon]["status"]}}</div>
+          <div class="condition">ไอเท็ม :</div>
+          <div></div>
           {%for a in Order[coupon]["items_list"]%}
           <div style="display: flex;">      
-            <div class="condition" >ไอเท็ม : {{a.get_product().get_name()}}</div>
+            <div class="condition" style="padding-left: 30px;" >{{a.get_product().get_name()}}</div>
             <div class="condition" style="padding-left: 10px;" >X {{a.get_product().get_name()}}</div>
-            <br>
           </div>
           
                 
