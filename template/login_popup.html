@@ -1,0 +1,83 @@
+<title>mercule</title>
+<style>
+  /*Eng font*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap');
+
+/*TH font*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap');
+
+*{
+  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Noto Sans Thai', sans-serif;
+}
+  .circle{
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    background-color: rgb(15, 99, 233);
+    text-align: center;
+    line-height: 50%;
+  }
+  .login_button{
+      display: inline-flex;
+      -webkit-box-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      justify-content: center;
+      position: relative;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      outline: 0px;
+      border: 0px;
+      margin: 0px;
+      cursor: pointer;
+      user-select: none;
+      vertical-align: middle;
+      appearance: none;
+      text-decoration: none;
+      font-family: NotoSans-Thai, sans-serif;
+      font-size: 0.875rem;
+      line-height: 1.75;
+      padding: 6px 16px;
+      transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      color: rgb(255, 255, 255);
+      background-color: rgb(15, 99, 233);
+      min-width: fit-content;
+      text-transform: initial;
+      box-shadow: unset;
+      font-weight: bold;
+      width: 90px;
+      height: 40px;
+      border-radius: 8px;}
+ </style>
+<body>
+  <div id="login_display" style="display: none;">
+    <button class="login_button" onclick="window.location.href='login.html'">Login</button>
+    <button class="login_button" onclick="window.location.href='register.html'">Register</button>
+  </div>
+  <div id="account_display" style="display: none;">
+    <div class="circle">
+      <span class="account_display" id="account" style="text-align: center; line-height:40px; color: white;" onclick="go_to_profile()"></span>
+    </div>
+  </div>
+  <script>
+    session = sessionStorage.getItem("username")
+    console.log(session)
+    if (session == null)
+    {
+      document.getElementById("login_display").style.display = 'block'
+    }
+    else
+    {
+      document.getElementById("account_display").style.display = 'block'
+      document.getElementById("account").innerHTML += session[0] +session[1]
+    }
+    function go_to_profile()
+    {
+      window.location.href = "http://localhost:8000/template/profile.html";
+    }
+  </script>
+ </body>
+
+
+
