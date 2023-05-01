@@ -1,5 +1,6 @@
-from Product import Product
+from Product import Product,ProductCatalog
 from shipping_address import ShippingAddress
+from promotion import Coupon,CouponCatalog,Promotion
 from cart import Cart
 from copy import copy
 from uuid import uuid4
@@ -61,15 +62,40 @@ class Admin(Account):
             self.__order = order # Order object (specific user) 
             
           
-     def add_item_to_product_catalog(self,product:Product,product_catalog:list):
-          product.add_promotion(product)
+     def add_item_to_product_catalog(self,product:Product,product_catalog:ProductCatalog):
+          if product_catalog.add_product(product):
+               return True
+          return False
      
-     def edit_item_in_product_catalog(self,product:Product,product_catalog:list):
-          product.ed
+     def edit_item_in_product_catalog(self,product_id:str,new_product:Product,product_catalog:ProductCatalog):
+          if product_catalog.edit_product(product_id,new_product):
+               return True
+          return False
      
-     def del_item_in_product_catalog(self,product:Product,product_catalog:list):
-          product_catalog.remove(product)   
-          
+     def del_item_in_product_catalog(self,product:Product,product_catalog:ProductCatalog):
+          if product_catalog.remove_product(product):
+               return True
+          return False
+     
+     def add_coupon_to_coupon_catalog(self,coupon:Coupon,coupon_catalog:CouponCatalog):
+          if coupon_catalog.add_coupon(coupon):
+               return True
+          return False
+     
+     def edit_coupon_in_coupon_catalog(self,coupon_id,new_coupon:Coupon,coupon_catalog:CouponCatalog):
+          if coupon_catalog.edit_coupon(coupon_id,new_coupon):
+               return True
+          return False
+     
+     def del_coupon_in_coupon_catalog(self,coupon_id,coupon_catalog:CouponCatalog):
+          if coupon_catalog.delete_coupon(coupon_id):
+               return True
+          return False
+     
+     def add_product_promotion(self,product:Product,promotion:Promotion):
+          if product.add_promotion(promotion):
+               return True
+          return False
 class User(Account):
      
      def __init__(self, username, password, email, phone_number:int="", person_data="", address=[], cart="", order=[],  order_history=OrderHistory(), coupon=[]):
@@ -154,3 +180,7 @@ class User(Account):
      def delete_address(self,address):
           self.__address.remove(address)
           return True
+     
+     def get_address_info(self):
+          return f"{self.get_address()} {self.address.get_sub_district()} {self.address.get_district()} {self.address.get_province()} {self.address.get_postal_code()}"
+"
