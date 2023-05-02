@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{{ url_for('styles', path='menu_bar.css?v=1') }}" >
+    <link rel="stylesheet" href="{{ url_for('styles', path='nav_bar.css?v=1') }}" >
+    <meta charset="UTF-8">
+    <title>mercule</title>
+    <script>
+        session = sessionStorage.getItem("username")
+    </script>
+    <div class="popup-background" id="popup-background" style="display: none;" onclick="close_popup()"></div>
+  <body>
+    <div  style="display: none;"  id="error_img"> <center><img src="https://i0.wp.com/learn.onemonth.com/wp-content/uploads/2017/08/1-10.png?fit=845%2C503&ssl=1"></center>
+      <center><a href="login.html" style="font-size: 30px;">กดที่นี่เพื่อ Login</a></center>
+    </div>
+     <div class="container" id ='coupon_display' style="display: block;">
+      <button onclick="go_to('profile.html')">ข้อมูลส่วนตัว</button>
+      <br>
+      <button onclick="go_to('address.html')">ที่อยู่</button>
+      <br>
+      <button onclick="go_to('http:\/\/127.0.0.1:8000/'+session+'/account/view_user_coupon')">คูปอง</button>
+      <br>
+      <button>รายการสั่งซื้อ</button>
+    </div>
+   </body>
+   <script>
+    function go_to(location)
+    {
+        window.location.href = location;
+    }
+   </script>
+</html>

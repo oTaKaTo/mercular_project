@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{{ url_for('styles', path='order.css?v=1') }}" >
+    <link rel="stylesheet" href="{{ url_for('styles', path='nav_bar.css?v=1') }}" >
+    <meta charset="UTF-8">
+    <title>mercule</title>
+    {% for coupon in Order %}
+       <div class="popup-container" style="display: none;" id="popup-{{Order[coupon]['order_id']}}">
+        <div class="description-container">
+          <div class="description-title">รายการ</div>
+          <div class="condition">วันที่สั่ง : {{Order[coupon]["order_date"]}}</div>
+          <div class="condition">วันที่คาดว่าจะส่ง : {{Order[coupon]["delivery_expect_date"]}}</div>
+          <div class="condition">เลขพัสดุ : {{Order[coupon]["tracking_number"]}}</div>
+          <div class="condition">ราคา : {{Order[coupon]["discounted_price"]}}</div>
+          <div class="condition">เลขรายการ : {{Order[coupon]["order_id"]}}</div>
+          <div class="condition">สถานะ : {{Order[coupon]["status"]}}</div>
+          <div class="condition">ไอเท็ม :</div>
+          <div></div>
+          {%for a in Order[coupon]["items_list"]%}
+          <div style="display: flex;">      
+            <div class="condition" style="padding-left: 30px;" >{{a.get_product().get_name()}}</div>
+            <div class="condition" style="padding-left: 10px;" >X {{a.get_product().get_name()}}</div>
+          </div>
+          
+                
+          
+           
+            
+          {% endfor%}
+            <div class="close-button" onclick="close_popup()">ปิด</div>
+          </div>
+        </div>
+      </div>
+  {% endfor %}
+  </head>
+  <body>
+    {% include "nav-bar.html" %}
+    <div class="popup-background" id="popup-background" style="display: none;" onclick="close_popup()"></div>
+    <div  style="display: none;"  id="error_img"> <center><img src="https://i0.wp.com/learn.onemonth.com/wp-content/uploads/2017/08/1-10.png?fit=845%2C503&ssl=1"></center>
+      <center><a href="login-page" style="font-size: 30px;">กดที่นี่เพื่อ Login</a></center>
+    </div>
+    <div id="all_display" style="display: none; position: relative;">
+      <div class="menu_container" id ='coupon_display' style="display: block;">
+        <button type="menu" onclick="go_to('profile-page')">ข้อมูลส่วนตัว</button>
+        <br>
+        <button type="menu" onclick="go_to('address-page')">ที่อยู่</button>
+        <br>
+        <button type="menu" onclick="go_to(email + '/view_user_coupon')">คูปอง</button>
+        <br>
+        <button type="menu" onclick="go_to(email + '/account/view_order')">รายการสั่งซื้อ</button>
+      </div>
+     <div class="container" id ='coupon_display' style="display: block;">
+      <h1>รายการคำสั่งซื้อ</h1>
+      <div id = "error_display" style="color: red;padding-left: 25%;"></div>
+      <hr width="100%" >
+      <ul id = "available_coupon" style="display: block;"> 
+        {% for coupon in Order %}
+         <div class="coupon-container" onclick="show_popup({{Order[coupon]['order_id']}})" id="{{Order[coupon][order_id]}}">
+            <div class="coupon-description">
+             <strong style="font-size: 20px;"> หมายเลขรายการ : {{Order[coupon]['order_id']}}</strong> 
+             <div> 
+             <div  style="display: inline;">ราคารวม : {{Order[coupon]["discounted_price"]}}</div>
+             <div  style="display: inline;padding-left: 50px;">วันที่สั่ง : {{Order[coupon]["order_date"]}}</div>
+             <div  style="display: inline;padding-left: 50px;">สถานะ : {{Order[coupon]["status"]}}</div>
+             
+            </div>
+            </div>
+            
+         </div>
+         <hr width="100%">
+        </div>
+        {% endfor %}
+     </ul>
+      </div>
+      </body>
+    <script>
+      var email = "MOMO@gmail.com"
+      if(email!=null)
+      {
+      global = 1;
+      var address_id
+      a = document.getElementById('all_display')
+      a.style.display = 'flex'
+      }
+      else
+      {
+       document.getElementById('error_img').style.display = 'block'
+      }
+      function submit_code()
+      {
+        code = document.getElementById("coupon_code").value
+        console.log(code)
+        fetch("http://127.0.0.1:8000/"+email+"/account/add_coupon", {
+          method: 'POST',
+          body:JSON.stringify({'new_coupon': code}),
+          headers :{'Content-Type': 'application/json'}
+        }).then(response => response.json()).then(data =>{
+          if(data.result == "success")
+          {
+            location.reload()
+          }
+          else 
+          {            
+            document.getElementById('error_display').innerHTML = data.result
+          }
+        })
+      }
+      var current_popup_id = 0
+      function show_popup(id){
+        current_popup_id = id
+        document.getElementById("popup-" + id).style.display = "flex"
+        document.getElementById("popup-background").style.display = "block"
+        document.body.style.overflowY = "hidden"
+      }
+      function close_popup(){
+        document.getElementById("popup-" + current_popup_id).style.display = "none"
+        document.getElementById("popup-background").style.display = "none"
+        document.body.style.overflowY = "scroll"
+      }
+      function available_click()
+      {
+        document.getElementById("available_coupon").style.display = 'block'
+        document.getElementById("used_coupon").style.display = 'none'
+        document.getElementById("expire_coupon").style.display = 'none'
+        document.getElementById("available_coupon_button").style.color = 'rgb(90, 160, 225)'
+        document.getElementById("used_coupon_button").style.color = 'rgb(86, 86, 87)'
+        document.getElementById("expire_coupon_button").style.color = 'rgb(86, 86, 87)'
+      }
+      function used_click()
+      {
+        document.getElementById("available_coupon").style.display = 'none'
+        document.getElementById("used_coupon").style.display = 'block'
+        document.getElementById("expire_coupon").style.display = 'none'
+        document.getElementById("available_coupon_button").style.color = 'rgb(86, 86, 87)'
+        document.getElementById("used_coupon_button").style.color = 'rgb(90, 160, 225)'
+        document.getElementById("expire_coupon_button").style.color = 'rgb(86, 86, 87)'
+      }
+      function expire_click()
+      {
+        document.getElementById("available_coupon").style.display = 'none'
+        document.getElementById("used_coupon").style.display = 'none'
+        document.getElementById("expire_coupon").style.display = 'block'
+        document.getElementById("available_coupon_button").style.color = 'rgb(86, 86, 87)'
+        document.getElementById("used_coupon_button").style.color = 'rgb(86, 86, 87)'
+        document.getElementById("expire_coupon_button").style.color = 'rgb(90, 160, 225)'
+      }
+      function go_to(location)
+      {
+          window.location.href = location;
+      }
+    </script>
+</html>

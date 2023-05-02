@@ -1,0 +1,319 @@
+/*Eng font*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap');
+
+/*TH font*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap');
+
+*{
+  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Noto Sans Thai', sans-serif;
+}
+
+button{
+  position: absolute;
+  display: flex;
+    align-items:center;
+    justify-content:right;
+    position: relative;
+    box-sizing: border-box;
+    border: 5px;
+    cursor: pointer;
+    background-color: #ffffff;
+}
+
+button[type = "bluebutton"]
+{
+  position: absolute;
+  display: flex;
+    align-items:center;
+    justify-content:right;
+    position: relative;
+    box-sizing: border-box;
+    border: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(15, 99, 233);
+    border-radius: 8px;
+    font-weight: bold;
+    height: 40px;
+}
+input[type ="whiteblock"] {
+color: currentcolor;
+border: 20px;
+border-radius: 5px;
+border-color: black;
+box-sizing: content-box;
+background: none;
+height: 10px;
+margin: 0px;
+-webkit-tap-highlight-color: transparent;
+display: block;
+width: 320px;
+animation-name: mui-auto-fill-cancel;
+animation-duration: 10ms;
+padding: 16.5px 14px;
+box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+body{
+  background-color: #f5f5f5;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+.img-container{
+  margin-top:20px;
+  display: flex;
+  width: 80%;
+  object-fit: cover;
+}
+
+img{
+  width: 100%;
+  height: 100%;
+}
+
+.row-container{
+  background: rgba(244, 244, 244, 0.89);
+  border-radius: 10px;
+  background-position: center center;
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  width: 800px;
+  margin: 0 0 0 0;
+  z-index: 1;
+}
+
+.popup-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 0;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  max-width: 300px;
+  max-height: 500px;
+  border-radius: 30px;
+  background-color: white;
+}
+
+.description-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-container .description-title{
+  padding-top: 10px;
+  font-size: 50px;
+  padding-left: 10px;
+}
+
+.popup-container .condition{
+  font-size: 20px;
+  padding-left: 20px;
+}
+
+.popup-container .button-container{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.get-code-button{
+  width: 80%;
+  background-color: blue;
+  color: white;
+  border-radius: 4px;
+  text-align: center;
+  padding: 2px;
+  margin-bottom: 10px;
+}
+
+.close-button{
+  width: 100%;
+  border-radius: 4px;
+  padding: 2px;
+  text-align: center;
+}
+
+.close-button:hover{
+  background-color: rgb(204, 204, 204);
+}
+  
+
+.popup-background{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.4;
+    z-index: 3;
+    background-color: gray;
+}
+h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    font-size: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    position: relative;
+  }
+  strong {
+    font-weight: 700;
+  }
+.coupon-container{
+  background-color: white;
+  position: relative;
+  flex-shrink: 0;
+  flex-grow: 0;
+  width: 800px;
+  height: 70px;
+  margin: 10px 10px;
+  overflow: hidden;
+  border-radius: 7px;
+  border: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+}
+
+.coupon-discount{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 35%;
+  height: 100%;
+  border-right: dashed gray 1px;
+  color: rgb(199, 4, 4);
+}
+
+.coupon-discount .text{
+  font-size: 16px;
+}
+
+.coupon-discount .discount{
+  font-size: 20px;
+}
+
+.circle-top{
+  position: absolute;
+  left: 35%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: solid gray 1px;
+  width: 10px;
+  height: 10px;
+  z-index: 2;
+  background-color: white;
+}
+
+.circle-bottom{
+  position: absolute;
+  left: 35%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  border-radius: 50%;
+  border: solid gray 1px;
+  width: 10px;
+  height: 10px;
+  z-index: 2;
+  background-color: white;
+}
+
+.coupon-description{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 4px;
+  border-color:transparent;
+}
+
+.coupon-description .title{
+  font-size: 14px;
+}
+
+.coupon-description .description{
+  font-size: 12px;
+}
+
+.coupon-description .due-date{
+  font-size: 10px;
+}
+
+.coupon-container .button{
+  width: 20%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.container {
+    position: relative;
+    display: inline;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  }
+.coupon-container .button .text{
+  position: absolute;
+  height: 20px;
+  font-size: 10px;
+  border: solid blue 1px;
+  background-color: blue;
+  color: white;
+  border-radius: 6px;
+  padding-top: 4px;
+  padding-left: 3px;
+  padding-right: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+button[type = "menu"]
+      {
+        position: relative;
+        display: inline-flex;
+        justify-content:right;
+        box-sizing: border-box;
+        border: 5px;
+        cursor: pointer;
+        background-color: #ffffff;
+        border-color: black;
+        color: rgb(15, 99, 233);
+        font-size: 25px;
+      }
+      button[type ="menu"]:hover
+      {
+        color: rgb(8, 0, 123);
+      }
+
+      .menu_container {
+        position: relative;
+        display:flex;
+        flex-direction: row;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #ffffff;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+      }
