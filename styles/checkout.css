@@ -1,0 +1,54 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.price-contrainer {
+    border-style: solid;
+    border-radius: 10px;
+    border-color: rgb(222, 221, 221);;
+    margin: 10px 0px;
+}
+
+.price-contrainer .price-text {
+    margin: 0;
+}
+
+#Total {
+    margin: 10px 5px 0px 5px;
+}
+#Discounted {
+    margin: 5px;
+}
+
+#order-conclusion {
+    height: 10%;
+    background-color:rgb(222, 221, 221);
+    text-align: center;
+}
+
+.price-text hr{
+    color: rgb(222, 221, 221);
+}
+.submit {
+    background-color: rgb(15, 99, 233);
+    border-radius: 10px;
+    border-style: none;
+    color: white;
+    padding: 2px 10px;
+    text-decoration: none;
+    margin: 6px 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.price-contrainer .submit {
+    width: 95%;
+}
+
+body .address-contrainer {
+    display: flex;
+    height: 20%;
+}

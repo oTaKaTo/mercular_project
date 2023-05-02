@@ -7,14 +7,13 @@
     </head>
     <body>
         {% include 'nav-bar.html' %}
-        <p style="line-height: 40px;font-weight: 800; font-size: 40px; margin-top:40px;">{{brand}}</p>
+        <p style="line-height: 40px;font-weight: 800; font-size: 40px; margin-top: 40px;">{{keyword}}</p>
         {% for row in products %}
             <div class="row-container">
                 {% for product in row %}
                     
                 <div class="item-container">
-                        <a href="/"+session+"/product/{{product.get_object_id()}}">
-                        
+                        <a href="/product/{{product.get_object_id()}}">
                             <div class="product-img-container">
                                 <img src="{{product.get_image()[0]}}">
                             </div>
@@ -24,14 +23,11 @@
                                 <div class="product-price">{{product.get_price()}} .-</div>
                             </div>
                         </a>
-            
                     </div>
                 {% endfor %}
             </div>
         {% endfor %}
-    
         <script>
-
             session = sessionStorage.getItem("username")
             console.log(session)
             if (session == null)

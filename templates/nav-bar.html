@@ -9,29 +9,8 @@
             <input type="text" name="search" id="search-input" placeholder="Search" autoComplete="off"></input>
             <button class = "search-button" onclick="search_pressed()" ><img class="search-img" src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
         </div>
-        <div class="product-type-component">
-            <div class = "list">
-                <form class = "types" action="/products/type/คอมพิวเตอร์">
-                    <button class = "type">
-                        <p>คอมพิวเตอร์</p>
-                    </button>
-                </form>
-                <form class = "types" action="/products/type/หูฟัง">
-                    <button class = "type">
-                        <p>หูฟัง/ลำโพง</p>
-                    </button>
-                </form>
-                <form class = "types" action="/products/type/เกมมิ่ง">
-                    <button class = "type">
-                        <p>เกมมิ่ง</p>
-                    </button>
-                </form>
-                <form class = "types" action="/products/type/โต๊ะคอม">
-                    <button class = "type">
-                        <p>โต๊ะคอม</p>
-                    </button>
-                </form>
-            </div>
+        <div class="product-type-component" id="product-type-component">
+            
         </div>
         <div class="utility">
             {% if email != "" %} 
@@ -52,12 +31,86 @@
             {% endif %}
         </div>
         <script>
-            search = document.getElementById("search-input").value
-            search = search.toString()
+            let email = sessionStorage.getItem["username"]
+
+            let html_noemail = `
+            <div class = "list">
+                <form class = "types" action= "http://127.0.0.1:8000/products/type/คอมพิวเตอร์">
+                    <button class = "type">
+                        <p>คอมพิวเตอร์</p>
+                    </button>
+                </form>
+                <form class = "types" action="http://127.0.0.1:8000/products/type/หูฟัง">
+                    <button class = "type">
+                        <p>หูฟัง/ลำโพง</p>
+                    </button>
+                </form>
+                <form class = "types" action="http://127.0.0.1:8000/products/type/เกมมิ่ง">
+                    <button class = "type">
+                        <p>เกมมิ่ง</p>
+                    </button>
+                </form>
+                <form class = "types" action="http://127.0.0.1:8000/products/type/โต๊ะคอม">
+                    <button class = "type">
+                        <p>โต๊ะคอม</p>
+                    </button>
+                </form>
+            </div>
+            `
+            let html_email = `
+            <div class = "list">
+                <form class = "types" action= "http://127.0.0.1:8000/"+email+"/products/type/คอมพิวเตอร์">
+                    <button class = "type">
+                        <p>คอมพิวเตอร์</p>
+                    </button>
+                </form>
+                <form class = "types" action="http://127.0.0.1:8000/"+email+"/products/type/หูฟัง">
+                    <button class = "type">
+                        <p>หูฟัง/ลำโพง</p>
+                    </button>
+                </form>
+                <form class = "types" action="http://127.0.0.1:8000/"+email+"/products/type/เกมมิ่ง">
+                    <button class = "type">
+                        <p>เกมมิ่ง</p>
+                    </button>
+                </form>
+                <form class = "types" action="http://127.0.0.1:8000/"+email+"/products/type/โต๊ะคอม">
+                    <button class = "type">
+                        <p>โต๊ะคอม</p>
+                    </button>
+                </form>
+            </div>
+            `
+
+            document.addEventListener("DOMContentLoaded", () => {
+               html_gen()
+            });
+
+            function html_gen(){
+                if(email == null){
+                    document.getElementById('product-type-component').innerHTML = html_noemail
+                }
+                else{
+                    document.getElementById('product-type-component').innerHTML = html_email
+                }
+            }
+
             function search_pressed()
             {
-                fetch("http://127.0.0.1:8000/search/{{seacrh}}").
-                then(response => response.json()).then(data =>{console.log(response)})
+                search = document.getElementById("search-input").value
+                search = search.toString()
+
+                console.log(search)
+                if(email == null){
+                    window.location.href='http://127.0.0.1:8000/search/'+search
+                }
+                else{
+                    window.location.href='http://127.0.0.1:8000/'+email+'search/'+search
+                }
+                
+          
+        
+                
          
             }
             function go_to_profile()

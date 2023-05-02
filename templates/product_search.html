@@ -13,7 +13,7 @@
                 {% for product in row %}
                     
                 <div class="item-container">
-                        <a href="/product/{{product.get_object_id()}}">
+                        <a href="/"+session+"/product/{{product.get_object_id()}}">
                             <div class="product-img-container">
                                 <img src="{{product.get_image()[0]}}">
                             </div>
@@ -41,7 +41,7 @@
             }
             function go_to_profile()
             {
-              window.location.href = "http://localhost:8000/template/profile.html";
+              window.location.href = "http://127.0.0.1:8000/profile-page";
             }
         </script>
     </body>

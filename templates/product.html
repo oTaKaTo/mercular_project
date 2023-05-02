@@ -12,7 +12,7 @@
                 <img src="{{product.get_image()[0]}}">
             </div>
             <div class="info-container">
-             <a href="/products/brand/{{product.get_brand()}}">
+             <a href="/{{email}}/products/brand/{{product.get_brand()}}">
             
                 {{product.get_brand()}}</a>
                 <div class="name-container">
@@ -31,13 +31,18 @@
                     <div class="select" style="width:40%;">
                     <select id="option-select">
                     {% for i in option %}
-                        <option id= "{{i["product_id"]}}"> {{i["option"]}} </option>                   
+                        <option value= "{{i['product_id']}}"> {{i["option"]}} </option>                   
                     {% endfor %}
                     </select>
                     </div>
 
                     </div>
+                {% else %}
+                <select id="option-select">
+                        <option value= "{{product.get_product_id()}}"> {{product.get_option()}} </option>                   
+                    </select>
                 {% endif %}
+                
                 <div class="quantity-container">
                     <p style="line-height: 20px;font-weight: 700; font-size: 14px;">จำนวน :</p>
                 <form>
@@ -66,8 +71,8 @@
                 </form>
                 </div> 
                 <div class="action-container">
-                    <button class="buy-button" id="buy">ซื้อเลย</button>
-                    <button class="cart-button" id="cart">ใส่รถเข็น</button>
+                    <button class="buy-button" id="buy" onclick="">ซื้อเลย</button>
+                    <button class="cart-button" id="cart" onclick="add_to_cart()">ใส่รถเข็น</button>
                 </div>
             </div>
         </div> 
@@ -82,40 +87,34 @@
 
         </div> 
         <script>
+            session = sessionStorage.getItem("username")
             function go_to_profile()
             {
                 window.location.href='http://127.0.0.1:8000/login-page'
             }
+
             function add_to_cart(){
                 email = sessionStorage.getItem("username")
-                
+                console.log(email)
                 if (email == null)
-            {
-              window.location.href = "http://127.0.0.1:8000/"
-            }
-            else
-            {
-              document.getElementById("account_display").style.display = 'block'
-              document.getElementById("account").innerHTML += session[0] +session[1]
-            }
-            
-                var e = document.getElementById("option-selector");
-                var value = e.value;
+                {
+                window.location.href = "http://127.0.0.1:8000/login-page"
+                }
+                
+                var e = document.getElementById("option-select");
+                var id = e.value;
                 var quantity = document.getElementById("number").value
                 var option = e.options[e.selectedIndex].text;
-                fetch("http://127.0.0.1:8000/{{email}}/addtocart",{
+                alert(quantity)
+                fetch("http://127.0.0.1:8000/"+email+"/add_item_to_cart",{
                     method:"PUT",
-                    body:JSON.stringify({'quantity':quantity,'option': option}),
+                    body:JSON.stringify({
+                        'quantity':Number(quantity),
+                        'product_id': id,
+                    }),
                     headers :{'Content-Type': 'application/json'}
                 }).then(response => response.json()).then(data =>{
-          if(data.result == "success")
-          {
-            location.reload()
-          }
-          else 
-          {            
-            document.getElementById('error_display').innerHTML = data.result
-          }
+                    console.log(data)
             })
         }
         </script>

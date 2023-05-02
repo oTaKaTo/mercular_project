@@ -53,9 +53,9 @@ class FlatDiscount(Promotion):
         return str(self.__discount) + '.-'
 
 class PercentageDiscount(Promotion):
-    def __init__(self, due_date:str, minimum_price:int, discount_percent:int, max_discount:int, title:str="", description:str=""):
+    def __init__(self, due_date:str, minimum_price:int, discount:int, max_discount:int, title:str="", description:str=""):
         Promotion.__init__(self, due_date, minimum_price, title, description)
-        self.__discount_percent = discount_percent
+        self.__discount = discount
         self.__max_discount = max_discount
     
     def get_discount(self, price):
@@ -75,15 +75,23 @@ class Coupon(Promotion):
     
     def __init__(self, quantity:int, coupon_type:str, ban_products:list=[], ban_types:list=[], types:list=[], brands:list=[]):
         self.__quantity = quantity
-        self.__code_id = next(coupon_id_gen)
+        self.__code_id = None
         self.__ban_products = ban_products
         self.__ban_types = ban_types
         self.__types = types
         self.__brands = brands
         self.__coupon_type = coupon_type
 
+    def set_id(self, id):
+        self.__code_id = id
+
+    def use(self):
+        if self.__quantity > 0:
+            self.__quantity -= 1
+        return True
+
     def get_id(self):
-        return self.__code_id
+        return str(self.__code_id)
     
     def get_coupon_type(self):
         return self.__coupon_type
@@ -128,8 +136,8 @@ class FlatCoupon(FlatDiscount, Coupon):
         Coupon.__init__(self, quantity, coupon_type, ban_products, ban_types, types, brands)
 
 class PercentageCoupon(PercentageDiscount, Coupon):
-    def __init__(self, due_date:str, minimum_price:int, discount_percent:int, max_discount:int, quantity:int, coupon_type:str, title:str="", description:str="", ban_products:list=[], ban_types:list=[], types:list=[], brands:list=[]):
-        PercentageDiscount.__init__(self, due_date, minimum_price, discount_percent, max_discount, title, description)
+    def __init__(self, due_date:str, minimum_price:int, discount:int, max_discount:int, quantity:int, coupon_type:str, title:str="", description:str="", ban_products:list=[], ban_types:list=[], types:list=[], brands:list=[]):
+        PercentageDiscount.__init__(self, due_date, minimum_price, discount, max_discount, title, description)
         Coupon.__init__(self, quantity, coupon_type, ban_products, ban_types, types, brands)
 
 class CouponCatalog:
@@ -147,10 +155,11 @@ class CouponCatalog:
         return self.__coupons
 
     def add_coupon(self, coupon):
+        coupon.set_id(str(next(coupon_id_gen)))
         self.__coupons.append(coupon)
         return True
     
-    def edit_coupon(self, coupon):
+    def edit_coupon(self, id, coupon):
         id = int(coupon.get_id())
         if id < len(self.__coupons):
             self.__coupons[id] = coupon
@@ -158,8 +167,10 @@ class CouponCatalog:
         return False
 
     def delete_coupon(self, id):
-        self.__coupons[int(id)] = None
-        return True
+        if self.__coupons[int(id)]:
+            self.__coupons[int(id)] = None
+            return True
+        return False
     
     def get_coupons_sorted_by_coupon_type(self):
         sorted_coupon = {'exclusive':[], 'speaker':[], 'gaming':[], 'computer':[], 'table':[]}
@@ -168,4 +179,6 @@ class CouponCatalog:
             if coupon_type in sorted_coupon:
                 sorted_coupon[coupon_type].append(coupon)
         return sorted_coupon
-            
+    
+    def get_coupon_by_id(self, id):
+        return self.__coupons[int(id)]

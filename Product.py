@@ -62,6 +62,11 @@ class ProductCatalog:
             if object_id in i.get_object_id():
                 return i
 
+    def search_by_id(self,product_id:str):
+        for i in self.__products:
+            if product_id in i.get_product_id():
+                return i
+
     def get_option(self,object_id):
         option=[]
         for i in self.__products:
@@ -109,8 +114,8 @@ class ProductCatalog:
     # search box that can search by id, name
     def search(self,keyword=""):
         search_result = []
-        for pd in self.__products:
-            if keyword in pd.get_name() or keyword in pd.get_type():
+        for pd in self.get_object_products():
+            if keyword in pd.get_name() or keyword in pd.get_type() or keyword in pd.get_product_id():
                 search_result.append(pd)
         return search_result
 
