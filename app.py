@@ -56,7 +56,8 @@ async def index(request: Request, email: str, data: Optional[dict] = None):
     user_cart = user.get_user_cart()
     if(data is not None):
         total_price = data["buy_now_total"]
-        discount_price = data["buy_now_discount"] 
+        discount_price = data["buy_now_discount"]
+        is_buynow = True 
     else:
         total_price = user_cart.get_total_price()
         discount_price = user_cart.get_discounted_price(None)
