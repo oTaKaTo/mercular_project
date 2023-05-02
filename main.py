@@ -114,10 +114,23 @@ def  login(data:dict):
      password = data["password"]
      x = my_system.login(email,password)
      if x != False:
+         print(x)
+         if x=="Admin":
+            
+            return {'result':"Admin"}
          return {'result': "success"}
      else:
          return {'result': "failed"}
 
+@app.post('/logout')
+def logout(data:dict):
+    email = data["email"]
+    id = my_system.search_user_by_email(email)
+    if id!= False:
+      my_system.logout(id)
+      return {'result':'success'}
+    return {'result':'failed'}
+        
 @app.post("/register")
 def register(request: Request, data:dict):
     email = data["email"]
@@ -306,7 +319,7 @@ def  user_used_coupon(email:str,data:dict):
             return {"Failed":"Coupon Not Found"}
     else:
         return {"Failed":"Email Not Found"}
-    
+
 @app.get("/{email}/account/view_order",tags=["account"])
 def view_order(request:Request,email:str):
     id = my_system.search_user_by_email(email)

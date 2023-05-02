@@ -236,11 +236,7 @@
               {
                 document.getElementById("login_display").style.display = 'block'
               }
-              else
-              {
-                document.getElementById("account_display").style.display = 'block'
-                document.getElementById("account").innerHTML += session[0] +session[1]
-              }
+              
               function go_to_profile()
               {
                 window.location.href = "http://localhost:8000/template/profile.html";
@@ -250,13 +246,18 @@
 </header>
   <div style="display: none;" id ="all_display">
     <div class="menu_container" id ='coupon_display' style="display: block;">
-      <button type="menu" onclick="go_to('profile-page')">ข้อมูลส่วนตัว</button>
+      <button type="menu" onclick="go_to('http://127.0.0.1:8000/profile-page')">ข้อมูลส่วนตัว</button>
       <br>
-      <button type="menu" onclick="go_to('address-page')">ที่อยู่</button>
+      <button type="menu" onclick="go_to('http://127.0.0.1:8000/address-page')">ที่อยู่</button>
       <br>
-      <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+email+'/account/view_user_coupon')">คูปอง</button>
+      <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+session+'/account/view_user_coupon')">คูปอง</button>
       <br>
-      <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+email+'/account/view_order')">รายการสั่งซื้อ</button>
+      <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+session+'/account/view_order')" >รายการสั่งซื้อ</button>
+      <br>
+      <button type="menu" style="color:red" onclick="logout()">logout</button>
+     
+       
+      
     </div>
     <div class="container" style="display: block;" id="profile_display">
       <h1>ข้อมูลส่วนบุคคล</h1>
@@ -367,6 +368,22 @@
       function go_to(location)
       {
           window.location.href = location;
+      }
+      function logout()
+      {
+        email = sessionStorage.getItem("username")
+        fetch("http://127.0.0.1:8000/logout",
+        {method: 'POST',
+        body:JSON.stringify({'email': email}),
+        headers :{'Content-Type': 'application/json'}
+      }).then(response=>response.json()).then(data=>
+        { 
+        if (data.result == "success")
+        {
+          sessionStorage.removeItem("username")
+          window.location.href='http://127.0.0.1:8000/login-page'
+        }
+        })
       }
     </script>
 </html>

@@ -123,13 +123,16 @@
     </div>
     <div id="all_display" style="display: none; position: relative;">
       <div class="menu_container" id ='coupon_display' style="display: block;">
-        <button type="menu" onclick="go_to('profile-page')">ข้อมูลส่วนตัว</button>
+        <button type="menu" onclick="go_to('http://127.0.0.1:8000/profile-page')">ข้อมูลส่วนตัว</button>
         <br>
-        <button type="menu" onclick="go_to('address-page')">ที่อยู่</button>
+        <button type="menu" onclick="go_to('http://127.0.0.1:8000/address-page')">ที่อยู่</button>
         <br>
-        <button type="menu" onclick="go_to(email+'/account/view_user_coupon')">คูปอง</button>
+        <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+session+'/account/view_user_coupon')">คูปอง</button>
         <br>
-        <button type="menu" onclick="go_to(email+'/account/view_order')" >รายการสั่งซื้อ</button>
+        <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+session+'/account/view_order')" >รายการสั่งซื้อ</button>
+        <br>
+        <button type="menu" style="color:red" onclick="logout()">logout</button>
+       
       </div>
      <div class="container" id ='coupon_display' style="display: block;">
       <h1>คูปองของฉัน</h1>
@@ -285,5 +288,21 @@
       {
           window.location.href = location;
       }
+      function logout()
+    {
+      email = sessionStorage.getItem("username")
+      fetch("http://127.0.0.1:8000/logout",
+      {method: 'POST',
+      body:JSON.stringify({'email': email}),
+      headers :{'Content-Type': 'application/json'}
+    }).then(response=>response.json()).then(data=>
+      { 
+      if (data.result == "success")
+      {
+        sessionStorage.removeItem("username")
+        window.location.href='http://127.0.0.1:8000/login-page'
+      }
+      })
+    }
     </script>
 </html>

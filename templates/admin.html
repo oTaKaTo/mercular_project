@@ -11,6 +11,7 @@
 </head>
 
 <body>
+  <button  style="color:red" onclick="logout()">logout</button>
   <form>
     <label for="input1">Select method</label>
     <select id="input1" name="input1" onchange="select(this.value)">
@@ -438,7 +439,22 @@
       headers: {'Content-Type': 'application/json'}
       }).then(response => response.json()).then(data => {alert(data)})
     }
-
+    function logout()
+    {
+      email = sessionStorage.getItem("username")
+      fetch("http://127.0.0.1:8000/logout",
+      {method: 'POST',
+      body:JSON.stringify({'email': email}),
+      headers :{'Content-Type': 'application/json'}
+    }).then(response=>response.json()).then(data=>
+      { 
+      if (data.result == "success")
+      {
+        sessionStorage.removeItem("username")
+        window.location.href='http://127.0.0.1:8000/login-page'
+      }
+      })
+    }
   </script>
 </body>
 

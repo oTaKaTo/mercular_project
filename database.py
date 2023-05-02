@@ -9,7 +9,7 @@ my_system = System()
 my_system.create_account(email='qwer', password='1234')
 
 
-my_system.add_admin("qwe","qepaskd")
+my_system.add_admin("qwe","123")
 
 my_promotion = PercentageDiscount("6-6-2023", 200, 12, 300)
 
