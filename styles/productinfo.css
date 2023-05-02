@@ -175,11 +175,13 @@ select {
 
 form #decrease {
   margin-right: -4px;
+  height: 40px;
   border-radius: 8px 0 0 8px;
 }
 
 form #increase {
   margin-left: -4px;
+  height: 40px;
   border-radius: 0 8px 8px 0;
 }
 

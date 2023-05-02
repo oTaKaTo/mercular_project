@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{{ url_for('styles', path='font.css?v=1') }}" >
+    <link rel="stylesheet" href="{{ url_for('styles', path='nav_bar.css?v=1') }}" >
+    <title>mercule</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-image: url(https://img.freepik.com/premium-vector/abstract-gray-line-background-vector-illustration_747203-720.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      h1 {
+        text-align: center;
+      }
+      
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+        input[type="text"], input[type="password"] {
+        display: block;
+        width: 30%;
+        padding: 10px;
+        border: 1px solid #000000;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        margin-left: 35%;
+      }
+      
+      input[type="submit"] {
+        background-color: #232323;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        width: 5%;
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-left: 35%;
+        
+      }
+      
+      input[type="submit"]:hover {
+        background-color: #4f4d4df9;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="font-size:300%;">Login</h1>
+    <form>
+      <label style="margin-left: 35%;" for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+      <label style="margin-left: 35%" for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <button style="display: inline-block;margin-left:35%;font-size: 100%;" onclick="submitForm(event)">Submit</button>
+      <a href="register-page" style="padding-left:10%;padding-right: 1%;display: inline-block;">Register</a> 
+      <a href="*" >Forgot your password?</a>
+      <p id="error" style="color:red;display: none;padding-left: 35%;">Login failed. Please check your email and password.</p>
+    </form> 
+    <p id="success" style="color: rgb(0, 255, 72); display: none;">Login success.</p>
+    <script>  
+       function submitForm(event) {
+        event.preventDefault()
+        var username1 = document.getElementById("username").value; 
+        var password1 = document.getElementById("password").value;  
+          fetch("http://127.0.0.1:8000/login", {
+          method: 'POST',
+          body:JSON.stringify({'email': username1,'password': password1}),
+          headers :{'Content-Type': 'application/json'}
+        }).then(response => response.json()).then(data =>{
+          console.log(data.result)
+          if(data.result == 'success')
+          {
+            var x= document.getElementById("error");
+            var a = document.getElementById("username").value;
+            sessionStorage.setItem("username", a);
+            a = ""
+            document.getElementById("password").value ="";
+            if (x.style.display == 'block' )
+            {
+              x.style.display = 'none';
+            }
+            window.location.href='profile-page';
+          }
+          else if (data.result == "Admin")
+          {
+            var x= document.getElementById("error");
+            var a = document.getElementById("username").value;
+            sessionStorage.setItem("username", a);
+            a = ""
+            document.getElementById("password").value ="";
+            if (x.style.display == 'block' )
+            {
+              x.style.display = 'none';
+            }
+            email = sessionStorage.getItem("username")
+            window.location.href= email+'/admin';
+          }
+          else
+          {
+            var x = document.getElementById("error");
+            x.style.color = 'red';
+            if (x.style.display == "none") {
+            x.style.display = 'block';
+            } 
+          }
+        })
+       
+      }
+    </script>
+  </body>
+</html>

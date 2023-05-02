@@ -1,4 +1,4 @@
-class shipping_adress:
+class ShippingAddress:
     def __init__(self, name_surname, phone_number, address, sub_district, district, province, postal_code):
         self.__name_surname = name_surname
         self.__phone_number = phone_number

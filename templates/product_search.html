@@ -1,103 +1,48 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="{{ url_for('htmldirectory', path='productinfos.css?v=1') }}">
+        {% include 'global_head.html' %}
+        <link rel="stylesheet" href="{{ url_for('styles', path='productlist.css?v=1') }}">
         <link rel="icon" href="data:image/png;base64,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">
     </head>
     <body>
-        <a href="/"><img src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=128&q=75" style="height: 36px;width: 112px; ; margin-left: 2%; margin-top: 0.5%;" alt="Mercular"></a>
-        <div class="row-container">
-            <div class="img-container">
-                <img src="{{product.get_image()[0]}}">
-            </div>
-            <div class="info-container">
-                <a href="/products/{{product.get_brand()}}">{{product.get_brand()}}</a>
-                <div class="name-container">
-                    {{product.get_name()}}
-                </div>
-                
-                <div class="id-container">
-                    รหัสสินค้า {{product.get_product_id()}} ({{product.get_object_id()}})
-                </div>
-                <div class="price-container">
-                    ฿{{product.get_price()}}
-                </div>
-                {% if option[0]["option"] != '' %}
-                    <div class="option-container">
-                        <p style="line-height: 20px;font-weight: 700; font-size: 14px;">ตัวเลือก :</p>
-                    <div class="select" style="width:40%;">
-                    <select id="option-select">
-                    {% for i in option %}
-                        <option id= "{{i["product_id"]}}"> {{i["option"]}} </option>                   
-                    {% endfor %}
-                    </select>
+        {% include 'nav-bar.html' %}
+        <p style="line-height: 40px;font-weight: 800; font-size: 40px; margin-top: 40px;">{{keyword}}</p>
+        {% for row in products %}
+            <div class="row-container">
+                {% for product in row %}
+                    
+                <div class="item-container">
+                        <a href="/product/{{product.get_object_id()}}">
+                            <div class="product-img-container">
+                                <img src="{{product.get_image()[0]}}">
+                            </div>
+                            <div class="product-name">{{product.get_name()}}</div>
+                            <div class="price-container">
+                                <div class="product-discount"></div>
+                                <div class="product-price">{{product.get_price()}} .-</div>
+                            </div>
+                        </a>
                     </div>
-
-                    </div>
-                {% endif %}
-                <div class="quantity-container">
-                    <p style="line-height: 20px;font-weight: 700; font-size: 14px;">จำนวน :</p>
-                <form>
-                    <div class="value-button" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
-                    <input type="number" id="number" value="1" />
-                    <div class="value-button" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
-                    <script>
-                    function increaseValue() {
-                        var value = parseInt(document.getElementById('number').value, 10);
-                        value = isNaN(value) ? 0 : value;
-                        if (value <99){
-                            value++;
-                        }
-                        document.getElementById('number').value = value;
-                      }
-                      
-                      function decreaseValue() {
-                        var value = parseInt(document.getElementById('number').value, 10);
-                        value = isNaN(value) ? 0 : value;
-                        value < 1 ? value = 1 : '';
-                        if (value >1){
-                            value--;
-                        }
-                        document.getElementById('number').value = value;
-                      }</script>
-                </form>
-                </div> 
-                <div class="action-container">
-                    <button class="buy-button" id="buy">ซื้อเลย</button>
-                    <button class="cart-button" id="cart">ใส่รถเข็น</button>
-                </div>
-            </div>
-        </div> 
-        <div class="detail-box">
-            <p style="line-height: 40px;font-weight: 700; font-size: 40px; margin-top: 10px;">สเปคสินค้า</p>
-                {% for k,v in product.get_detail().items() %}
-                <div class="detail-container">
-                    <div class="spec-container" style="font-weight: 700;">{{k}}</div>
-                    <div class="spec-container">{{v}}</div>
-                </div>
                 {% endfor %}
-            
-
-        </div> 
-        <!-- <script>
-            function add_to_cart(){
-                if()
-                var e = document.getElementById("option-selector");
-                var value = e.value;
-                var quantity = document.getElementById("number").value
-                var text = e.options[e.selectedIndex].text;
-                fetch("http://127.0.0.1:8000/{{email}}/addtocart",{
-                    method:"PUT",
-                    body:JSON.stringify({'email':{{email}},'password': password1}),
-                }
-                )
-                {
-
-                }
+            </div>
+        {% endfor %}
+        <script>
+            session = sessionStorage.getItem("username")
+            console.log(session)
+            if (session == null)
+            {
+              document.getElementById("login_display").style.display = 'block'
             }
-           
-        </script> -->
-
-        
+            else
+            {
+              document.getElementById("account_display").style.display = 'block'
+              document.getElementById("account").innerHTML += session[0] +session[1]
+            }
+            function go_to_profile()
+            {
+              window.location.href = "http://localhost:8000/template/profile.html";
+            }
+        </script>
     </body>
 </html>

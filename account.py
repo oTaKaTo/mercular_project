@@ -1,5 +1,5 @@
 from product import Product
-from shipping_address import shipping_adress
+from shipping_address import ShippingAddress
 from cart import Cart
 from copy import copy
 from uuid import uuid4
@@ -136,7 +136,7 @@ class User(Account):
                return "Invaild Coupon ID"
      
      def add_address(self,name_surname, phone_number, address, sub_district, district, province, postal_code):
-          self.__address.append(shipping_adress(name_surname,phone_number,address,sub_district,district,province,postal_code))
+          self.__address.append(ShippingAddress(name_surname,phone_number,address,sub_district,district,province,postal_code))
           return True
      
      def delete_address(self,address):
