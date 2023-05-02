@@ -48,16 +48,26 @@ templates = Jinja2Templates(directory = 'mercular_frontend\src\\templates')
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "email": "65010244@gmail.com"})
 
-@app.get('/{email}/checkout', tags=["Page"], response_class=HTMLResponse)
-async def index(request: Request, email: str):
+@app.post('/{email}/checkout', tags=["Page"], response_class=HTMLResponse)
+async def index(request: Request, email: str, data: Optional[dict] = None):
+    is_buynow = False
     user = system.check_exists_account(email)
     user = system.check_exists_account(email)
     user_cart = user.get_user_cart()
+    if(data is not None):
+        total_price = data["buy_now_total"]
+        discount_price = data["buy_now_discount"] 
+    else:
+        total_price = user_cart.get_total_price()
+        discount_price = user_cart.get_discounted_price(None)
+    
     return templates.TemplateResponse("checkout.html", {"request": request,
                                                         "email": email,
                                                         "shipping_address": user.get_address(),
-                                                        "total_price": user_cart.get_total_price(),
-                                                        "discount_price": user_cart.get_discounted_price(None)
+                                                        "total_price": total_price,
+                                                        "discount_price": discount_price,
+                                                        "user_coupons": user.get_user_coupon(),
+                                                        "is_buynow" : is_buynow
                                                         })
 
 @app.get('/{email}/cart', tags=["Page"], response_class=HTMLResponse)
@@ -72,7 +82,7 @@ async def cart(email: str, request: Request):
         selected_item = user_cart.get_selected_items()
         for selected in selected_item:
             selected_info.update(selected.get_item())   
-        print("===============")
+            
         for item in items:
             price = item.get_price() * item.get_quantity()
             temp_info = item.get_item()
@@ -85,7 +95,8 @@ async def cart(email: str, request: Request):
                                                         "list": list,
                                                         "email": email, 
                                                         "dict_price": dict_price, 
-                                                        "selected_info": selected_info
+                                                        "selected_info": selected_info,
+                                                        "user_coupons": user.get_user_coupon()
                                                         })
 
 @app.get('/{email}/cart/current_selected_items' , tags = ["View Cart"])
@@ -161,10 +172,6 @@ async def create_order(email: str, data: dict):
         return {"status": user_cart.checkout()}
     except:
         return {"status": False}
-
-
-        
-
 
 @app.put("/{email}/add_item_to_cart", tags = ["View Product"])
 def add_item(email: str, product_id: str, quantity: int):

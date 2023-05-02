@@ -3,12 +3,17 @@ from system import System
 from Product import Product, ProductCatalog, Item
 from shipping_address import ShippingAddress
 from order import Order, OrderStatus
+from promotion import PercentageCoupon, FlatCoupon
+
+
 
 system = System()
 system_user_lst = system.get_user_lst()
 product_catalog = system.get_product_catalog()
 coupoun_catalog = system.get_coupon_catalog()
 
+coupon1 = PercentageCoupon('23-5-2023', 100, 10, 20, 100, description="oasijfoasifj")
+coupoun_catalog.add_coupon(coupon1)
 system_user_lst.append(User("momo","1234","65010244@gmail.com"))
 momo = system.check_exists_account("65010244@gmail.com")
 

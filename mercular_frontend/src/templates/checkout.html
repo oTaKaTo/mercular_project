@@ -29,6 +29,26 @@
                 </fieldset>
             </form>
         </div>
+        <!--<div class = "coupon-contrainer">
+            <form>
+                <fieldset class="coupons-list" action = "javascript:">
+                    <div>
+                        {% for coupon in user_coupons %}
+                        <p>Hi</p>
+                            {% set coupon_index = user_coupons.index(coupon) %}
+                                <input  type="radio"
+                                id = "coupon-no-{{coupon_index}}"
+                                name="contact"
+                                value = {{coupon_index}}
+                                onchange="checkbox_handle(this)"
+                                >
+                                <label for="coupon-no-{{coupon_index}}">{{user_coupons[coupon_index].get_id()}}</label>
+                            <hr>
+                        {% endfor %}
+                    <div>
+                </fieldset>
+              </form>
+        </div>-->
         <div class = "summarize">
             <div class = "price-contrainer">
                 <div class = 'price-text'>

@@ -135,8 +135,7 @@
                 headers :{'Content-Type': 'application/json'}
               }).then(response=>response.json())
       }
-      
-      
+            
       function edit_item_amount(index, edit_by) {
         temp_amount = Number(document.getElementById("item-quantity-" + index).innerHTML)
         temp_price = Number(document.getElementById("item-price-" + index).innerHTML)/Number(temp_amount)
