@@ -71,7 +71,6 @@
           body:JSON.stringify({'email': username1,'password': password1}),
           headers :{'Content-Type': 'application/json'}
         }).then(response => response.json()).then(data =>{
-          console.log(data.result)
           if(data.result == 'success')
           {
             var x= document.getElementById("error");
@@ -84,20 +83,6 @@
               x.style.display = 'none';
             }
             window.location.href='profile-page';
-          }
-          else if (data.result == "Admin")
-          {
-            var x= document.getElementById("error");
-            var a = document.getElementById("username").value;
-            sessionStorage.setItem("username", a);
-            a = ""
-            document.getElementById("password").value ="";
-            if (x.style.display == 'block' )
-            {
-              x.style.display = 'none';
-            }
-            email = sessionStorage.getItem("username")
-            window.location.href= email+'/admin';
           }
           else
           {

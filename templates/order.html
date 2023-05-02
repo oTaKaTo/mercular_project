@@ -35,95 +35,20 @@
   {% endfor %}
   </head>
   <body>
-    <header>
-      <nav>
-          <div class="logo">
-              <a href="/">
-                  <img class="logo-img" src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=256&q=75">
-              </a>   
-          </div>
-          <div class="search-bar">
-              <input type="text" name="search" id="search-input" placeholder="Search" autoComplete="off"></input>
-              <button class = "search-button" type="submit" ><img class="search-img" src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
-          </div>
-          <div class="product-type-component">
-              <div class = "list">
-                  <form class = "types" action="/">
-                      <button class = "type">
-                          <p>คอมพิวเตอร์</p>
-                      </button>
-                  </form>
-                  <form class = "types" action="/">
-                      <button class = "type">
-                          <p>หูฟัง/ลำโพง</p>
-                      </button>
-                  </form>
-                  <form class = "types" action="/">
-                      <button class = "type">
-                          <p>เกมมิ่ง</p>
-                      </button>
-                  </form>
-                  <form class = "types" action="/">
-                      <button class = "type">
-                          <p>อุปกรณ์มือถือ </p>
-                      </button>
-                  </form>
-              </div>
-          </div>
-          <div class="utility">
-              {% if email != "" %} 
-                  <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
-              {% else %} 
-                  <a href= "/"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
-              {% endif %}
-          </div>
-          <div class="user">
-              {% if email != "" %} 
-                  <a onclick="go_to_profile()"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
-
-              {% else %} 
-              <div id="login_display" style="display: inline-flex;">
-                  <button class="login_button" onclick="window.location.href='login.html'">Login</button>
-                  <button class="login_button" onclick="window.location.href='register.html'">Register</button>
-              </div>
-              {% endif %}
-          </div>
-          
-          <script>
-              session = sessionStorage.getItem("username")
-              console.log(session)
-              if (session == null)
-              {
-                document.getElementById("login_display").style.display = 'block'
-              }
-              else
-              {
-                document.getElementById("account_display").style.display = 'block'
-                document.getElementById("account").innerHTML += session[0] +session[1]
-              }
-              function go_to_profile()
-              {
-                window.location.href = "http://localhost:8000/template/profile.html";
-              }
-          </script>
-      </nav>
-</header>
+    {% include "nav-bar.html" %}
     <div class="popup-background" id="popup-background" style="display: none;" onclick="close_popup()"></div>
     <div  style="display: none;"  id="error_img"> <center><img src="https://i0.wp.com/learn.onemonth.com/wp-content/uploads/2017/08/1-10.png?fit=845%2C503&ssl=1"></center>
       <center><a href="login-page" style="font-size: 30px;">กดที่นี่เพื่อ Login</a></center>
     </div>
     <div id="all_display" style="display: none; position: relative;">
       <div class="menu_container" id ='coupon_display' style="display: block;">
-        <button type="menu" onclick="go_to('http://127.0.0.1:8000/profile-page')">ข้อมูลส่วนตัว</button>
+        <button type="menu" onclick="go_to('profile-page')">ข้อมูลส่วนตัว</button>
         <br>
-        <button type="menu" onclick="go_to('http://127.0.0.1:8000/address-page')">ที่อยู่</button>
+        <button type="menu" onclick="go_to('address-page')">ที่อยู่</button>
         <br>
-        <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+session+'/account/view_user_coupon')">คูปอง</button>
+        <button type="menu" onclick="go_to(email + '/view_user_coupon')">คูปอง</button>
         <br>
-        <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+session+'/account/view_order')" >รายการสั่งซื้อ</button>
-        <br>
-        <button type="menu" style="color:red" onclick="logout()">logout</button>
-       
+        <button type="menu" onclick="go_to(email + '/account/view_order')">รายการสั่งซื้อ</button>
       </div>
      <div class="container" id ='coupon_display' style="display: block;">
       <h1>รายการคำสั่งซื้อ</h1>
@@ -223,22 +148,6 @@
       function go_to(location)
       {
           window.location.href = location;
-      }
-      function logout()
-      {
-        email = sessionStorage.getItem("username")
-        fetch("http://127.0.0.1:8000/logout",
-        {method: 'POST',
-        body:JSON.stringify({'email': email}),
-        headers :{'Content-Type': 'application/json'}
-      }).then(response=>response.json()).then(data=>
-        { 
-        if (data.result == "success")
-        {
-          sessionStorage.removeItem("username")
-          window.location.href='http://127.0.0.1:8000/login-page'
-        }
-        })
       }
     </script>
 </html>
