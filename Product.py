@@ -104,31 +104,14 @@ class ProductCatalog:
     
     
 
-    
-    
-    
-    # def get_product_by_brand(self,brand:str):
-    #      branded_product = []
-    #      for i in self.__products:
-    #         if brand.lower() in (i.get_brand()).lower():
-    #             branded_product.append(i)
-    #      return branded_product   
+ 
 
     # search box that can search by id, name
-    def search_keyword(self, keyword=""):
-        search_result = {}
-        # for i in self.__products:
-        #     if keyword.lower() == i.product_id:
-        #         return i
-        #     if keyword.lower() in (i.name).lower():
-        #         search_result[i.product_id] = i.name  
-        return search_result
-    
-    def search_by_catagories(self,keyword=""):
-        search_result = {}
-        for i in self.__products:
-                if keyword == i:
-                    search_result[i.get_product_id()] = i.get_name()
+    def search(self,keyword=""):
+        search_result = []
+        for pd in self.__products:
+            if keyword in pd.get_name() or keyword in pd.get_type():
+                search_result.append(pd)
         return search_result
 
 
