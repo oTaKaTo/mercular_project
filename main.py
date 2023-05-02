@@ -16,6 +16,14 @@ app.mount('/styles', StaticFiles(directory='styles'), name='styles')
 
 templates = Jinja2Templates(directory="templates")
 
+@app.get('/', response_class=HTMLResponse)
+async def view_home_page(request: Request):
+    return templates.TemplateResponse("index_no_email.html", {"request": request, 'email': ''})
+
+@app.get('/{email}/', response_class=HTMLResponse)
+async def view_home_page_email(request: Request, email:str):
+    return templates.TemplateResponse("index.html", {"request": request, 'email': email})
+
 @app.get("/{email}/admin", response_class=HTMLResponse)
 async def view_admin_page(request: Request, email:str):
     return templates.TemplateResponse("admin.html", {"request": request, 'email': email})
