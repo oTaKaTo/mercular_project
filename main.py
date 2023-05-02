@@ -50,34 +50,44 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get('/', response_class=HTMLResponse)
 async def view_home_page(request: Request):
-    return templates.TemplateResponse("index_no_email.html", {"request": request, 'email': None})
+    return templates.TemplateResponse("index_no_email.html", {"request": request, 'email': ''})
 
 @app.get('/{email}/', response_class=HTMLResponse)
 async def view_home_page_email(request: Request, email:str):
     return templates.TemplateResponse("index.html", {"request": request, 'email': email})
 
-@app.post('/{email}/checkout', tags=["Page"], response_class=HTMLResponse)
-async def index(request: Request, email: str, data: Optional[dict] = None):
-    is_buynow = False
+@app.get('/{email}/checkout', tags=["Page"], response_class=HTMLResponse)
+async def index(request: Request, email: str):
     user = my_system.search_user_by_email(email)
     user = my_system.search_user_by_email(email)
     user_cart = user.get_user_cart()
-    if(data is not None):
-        total_price = data["buy_now_total"]
-        discount_price = data["buy_now_discount"]
-        is_buynow = True 
-    else:
-        total_price = user_cart.get_total_price()
-        discount_price = user_cart.get_discounted_price(None)
     
     return templates.TemplateResponse("checkout.html", {"request": request,
                                                         "email": email,
                                                         "shipping_address": user.get_address(),
-                                                        "total_price": total_price,
-                                                        "discount_price": discount_price,
+                                                        "total_price": user_cart.get_total_price(),
+                                                        "discount_price": user_cart.discounted_price(),
                                                         "user_coupons": user.get_user_coupon(),
-                                                        "is_buynow" : is_buynow
                                                         })
+
+@app.get('/{email}/{product_id}/buynow', tags=["Page"], response_class=HTMLResponse)
+async def buynow(request: Request, email: str, product_id):
+    user = my_system.search_user_by_email(email)
+    user = my_system.search_user_by_email(email)
+    user_cart = user.get_user_cart()
+    selected_item = user.get_selected_item()
+    selected_item.clear()
+    
+    user_cart.add_item()
+    
+    return templates.TemplateResponse("checkout.html", {"request": request,
+                                                        "email": email,
+                                                        "shipping_address": user.get_address(),
+                                                        "total_price": user_cart.get_total_price(),
+                                                        "discount_price": user_cart.discounted_price(),
+                                                        "user_coupons": user.get_user_coupon(),
+                                                        })
+
 
 @app.get('/{email}/cart', tags=["Page"], response_class=HTMLResponse)
 async def cart(email: str, request: Request):
@@ -219,7 +229,7 @@ async def view_coupon_email(request: Request, email: str):
 
 @app.get("/monthly-promotion", response_class=HTMLResponse)
 async def view_promotion(request: Request):
-  return templates.TemplateResponse("promotion_no_email.html", {"request": request, 'products': promo_pd_catalog_dict.get_products(), 'email': None})
+  return templates.TemplateResponse("promotion_no_email.html", {"request": request, 'products': promo_pd_catalog_dict.get_products(), 'email':''})
 
 @app.get("/{email}/monthly-promotion", response_class=HTMLResponse)
 async def view_promotion_email(request: Request, email: str):
@@ -420,7 +430,7 @@ async def view_user_coupon(request:Request,email:str):
         for coupon in id.get_expire_coupon():
             expire_coupon.append(coupon)
         user_coupon_dict["expire_coupon"] = expire_coupon
-        return templates.TemplateResponse('user_coupon.html',{"request":request,"user_coupon_dict": user_coupon_dict, 'email': email})
+        return templates.TemplateResponse('user_coupon.html',{"request":request,"user_coupon_dict": user_coupon_dict})
     else:
         return {"Failed":"Email Not Found"}
     
@@ -495,11 +505,11 @@ def  user_used_coupon(email:str,data:dict):
         return {"Failed":"Email Not Found"}
 
 @app.get("/{email}/account/view_order",tags=["account"])
-def view_order(request:Request,email:str):
+def view_order(request:Request, email:str):
     id = my_system.search_user_by_email(email)
     if id!=False:
         response = id.get_order_history().get_order_info()
-        return templates.TemplateResponse('order.html',{"request":request,"Order":response, 'email': email})
+        return templates.TemplateResponse('order.html',{"request":request,"Order":response})
     else:
         return {"Failed":"Email Not Found"}
 

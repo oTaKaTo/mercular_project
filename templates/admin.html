@@ -65,10 +65,10 @@
       </div>
     </div>
     <div class="data-container" id="data-container">
-      <div class="ban-products-container" id="ban-products-container">--ban products--</div>
-      <div class="ban-types-container" id="ban-types-container">--ban types--</div>
-      <div class="types-container" id="types-container">--types--</div>
-      <div class="brands-container" id="brands-container">--brands--</div>
+      <div class="ban-products-container" id="ban-products-container">ban products</div>
+      <div class="ban-types-container" id="ban-types-container">ban types</div>
+      <div class="types-container" id="types-container">types</div>
+      <div class="brands-container" id="brands-container">brands</div>
       <div class="coupon-container" id="coupon-container"></div>
       <button onclick="system_add_coupon()">submit</button>
     </div>
@@ -85,42 +85,21 @@
       value = document.getElementById('ban-product').value
       ban_products_arr.push(value)
       document.getElementById('ban-product').value = ''
-      let temp = `--ban product-- <br>`
-      for(let product in ban_products_arr){
-        temp = temp + `${ban_products_arr[product]} <br>`
-      }
-      document.getElementById('ban-products-container').innerHTML = temp
     }
     function add_ban_type(){
       value = document.getElementById('ban-type').value
       ban_types_arr.push(value)
       document.getElementById('ban-type').value = ''
-      document.getElementById('ban-product').value = ''
-      let temp = `--ban types-- <br>`
-      for(let product in ban_types_arr){
-        temp = temp + `${ban_types_arr[product]} <br>`
-      }
-      document.getElementById('ban-types-container').innerHTML = temp
     }
     function add_type(){
       value = document.getElementById('type').value
       types_arr.push(value)
       document.getElementById('type').value = ''
-      let temp = `--types-- <br>`
-      for(let product in types_arr){
-        temp = temp + `${types_arr[product]} <br>`
-      }
-      document.getElementById('types-container').innerHTML = temp
     }
     function add_brand(){
       value = document.getElementById('brand').value
       brands_arr.push(value)
       document.getElementById('brand').value = ''
-      let temp = `--brands-- <br>`
-      for(let product in brands_arr){
-        temp = temp + `${brands_arr[product]} <br>`
-      }
-      document.getElementById('brands-container').innerHTML = temp
     }
 
     let add_coupon = `
@@ -168,10 +147,10 @@
       </div>
     </div>
     <div class="data-container" id="data-container">
-      <div class="ban-products-container" id="ban-products-container">--ban products--</div>
-      <div class="ban-types-container" id="ban-types-container">--ban types--</div>
-      <div class="types-container" id="types-container">--types--</div>
-      <div class="brands-container" id="brands-container">--brands--</div>
+      <div class="ban-products-container" id="ban-products-container">ban products</div>
+      <div class="ban-types-container" id="ban-types-container">ban types</div>
+      <div class="types-container" id="types-container">types</div>
+      <div class="brands-container" id="brands-container">brands</div>
       <div class="coupon-container" id="coupon-container"></div>
       <button onclick="system_add_coupon()">submit</button>
     </div>`
@@ -222,12 +201,11 @@
       </div>
     </div>
     <div class="data-container" id="data-container">
-      <div class="ban-products-container" id="ban-products-container">--ban products--</div>
-      <div class="ban-types-container" id="ban-types-container">--ban types--</div>
-      <div class="types-container" id="types-container">--types--</div>
-      <div class="brands-container" id="brands-container">--brands--</div>
+      <div class="ban-products-container" id="ban-products-container">ban products</div>
+      <div class="ban-types-container" id="ban-types-container">ban types</div>
+      <div class="types-container" id="types-container">types</div>
+      <div class="brands-container" id="brands-container">brands</div>
       <div class="coupon-container" id="coupon-container"></div>
-      <button onclick="system_add_coupon()">submit</button>
     </div>`
 
     let delete_coupon = `

@@ -114,6 +114,7 @@
           .then(response => response.json())
           .then(data => {
             if(data["selected_item"].length > 0) {
+              fetch("/" + email + "/checkout")
               window.location.href = ("/" + email + "/checkout")
               return 0;
             }
