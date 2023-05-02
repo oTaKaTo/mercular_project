@@ -39,7 +39,6 @@
                     
                 </script>
                 {% if email is none %} 
-                    <script>alert(session)</script>
                     <a href= "" onclick= "location.href=this.href+session + '/cart';return false;"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
                 {% elif email != "" and email is not none %} 
                     <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>

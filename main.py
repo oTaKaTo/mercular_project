@@ -50,7 +50,7 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get('/', response_class=HTMLResponse)
 async def view_home_page(request: Request):
-    return templates.TemplateResponse("index_no_email.html", {"request": request, 'email': ''})
+    return templates.TemplateResponse("index_no_email.html", {"request": request, 'email': None})
 
 @app.get('/{email}/', response_class=HTMLResponse)
 async def view_home_page_email(request: Request, email:str):
@@ -219,7 +219,7 @@ async def view_coupon_email(request: Request, email: str):
 
 @app.get("/monthly-promotion", response_class=HTMLResponse)
 async def view_promotion(request: Request):
-  return templates.TemplateResponse("promotion_no_email.html", {"request": request, 'products': promo_pd_catalog_dict.get_products(), 'email':''})
+  return templates.TemplateResponse("promotion_no_email.html", {"request": request, 'products': promo_pd_catalog_dict.get_products(), 'email': None})
 
 @app.get("/{email}/monthly-promotion", response_class=HTMLResponse)
 async def view_promotion_email(request: Request, email: str):
@@ -420,7 +420,7 @@ async def view_user_coupon(request:Request,email:str):
         for coupon in id.get_expire_coupon():
             expire_coupon.append(coupon)
         user_coupon_dict["expire_coupon"] = expire_coupon
-        return templates.TemplateResponse('user_coupon.html',{"request":request,"user_coupon_dict": user_coupon_dict})
+        return templates.TemplateResponse('user_coupon.html',{"request":request,"user_coupon_dict": user_coupon_dict, 'email': email})
     else:
         return {"Failed":"Email Not Found"}
     
@@ -499,7 +499,7 @@ def view_order(request:Request,email:str):
     id = my_system.search_user_by_email(email)
     if id!=False:
         response = id.get_order_history().get_order_info()
-        return templates.TemplateResponse('order.html',{"request":request,"Order":response})
+        return templates.TemplateResponse('order.html',{"request":request,"Order":response, 'email': email})
     else:
         return {"Failed":"Email Not Found"}
 
