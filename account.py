@@ -4,7 +4,7 @@ from promotion import Coupon,CouponCatalog,Promotion
 from cart import Cart
 from copy import copy
 from uuid import uuid4
-from OrderHistory import OrderHistory
+from order_history import OrderHistory
 
 class Account:
      def __init__(self, username, password, email, phone_number="",online_status:bool=False):

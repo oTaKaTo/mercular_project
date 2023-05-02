@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <!DOCTYPE html>
 <html>
   <head>
@@ -175,16 +176,89 @@
   </div>
   <div class="popup-background" style="display: none;" id="popup-bg"></div>
   <body>
-    {% include "nav-bar.html" %}
+    <header>
+      <nav>
+          <div class="logo">
+              <a href="/">
+                  <img class="logo-img" src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=256&q=75">
+              </a>   
+          </div>
+          <div class="search-bar">
+              <input type="text" name="search" id="search-input" placeholder="Search" autoComplete="off"></input>
+              <button class = "search-button" type="submit" ><img class="search-img" src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
+          </div>
+          <div class="product-type-component">
+              <div class = "list">
+                  <form class = "types" action="/">
+                      <button class = "type">
+                          <p>คอมพิวเตอร์</p>
+                      </button>
+                  </form>
+                  <form class = "types" action="/">
+                      <button class = "type">
+                          <p>หูฟัง/ลำโพง</p>
+                      </button>
+                  </form>
+                  <form class = "types" action="/">
+                      <button class = "type">
+                          <p>เกมมิ่ง</p>
+                      </button>
+                  </form>
+                  <form class = "types" action="/">
+                      <button class = "type">
+                          <p>อุปกรณ์มือถือ </p>
+                      </button>
+                  </form>
+              </div>
+          </div>
+          <div class="utility">
+              {% if email != "" %} 
+                  <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+              {% else %} 
+                  <a href= "/"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+              {% endif %}
+          </div>
+          <div class="user">
+              {% if email != "" %} 
+                  <a onclick="go_to_profile()"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
+
+              {% else %} 
+              <div id="login_display" style="display: inline-flex;">
+                  <button class="login_button" onclick="window.location.href='login.html'">Login</button>
+                  <button class="login_button" onclick="window.location.href='register.html'">Register</button>
+              </div>
+              {% endif %}
+          </div>
+          
+          <script>
+              session = sessionStorage.getItem("username")
+              console.log(session)
+              if (session == null)
+              {
+                document.getElementById("login_display").style.display = 'block'
+              }
+              
+              function go_to_profile()
+              {
+                window.location.href = "http://localhost:8000/template/profile.html";
+              }
+          </script>
+      </nav>
+</header>
   <div style="display: none;" id ="all_display">
     <div class="menu_container" id ='coupon_display' style="display: block;">
-      <button type="menu" onclick="go_to('profile-page')">ข้อมูลส่วนตัว</button>
+      <button type="menu" onclick="go_to('http://127.0.0.1:8000/profile-page')">ข้อมูลส่วนตัว</button>
       <br>
-      <button type="menu" onclick="go_to('address-page')">ที่อยู่</button>
+      <button type="menu" onclick="go_to('http://127.0.0.1:8000/address-page')">ที่อยู่</button>
       <br>
-      <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+email+'/account/view_user_coupon')">คูปอง</button>
+      <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+session+'/account/view_user_coupon')">คูปอง</button>
       <br>
-      <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+email+'/account/view_order')">รายการสั่งซื้อ</button>
+      <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+session+'/account/view_order')" >รายการสั่งซื้อ</button>
+      <br>
+      <button type="menu" style="color:red" onclick="logout()">logout</button>
+     
+       
+      
     </div>
     <div class="container" style="display: block;" id="profile_display">
       <h1>ข้อมูลส่วนบุคคล</h1>
@@ -296,5 +370,341 @@
       {
           window.location.href = location;
       }
+      function logout()
+      {
+        email = sessionStorage.getItem("username")
+        fetch("http://127.0.0.1:8000/logout",
+        {method: 'POST',
+        body:JSON.stringify({'email': email}),
+        headers :{'Content-Type': 'application/json'}
+      }).then(response=>response.json()).then(data=>
+        { 
+        if (data.result == "success")
+        {
+          sessionStorage.removeItem("username")
+          window.location.href='http://127.0.0.1:8000/login-page'
+        }
+        })
+      }
     </script>
+=======
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{{ url_for('styles', path='font.css?v=1') }}" >
+    {% include "global_head.html" %}
+    <style>
+      *{margin: 0;
+      padding: 0;}
+      body {
+        display: inline;
+        background-color: #f5f5f5;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      button[type = "bluebutton"]
+          {
+            position: absolute;
+            display: flex;
+              align-items:center;
+              justify-content:right;
+              position: relative;
+              box-sizing: border-box;
+              border: 5px;
+              cursor: pointer;
+              font-size: 14px;
+              color: rgb(255, 255, 255);
+              background-color: rgb(15, 99, 233);
+              border-radius: 8px;
+              font-weight: bold;
+              height: 40px;
+        }
+      input[type ="whiteblock"] {
+        color: currentcolor;
+        border: 20px;
+        border-radius: 5px;
+        border-color: black;
+        box-sizing: content-box;
+        background: none;
+        height: 10px;
+        margin: 0px;
+        -webkit-tap-highlight-color: transparent;
+        display: block;
+        width: 320px;
+        animation-name: mui-auto-fill-cancel;
+        animation-duration: 10ms;
+        padding: 16.5px 14px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+      }
+      .container {
+     
+        width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #ffffff;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 30px;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        font-size: 20px;
+        margin-bottom: 10px;
+        position: relative;
+      }
+      strong {
+        font-weight: 700;
+      }
+      button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-color: transparent;
+        color: rgba(28, 6, 194, 0.884);
+        border: none;
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+       
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .popup-container{
+        padding-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-grow: 0;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 4;
+        width: 400px;
+        height: 160px;
+        border-radius: 10px;
+        background-color: white;
+      }
+      .popup-background{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        opacity: 0.4;
+        z-index: 3;
+        background-color: gray;
+      }
+
+      button[type = "menu"]
+      {
+        position: relative;
+        display: inline-flex;
+        justify-content:right;
+        box-sizing: border-box;
+        border: 5px;
+        cursor: pointer;
+        background-color: #ffffff;
+        border-color: black;
+        color: rgb(15, 99, 233);
+        font-size: 25px;
+      }
+      button[type ="menu"]:hover
+      {
+        color: rgb(8, 0, 123);
+      }
+
+      .menu_container {
+        position: relative;
+        display:flex;
+        flex-direction: row;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #ffffff;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+    <div  style="display: none;"  id="error_img"> <center><img src="https://i0.wp.com/learn.onemonth.com/wp-content/uploads/2017/08/1-10.png?fit=845%2C503&ssl=1"></center>
+      <center><a href="login-page" style="font-size: 30px;">กดที่นี่เพื่อ Login</a></center></div>
+  </head>
+  <div class="popup-container" style="display: none;" id="popup-contain-user">
+    <div style="padding-left: 5%;font-size: 30px;">ชื่อโปรไฟล์</div>
+    <input type="whiteblock" value="Hi" id="new_name" style="margin-left: 5%;" required>
+    <button type="bluebutton" style="left: 250px ;top: 20px;background-color: rgb(255, 255, 255);color: rgb(15, 99, 233);border: 0.5px solid rgb(15, 99, 233);" onclick="hidePopup_username()">ยกเลิก</button>
+    <button type="bluebutton" style="left: 320px ;top:-20px;" onclick="submit_change_username()">บันทึก</button>
+  </div>
+  <div class="popup-container" style="display: none;" id="popup-contain-phone">
+    <div style="padding-left: 5%;font-size: 30px;">หมายเลขโทรศัพท์</div>
+    <input type="whiteblock" value="Hi" id="new_phone_number" style="margin-left:5%;" required>
+    <button type="bluebutton" style="left: 250px ;top: 20px;background-color: rgb(255, 255, 255);color: rgb(15, 99, 233);border: 0.5px solid rgb(15, 99, 233);" onclick="hidePopup_phone()">ยกเลิก</button>
+    <button type="bluebutton" style="left: 320px ;top:-20px;" onclick="submit_change_phone()">บันทึก</button>
+  </div>
+  <div class="popup-background" style="display: none;" id="popup-bg"></div>
+  <body>
+    {% include "nav-bar.html" %}
+  <div style="display: none;" id ="all_display">
+    <div class="menu_container" id ='coupon_display' style="display: block;">
+      <button type="menu" onclick="go_to('http://127.0.0.1:8000/profile-page')">ข้อมูลส่วนตัว</button>
+      <br>
+      <button type="menu" onclick="go_to('http://127.0.0.1:8000/address-page')">ที่อยู่</button>
+      <br>
+      <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+session+'/account/view_user_coupon')">คูปอง</button>
+      <br>
+      <button type="menu" onclick="go_to('http:\/\/127.0.0.1:8000/'+session+'/account/view_order')" >รายการสั่งซื้อ</button>
+      <br>
+      <button type="menu" style="color:red" onclick="logout()">logout</button>
+     
+       
+      
+    </div>
+    <div class="container" style="display: block;" id="profile_display">
+      <h1>ข้อมูลส่วนบุคคล</h1>
+      <p>ข้อมูลส่วนบุคคลและตัวเลือกในการจัดการ</p>
+      <ul>
+        <li><strong style="padding-right: 30%;">ชื่อโปรไฟล์</strong> <p style="display: inline;" id = "username_display"></p> <button onclick="openPopup_username()">แก้ไข</button></li>
+        <hr width="100%">
+        <li><strong style="padding-right: 21.2%;">หมายเลขโทรศัพท์:</strong> <p style="display: inline;" id = "phone_display"></p> <button onclick="openPopup_phone()">แก้ไข</button></li>
+        <hr width="100%">
+        <li><strong style="padding-right: 35%;">อีเมล:</strong><p style="display: inline;" id = "email_display"></li>
+        <hr width="100%">
+        <li><strong style="padding-right: 35%;">ที่อยู่:</strong> 123 ไทย 0014
+      </ul>
+    </div>
+  </div>
+  </body>
+    <script>
+      const myVariable = sessionStorage.getItem("username");
+      email = myVariable
+      if(myVariable!=null)
+        { var gobal =1;
+          email = myVariable;
+          b = document.getElementById("all_display");
+          fetch("http://127.0.0.1:8000/"+email+"/account/profile").then(response=>response.json()).then(data=>{ 
+          gobal= data;
+          var a = document.getElementById('username_display');
+          a.innerHTML = data.username;
+          a = document.getElementById('phone_display');
+          a.innerHTML = data.phone;
+          a = document.getElementById('email_display');
+          a.innerHTML = data.email;
+          b.style.display = 'flex' ;
+          })
+      }
+      else
+        {
+          a = document.getElementById("error_img");
+          a.style.display = 'block';
+        }
+      function hidePopup_username()
+      {
+        var a = document.getElementById("popup-contain-user");
+        var b =document.getElementById("popup-bg");
+        a.style.display = 'none';      
+        b.style.display = 'none';
+      }
+      function hidePopup_phone()
+      {
+        var a = document.getElementById("popup-contain-phone");
+        var b =document.getElementById("popup-bg");
+        a.style.display = 'none';      
+        b.style.display = 'none';
+      }
+      function submit_change_phone()
+      {
+        x = document.getElementById("new_phone_number").value
+        y = document.getElementById("phone_display")
+        fetch("http://127.0.0.1:8000/"+email+"/account/edit_phonenumber",
+        {method: 'PUT',
+        body:JSON.stringify({'new_phone_number': x}),
+        headers :{'Content-Type': 'application/json'}
+      }).then(response=>response.json()).then(data=>
+        { 
+        if (data.result == "success")
+        {
+          y.innerHTML = x ;
+          gobal.phone =x ;
+          hidePopup_phone()
+        }
+        })
+      }
+      function submit_change_username()
+      {
+        x = document.getElementById("new_name").value
+        y = document.getElementById("username_display")
+        fetch("http://127.0.0.1:8000/"+email+"/account/edit_username",
+        {method: 'PUT',
+        body:JSON.stringify({'new_username': x}),
+        headers :{'Content-Type': 'application/json'}
+      }).then(response=>response.json()).then(data=>
+        { 
+        if (data.result == "success")
+        {
+          y.innerHTML = x
+          gobal.username =x
+          hidePopup_username()
+        }
+        })
+      }
+      function openPopup_username()
+      {
+        var a = document.getElementById("popup-contain-user");
+        var b =document.getElementById("popup-bg");
+        var c= document.getElementById("new_name");
+        c.value = gobal.username
+        a.style.display = 'block';      
+        b.style.display = 'block';
+      }
+      function openPopup_phone()
+      {
+        var a = document.getElementById("popup-contain-phone");
+        var b =document.getElementById("popup-bg");
+        var c= document.getElementById("new_phone_number");
+        c.value = gobal.phone
+        a.style.display = 'block';      
+        b.style.display = 'block';
+      }
+      function go_to(location)
+      {
+          window.location.href = location;
+      }
+      function logout()
+      {
+        email = sessionStorage.getItem("username")
+        fetch("http://127.0.0.1:8000/logout",
+        {method: 'POST',
+        body:JSON.stringify({'email': email}),
+        headers :{'Content-Type': 'application/json'}
+      }).then(response=>response.json()).then(data=>
+        { 
+        if (data.result == "success")
+        {
+          sessionStorage.removeItem("username")
+          window.location.href='http://127.0.0.1:8000/login-page'
+        }
+        })
+      }
+    </script>
+>>>>>>> Stashed changes
 </html>

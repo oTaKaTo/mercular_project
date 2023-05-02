@@ -34,20 +34,29 @@
                 </div>
             </div>
             <div class="utility">
-                {% if email != "" %} 
+                <script>
+                    let session = sessionStorage.getItem("username")
+                    
+                </script>
+                {% if email is none %} 
+                    <script>alert(session)</script>
+                    <a href= "" onclick= "location.href=this.href+session + '/cart';return false;"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+                {% elif email != "" and email is not none %} 
                     <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
                 {% else %} 
-                    <a href= "/"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+                    <a href= "/login-page"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
                 {% endif %}
             </div>
             <div class="user">
-                {% if email != "" %} 
-                    <a onclick="go_to_profile()"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
-
+                {% if email is none %} 
+                    <a href="/profile-page"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
+                    
+                {% elif email != "" and email is not none %} 
+                    <a href="/profile-page"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
                 {% else %} 
                 <div id="login_display" style="display: inline-flex;">
-                    <button class="login_button" onclick="window.location.href='login.html'">Login</button>
-                    <button class="login_button" onclick="window.location.href='register.html'">Register</button>
+                    <button class="login_button" onclick="window.location.href='/login-page'">Login</button>
+                    <button class="login_button" onclick="window.location.href='/register-page'">Register</button>
                 </div>
                 {% endif %}
             </div>
@@ -66,7 +75,7 @@
                 }
                 function go_to_profile()
                 {
-                  window.location.href = "http://localhost:8000/template/profile.html";
+                  window.location.href = "/profile-page";
                 }
             </script>
         </nav>

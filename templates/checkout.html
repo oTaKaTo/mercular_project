@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% include 'global_head.html' %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('styles', path='checkout.css') }}?v=1" >
+    </head>
+    <body>
+        {% include 'nav-bar.html' %}
+        {% set order_status = 0%}
+        {% set index_address = namespace(value="NotFoundAnyAddress") %}
+        <div class = "address-contrainer">
+            <form>
+                <fieldset class="address" action = "javascript:">
+                    <div>
+                        {% for address in shipping_address %}
+                            {% set index_address.value = (shipping_address.index(address)) %}
+                            <p>{{address.get_name_surname()}}</p>
+                            <p>{{address.get_phone_number()}}</p>
+                                <input  type="radio"
+                                id = "{{index_address.value}}"
+                                name="contact"
+                                value = "{{address.get_address_info()}}"
+                                onchange="checkbox_handle(this)"
+                                >
+                            <label for={{index_address.value}}>{{address.get_address_info()}}</label>
+                            <hr>
+                        {% endfor %}
+                    <div>
+                </fieldset>
+            </form>
+        </div>
+        <!--<div class = "coupon-contrainer">
+            <form>
+                <fieldset class="coupons-list" action = "javascript:">
+                    <div>
+                        {% for coupon in user_coupons %}
+                        <p>Hi</p>
+                            {% set coupon_index = user_coupons.index(coupon) %}
+                                <input  type="radio"
+                                id = "coupon-no-{{coupon_index}}"
+                                name="contact"
+                                value = {{coupon_index}}
+                                onchange="checkbox_handle(this)"
+                                >
+                                <label for="coupon-no-{{coupon_index}}">{{user_coupons[coupon_index].get_id()}}</label>
+                            <hr>
+                        {% endfor %}
+                    <div>
+                </fieldset>
+              </form>
+        </div>-->
+        <div class = "summarize">
+            <div class = "price-contrainer">
+                <div class = 'price-text'>
+                    <p id = "order-conclusion">ตรวจสอบยอด</p>
+                    <p id = "Total">ยอดรวมสินค้า: {{total_price}}<p>
+                    <p id = "Discounted">ยอดรวมส่วนลด: {{discount_price}}</p>
+                </div>
+                <br><hr>
+            </div>
+            <fieldset style="display: block;">
+                <div>
+                    <input type="radio" id="QRCode" name="contact" value="QRCode" onchange="checkRadio()" checked = true/>
+                    <label for="QRCode">QRCode payment</label>
+            
+                    <input type="radio" id="CreditDebit" name="contact" value="Credit/Debit" onchange="checkRadio()"/>
+                    <label for="Credit/Debit">Credit/Debit payment</label>
+                    
+                    <input type="radio" id="COD" name="contact" value="COD" onchange="checkRadio()"/>
+                    <label for="COD">COD payment</label>
+                    
+                    <form id = "QRCode-form" action = "javascript: checkout('QRCode payment', '{{index_address.value}}')" style="display: block;">
+                        <input class="submit" type="submit" value="ชำระเงิน/QRCode">
+                    </form>
+                    
+                    <form id = "CreditDebit-form" action = "javascript: checkout('Credit/Debit payment', '{{index_address.value}}')" style="display: none;">
+                        <input id = "card_id" type = "text" maxlength="19" placeholder="หมายเลขหน้าบัตร Credit/Debit" autoComplete="off" required pattern="[0-9]+">
+                        <input id = "name_on_card" type = "text" placeholder="ชื่อบนหน้าบัตร" autoComplete="off" required pattern="[a-zA-Z]+">
+                        <input id = "expiry" type = "text" placeholder="วันหมดอายุ MM/YY" autoComplete="off" maxlength="5" pattern="(0[1-9]|1[0-2])\/\d{2}" required onkeyup="addSlash()">
+                        <input id = "CVV" type = "tel"  maxlength="3" pattern="[0-9]{3}" placeholder="รหัส CVV" autoComplete="off" required>
+                        <input class="submit" type="submit" value="ชำระเงิน/Credit-Debit">
+                    </form>
+                    
+                    <form id = "COD-form" action = "javascript: checkout('COD payment', '{{index_address.value}}')" style="display: none;">
+                        <input class="submit" type="submit" value="ชำระเงิน/COD">
+                    </form>
+                </div>
+            </fieldset>
+        </div>
+    <script>
+        var selected_shipping_address = "Please select any shipping address";
+
+        function addSlash() {
+            var expiry = document.getElementById("expiry");
+            if (expiry.value.length == 2 && !expiry.value.includes("/")) {
+                expiry.value += "/";
+            }
+        }
+        
+        function checkbox_handle(this_checkbox) {
+            if (this_checkbox.checked == true){
+                selected_shipping_address = this_checkbox.value;
+                console.log(selected_shipping_address)
+            }
+        }
+        
+        function checkRadio(this_radio) {
+            option1 = document.getElementById("QRCode");
+            option2 = document.getElementById("CreditDebit");
+            option3 = document.getElementById("COD");
+            
+            if (option1.checked) {
+                document.getElementById("QRCode-form").style.display = "block";
+            }
+            else {
+                document.getElementById("QRCode-form").style.display = "none";
+            }
+            
+            if (option2.checked) {
+                document.getElementById("CreditDebit-form").style.display = "block";
+            }
+            else {
+                document.getElementById("CreditDebit-form").style.display = "none";
+            }
+            
+            if (option3.checked) {
+                document.getElementById("COD-form").style.display = "block";
+            }
+            else {
+                document.getElementById("COD-form").style.display = "none";
+            }
+        }
+        
+        function checkout(payment_method, checker) {
+            if (checker.localeCompare("NotFoundAnyAddress") == 0) {
+                alert(checker + ": Please add shipping-address before checkout")
+                window.location.href = "/template/profile.html";
+            }
+            
+            if (selected_shipping_address.localeCompare("Please select any shipping address") == 0) {
+                alert(selected_shipping_address)
+            }
+            
+            else {
+                fetch ( "/{{email}}/checkout/create_order",
+                { method: 'PUT',
+                    body: JSON.stringify({
+                                        "payment_method": payment_method,
+                                        "total_price": {{total_price}},
+                                        "discounted_price": {{discount_price}},
+                                        "status": 0,
+                                        "shipping_address": selected_shipping_address,
+                                        }),
+                    headers :{'Content-Type': 'application/json'}
+                })
+                .then(response => response.json())
+                .then(data => { 
+                        if(data["status"] != "success") {
+                            alert("Failed Checkouting")
+                            window.location.href = "/{{email}}/cart"
+                        }
+                        
+                        fetch( "/{{email}}/checkout/update",
+                        { method: 'PUT',
+                            body: JSON.stringify({
+                                        
+                                        }),
+                            headers :{'Content-Type': 'application/json'}
+                        })
+                        .then(response => response.json())
+                        .then(checkout_status => {
+                            console.log(checkout_status["status"])
+                            if(checkout_status["status"] == false) {
+                                alert("Failed Checkouting")
+                                window.location.href = "/{{email}}/cart"
+                            }
+                            
+                            if (payment_method.localeCompare("QRCode payment") == 0) {
+                                perform_transaction_QR(selected_shipping_address)
+                            }
+                            else if (payment_method.localeCompare('Credit/Debit payment') == 0) {
+                                perform_transaction_credit_debit(selected_shipping_address)
+                            }
+                            else if (payment_method.localeCompare('COD payment') == 0) {
+                                perform_transaction_COD(selected_shipping_address)
+                            }
+                            window.location.href = "/"
+                        })
+                    })
+            }
+        }
+        
+        function perform_transaction_QR(address){
+            fetch("{{email}}" + '/requestQRpayment', {method: 'POST',
+            body: JSON.stringify({'email': "{{email}}",
+                                'address': address,
+                            }),
+            headers: {'Content-Type': 'application/json'}
+            }).then(response => response.json()).then(data => {console.log(data)})
+        }
+        
+        function perform_transaction_COD(address){
+            fetch("{{email}}" + '/requestCOD', {method: 'POST',
+            body: JSON.stringify({'email': "{{email}}", 
+                                'address': address,
+                            }),
+            headers: {'Content-Type': 'application/json'}
+            }).then(response => response.json()).then(data => {console.log(data)})
+        }
+        
+        function perform_transaction_credit_debit(address){
+            name_on_card = document.getElementById("name_on_card").value;
+            CVV_number = document.getElementById("CVV").value;
+            card_id = document.getElementById("card_id").value;
+            due_date = document.getElementById("expiry").value;
+            fetch("{{email}}" + '/requestcreditdebit', {method: 'POST',
+            body: JSON.stringify({'email': "{{email}}",
+                                'address': address,
+                                'name_on_card': name_on_card.toString(),
+                                'card_id': card_id.toString(),
+                                'CVC': CVV_number.toString(),
+                                'due_date': due_date.toString(),
+                            }),
+            headers: {'Content-Type': 'application/json'}
+            }).then(response => response.json()).then(data => {console.log(data)})
+        }
+    </script>    
+    </body>
+</html>

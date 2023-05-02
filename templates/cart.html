@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include 'global_head.html' %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('styles', path='item_list.css') }}?v=1" >
+    <link rel="stylesheet" type="text/css" href="{{ url_for('styles', path='item.css') }}?v=1" >
+  </head>
+  <body>
+    {% set total_price = dict_price['total_price'] %}
+    {% set discount_price = dict_price['discount_price'] %}
+    {% include 'nav-bar.html' %}
+    <div class= "cart-contrainer">
+      <div class="item-list">
+        <p id = myCart style = "font-weight: 700;">รถเข็นของฉัน</p><hr>
+        {% if ((list(items_info.keys())|length) < 1) %}
+          <div class = "item-NotFound">
+            <img id = cart-item-NotFound src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img>
+            <p id = upper-item-NotFound>ไม่มีสินค้าอยู่ในรถเข็น</p>
+            <p id = lower-item-NotFound>เลือกสินค้าที่โดนใจมาใส่ไว้ในรถเข็นได้เลย</p>
+          </div>
+        {% endif %}
+        {% for item in items_info %}
+        {% set index = list(items_info.keys()).index(item) %}
+        <div class="item">
+            <div class = "left-item-component">
+              {% if item in selected_info %}
+              <input  type = "checkbox" 
+                      id = {{index}}
+                      value = {{index}}
+                      checked = true
+                      onchange="checkbox_handle(this, {{items_info[item].price}}, {{index}})">
+              {% else %}
+                <input  type = "checkbox" 
+                        id = {{index}}
+                        value = {{index}}
+                        onchange="checkbox_handle(this, {{items_info[item].price}}, {{index}})">
+                        
+              {% endif %}
+              <img src="https://www.mercular.com/icons/me.png"></img>
+              <div>
+                <p id = 'name'>item_name : {{item}}</p>
+                <p id = 'option'>item_option : {{items_info[item].option}}</p>
+              </div>
+            </div>
+            <div class = "middle-item-component">
+              <p id = "item-price-{{index}}">{{items_info[item].price}}</p>
+            </div>
+            <div class = "right-item-component">
+              <div class = "item-quantity-component">
+                  <button id = "quantity_handler" type="button" onmousedown="edit_item_amount('{{index}}', -1)" onmouseup="update_amount_item('{{index}}')">-</button>
+                  <p id = "item-quantity-{{index}}" style = "width: 25%; right: 0%;">{{items_info[item].quantity}}</p>
+                  <button id = "quantity_handler" type="button" onmousedown="edit_item_amount('{{index}}', 1)" onmouseup="update_amount_item('{{index}}')">+</button>
+              </div>
+              <button id = "remove-item" type="button" onclick="remove_item({{index}})">
+                <img class = "remove-item-img" src = "https://cdn.discordapp.com/attachments/1069555702835720212/1102822212358119445/pngwing.com.png"></img>
+              </button>
+            </div>
+        </div>
+        <hr>
+        {%endfor%}
+      </div>
+      {% if ((list(items_info.keys())|length) >= 1) %}
+      <div class = "checkout">
+        <div class = "price-contrainer">
+          <div class = 'price-text'>
+            <p id = "order-conclusion">สรุปการสั่งซื้อ</p>
+            <p id = "Total">ยอดรวมสินค้า: {{total_price}}<p>
+            <p id = "Discounted">ยอดรวมส่วนลด: {{discount_price}}</p>
+          </div>
+          <br><hr>
+          <input class="submit" type="submit" value="ทำการสั่งซื้อ" onclick=pre_checkout("{{email}}")>
+        </div>
+      </div>
+      {% endif %}
+    <script>
+      var temp_total_price
+
+      document.addEventListener("DOMContentLoaded", (event) => {
+        temp_total_price = {{total_price}};
+      });
+      
+      function item_manage(url, index, sel_option) {
+        fetch ( url,
+              { method: 'PUT',
+                body: JSON.stringify({
+                                      "selected_item_idx": index,
+                                      "option": sel_option,
+                                  }),
+                headers :{'Content-Type': 'application/json'}
+              }).then(response=>response.json())
+      }
+      
+      
+      function checkbox_handle(this_checkbox, item_price, item_no){
+        if (this_checkbox.checked){
+          temp_total_price = temp_total_price + Number(document.getElementById("item-price-" + item_no).innerHTML);
+          total = "ยอดรวมสินค้า: " + (temp_total_price).toString() + "";
+          discount = "ยอดรวมส่วนลด: {{discount_price}}";
+          option = 0
+        }
+        else{
+          temp_total_price = temp_total_price - Number(document.getElementById("item-price-" + item_no).innerHTML);
+          total = "ยอดรวมสินค้า: " + (temp_total_price).toString() + "";
+          discount = "ยอดรวมส่วนลด: {{discount_price}}";
+          option = 1
+        }
+        item_manage("/" + "{{email}}" + "/cart/select_item_handler", item_no, option)
+        document.getElementById("Total").innerText = total;
+        document.getElementById("Discounted").innerText = discount;
+      }
+      
+      function pre_checkout(email) { 
+        fetch("/" + email + '/cart/current_selected_items')
+          .then(response => response.json())
+          .then(data => {
+            if(data["selected_item"].length > 0) {
+              window.location.href = ("/" + email + "/checkout")
+              return 0;
+            }
+            
+            alert("Please select any item")
+          })
+          
+      }
+      
+      function update_amount_item(index){
+        new_amount = document.getElementById("item-quantity-" + index).innerHTML       
+        url = "/{{email}}/cart/edit_amount_item";
+        fetch ( url,
+              { method: 'PUT',
+                body: JSON.stringify({
+                                      "selected_item_idx": Number(index),
+                                      "new_amount": Number(new_amount),
+                                  }),
+                headers :{'Content-Type': 'application/json'}
+              }).then(response=>response.json())
+      }
+            
+      function edit_item_amount(index, edit_by) {
+        temp_amount = Number(document.getElementById("item-quantity-" + index).innerHTML)
+        temp_price = Number(document.getElementById("item-price-" + index).innerHTML)/Number(temp_amount)
+        
+        temp_amount = temp_amount + Number(edit_by)
+        checkbox = document.getElementById(index)
+        if(checkbox.checked)
+          {
+            temp_total_price = temp_total_price + temp_price*Number(edit_by);
+            total = "ยอดรวมสินค้า: " + (temp_total_price).toString() + "";
+            discount = "ยอดรวมส่วนลด: {{discount_price}}";
+          
+            document.getElementById("Total").innerText = total;
+            document.getElementById("Discounted").innerText = discount;
+          }
+          
+        temp_price = temp_price*temp_amount
+        if (temp_amount > 0 && temp_amount < 100) {
+          document.getElementById("item-quantity-" + index).innerHTML = temp_amount
+          document.getElementById("item-price-" + index).innerHTML = temp_price
+        }
+      }
+      
+      function remove_item(index) {
+        url = "/{{email}}/cart/deleting_item";
+        fetch ( url,
+              { method: 'PUT',
+                body: JSON.stringify({
+                                    "deleteing_index": Number(index),
+                                  }),
+                headers :{'Content-Type': 'application/json'}
+              }).then(response=>response.json())
+              .then(data => console.log(data))
+              window.location.reload()
+      }
+    </script>
+  </body>
+</html>

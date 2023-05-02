@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 * {
   margin: 0;
   padding: 0;
@@ -143,4 +144,152 @@ nav .user {
   transform: translate(-50%, 0);
   right: -70%;
   top: 50%
+=======
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+nav {
+  background-color: whitesmoke;
+  display: flex;
+  align-items: center;
+  justify-content:  space-between;
+}
+nav .logo {
+  width: 10%;
+}
+
+.logo-img{
+  position: relative;
+  cursor: pointer;
+  margin-right: auto;
+  width: 50%;
+  height: 50%;
+}
+
+.logo .logo-img {
+  align-items: center;
+  margin: 0px auto;
+  transform: translate(-50%, 0%);
+  right: -50%;
+  padding-top: 2px;
+}
+
+nav .cart{
+  width: 10%;
+}
+
+.utility .cart-img {
+  position: relative;
+  width: 1em;
+  height: 1em;
+  transform: translate(-50%, 0);
+  right: -90%;
+  top: 50%
+}
+
+nav .product-type-component {
+  width: 40%;
+}
+
+.product-type-component .list {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.product-type-component .list .types {
+  border-radius: 5px;
+  justify-content: space-between;
+  border: 0 solid;
+  background-color: rgb(222, 221, 221);
+  font-size: 16px;
+  width: 20%;
+  height: 25px;
+}
+
+.types .type{
+  position: relative;
+  transform: translate(-50%, 0);
+  right: -50%;
+  
+  border-radius: 5px;
+  justify-content: space-between;
+  border: 0 solid;
+  background-color: rgb(222, 221, 221);
+  font-size: 16px;
+  width: 100%;
+  height: 25px;
+}
+
+.product-type-component .types {
+  display: inline-flex;
+}
+
+.product-type-component .list .type:hover {
+  background-color: rgb(15, 99, 233);
+  transition: 500ms;
+}
+
+.product-type-component .list .type:hover p{
+  color: white;
+}
+
+nav .search-bar {
+  position: relative;
+  background-color: whitesmoke;
+  border: none;
+  width: 25%;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  background: rgb(222, 221, 221);
+  border-radius: 10px;
+  text-align: center;
+  height: 1.5em;
+  width: 90%;
+}
+
+.search-bar button {
+  border: none;
+  background: rgb(222, 221, 221);
+  border-radius: 10px;
+  position: relative;
+  width: 2em;
+  height: 1.5em;
+  top: 5px;
+}
+
+.search-button .search-img {
+  transform: transform(-50%, 50%);
+  width: 1.5em;
+  height: 1.5em;
+  align-items: center;
+}
+
+nav .user {
+  width: 15%;
+}
+
+.user-img {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  transform: translate(-50%, 0);
+  right: -70%;
+  top: 50%
+>>>>>>> Stashed changes
 }
