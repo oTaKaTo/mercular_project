@@ -1,7 +1,7 @@
 <header>
         <nav>
             <div class="logo">
-                <a href="/">
+                <a id="home-icon" href="/{{email}}">
                     <img class="logo-img" src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=256&q=75">
                 </a>   
             </div>
@@ -62,6 +62,7 @@
             
             <script>
                 session = sessionStorage.getItem("username")
+                document.getElementById("home-icon").href=session
                 console.log(session)
                 if (session == null)
                 {
