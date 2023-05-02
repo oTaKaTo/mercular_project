@@ -20,6 +20,47 @@ class ProductCatalog:
                 continue
             product_list.append(i)
         return product_list    
+    
+    def get_object_products_by_brand(self,brand):
+        product_list = []
+        for i in self.__products:
+            status = False
+            for j in product_list:
+                if i.get_object_id() in  j.get_object_id():
+                    status = True
+            if status == True:
+                status = False
+                continue        
+            if brand.lower() in (i.get_brand()).lower():
+                product_list.append(i)
+        return product_list    
+    
+    def get_object_products_by_type(self,type):
+        product_list = []
+        for i in self.__products:
+            status = False
+            for j in product_list:
+                if i.get_object_id() in  j.get_object_id():
+                    status = True
+            if status == True:
+                status = False
+                continue        
+            if type in (i.get_type()):
+                product_list.append(i)
+        return product_list    
+    
+    def get_promotional_products(self,type:str):
+        promotional_products = []
+        for i in self.__products:
+            if i.get_type() == type:
+                if i.get_promotions() != None:
+                    promotional_products.append(i)
+        return promotional_products
+
+    def get_product_info(self,object_id:str):
+         for i in self.__products:
+            if object_id in i.get_object_id():
+                return i
 
     def get_option(self,object_id):
         option=[]
@@ -42,6 +83,14 @@ class ProductCatalog:
                 return True
         return False
 
+    def checkout_product(self,product_id,quantity):
+        for pd in self.__products:
+            if product_id in pd.get_product_id():
+                pd.checkout_qauntity(quantity)
+        return True
+                
+
+
     def edit_product(self, product_id,new_product):
         for pd in self.__products:
             if product_id in pd.get_product_id():
@@ -53,25 +102,17 @@ class ProductCatalog:
         self.__products[product_id].add_promotion(promotion)
         return True
     
-    def get_promotional_products(self,type:str):
-        promotional_products = []
-        for i in self.__products:
-            if i.get_type() == type:
-                if i.get_promotions() != None:
-                    promotional_products.append(i)
-        return promotional_products
-
-    def get_product_info(self,object_id:str):
-         for i in self.__products:
-            if object_id in i.get_object_id():
-                return i
     
-    def get_product_by_brand(self,brand:str):
-         branded_product = []
-         for i in self.__products:
-            if brand.lower() in (i.get_brand()).lower():
-                branded_product.append(i)
-         return branded_product   
+
+    
+    
+    
+    # def get_product_by_brand(self,brand:str):
+    #      branded_product = []
+    #      for i in self.__products:
+    #         if brand.lower() in (i.get_brand()).lower():
+    #             branded_product.append(i)
+    #      return branded_product   
 
     # search box that can search by id, name
     def search_keyword(self, keyword=""):
@@ -93,7 +134,7 @@ class ProductCatalog:
 
 class Product:
     # type MUST order by big --> small catagory 
-    def __init__(self, product_id:str, object_id:str, name:str, type:str, brand:str, price:int, quantity:int, detail="",image=[], option="",promotion=None):
+    def __init__(self, product_id:str, object_id:str, name:str, type:str, brand:str, price:int, quantity:int, detail={},image=[], option="",promotion=None):
         self.__product_id = product_id
         self.__object_id = object_id
         self.__name = name
@@ -151,12 +192,10 @@ class Product:
         self.__quantity = value
 
     # decreasing stock
-    def update_quantity(self,amount):
+    def checkout_quantity(self,amount):
         self.__quantity -= amount
         return True
         
-    def edit(self):
-        pass
 
 
 class Item:
