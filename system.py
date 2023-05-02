@@ -27,7 +27,7 @@ class System:
             
     def check_exists_account(self, email):
             for ID in self.__user_lst:
-                if ID.get_Email() == email:
+                if ID.get_email() == email:
                     return ID
             raise HTTPException(status_code=404, detail="User not found")
 
@@ -40,7 +40,7 @@ class System:
 
     def check_id_password(self, email, password):
             for ID in self.__user_lst:
-                if ID.get_Email()==email and ID.get_password() == password:
+                if ID.get_email()==email and ID.get_password() == password:
                     return ID
             return False
     

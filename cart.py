@@ -29,17 +29,18 @@ class Cart:
       raise HTTPException(status_code=204, detail="Cart is empty")
   
   def edit_amount_item(self, items: Item, quantity):
-    if(self.__items > 1):
+    if(len(self.__items) > 0):
       delta_quantity = quantity - items.get_quantity()
       self.__total_items += delta_quantity
       items.set_quantity(quantity)
+      self.__update_total_price()
     else:
       raise HTTPException(status_code=204, detail="Cart is empty")
     
   def __update_total_price(self): #update_total_item(self)
     self.__total_price = 0
     for item in self.__selected_item:
-      price = item.get_price()
+      price = item.get_price() * item.get_quantity()
       self.__total_price += price
     self.cal_discount_price()
     
@@ -62,7 +63,6 @@ class Cart:
 
   def get_selected_items(self):
     return self.__selected_item
-    
 
   def get_total_price(self) -> float:
     return self.__total_price
@@ -81,21 +81,32 @@ class Cart:
     except:
       return self.__total_price
 
-  def checkout(self):
-    price = self.get_total_price()
-    product_catalog = main.product_catalog.remove_product()
-    coupon_catalog = main.coupoun_catalog()
-    coupon = self.__coupon
+  def checkout(self, coupon = False):
     try:
-      for item in self.get_selected_item():
-        if (self.coupon and not coupon.is_available(price, item.get_type_brand_id())) or item.get_quantity() > item.get_amount():
+      price = self.__total_price
+      product_catalog = main.product_catalog
+      coupon_catalog = main.coupoun_catalog
+  
+      for items in self.__selected_item:
+        product = items.get_product() 
+        if (coupon and not coupon.is_available(price, product.get_type_brand_id())) or items.get_quantity() > product.get_quantity():
           return False
-        for _ in item.get_quantity():
-          product_catalog.remove_product(item.get_product().get_product_id())
+      
+      for items in self.__selected_item:  
+        items_quantity = items.get_quantity()
+        items_id = items.get_product().get_product_id()
+        #product_catalog.checkout_product(items_id, items_quantity)
+        self.delete_item(items)
+        
+      self.__selected_item.clear()  
+      self.__update_total_price()    
+      if(coupon):
         coupon_catalog.delete_coupon(coupon.get_id())
+      
       return True
     except:
       return False
+
   
   def select_coupon(self, coupon):
     self.__coupon = coupon

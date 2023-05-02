@@ -1,7 +1,7 @@
 from Account import User
 from system import System
 from Product import Product, ProductCatalog, Item
-from Shipping_Address import Shipping_Address
+from shipping_address import ShippingAddress
 from order import Order, OrderStatus
 
 system = System()
@@ -12,7 +12,8 @@ coupoun_catalog = system.get_coupon_catalog()
 system_user_lst.append(User("momo","1234","65010244@gmail.com"))
 momo = system.check_exists_account("65010244@gmail.com")
 
-momo.add_address("ที่อยู่แรก","adsad","Sdadsad","ASdasdsa","asdasdsa","asdasdsa","Adsadsa")
+momo.add_address("ที่อยู่แรก","168","Sda123123d","ASda1111sdsa","asdasdsa","asdasdsa","Adsadsa")
+momo.add_address("Address2","225","SAdasd","asdsad","sada","ASDASDS","asdasdsad")
 momo_cart = momo.get_user_cart()
 product_1st = Product("123", "321", "keyboardRGB", "keyboard", "razor", 920, 20)
 product_2nd = Product("1234w", "4123", "mousRGB", "mouse", "stellseries", 200, 10)
@@ -25,17 +26,17 @@ product_7nd = Product("2341eee", "412ww3", "ouseRG", "mouse", "stellseries", 200
 product_catalog.add_product(product_1st)
 product_catalog.add_product(product_2nd)
 
-print(product_catalog.get_product_info())
+
 
 item_1 = Item(product_1st, 5)
 item_2 = Item(product_2nd, 10)
 
 
-momo.add_item_to_cart(Item(product_3nd, 1))
-momo.add_item_to_cart(Item(product_4nd, 1))
-momo.add_item_to_cart(Item(product_5nd, 1))
-momo.add_item_to_cart(Item(product_6nd, 1))
-momo.add_item_to_cart(Item(product_7nd, 1))
+momo.add_item_to_cart(Item(product_3nd, 2))
+momo.add_item_to_cart(Item(product_4nd, 10))
+momo.add_item_to_cart(Item(product_5nd, 5))
+momo.add_item_to_cart(Item(product_6nd, 7))
+momo.add_item_to_cart(Item(product_7nd, 8))
 
 for i in momo_cart.get_items_in_cart():
     print(i.get_item())

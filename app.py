@@ -9,7 +9,9 @@ import uvicorn
 from typing import Optional
 from Product import Item
 from order import Order, OrderStatus
+from promotion import Coupon
 from main import system, product_catalog
+
 
 
 origins = [
@@ -47,8 +49,16 @@ async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "email": "65010244@gmail.com"})
 
 @app.get('/{email}/checkout', tags=["Page"], response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("checkout.html", {"request": request, "email": "65010244@gmail.com"})
+async def index(request: Request, email: str):
+    user = system.check_exists_account(email)
+    user = system.check_exists_account(email)
+    user_cart = user.get_user_cart()
+    return templates.TemplateResponse("checkout.html", {"request": request,
+                                                        "email": email,
+                                                        "shipping_address": user.get_address(),
+                                                        "total_price": user_cart.get_total_price(),
+                                                        "discount_price": user_cart.get_discounted_price(None)
+                                                        })
 
 @app.get('/{email}/cart', tags=["Page"], response_class=HTMLResponse)
 async def cart(email: str, request: Request):
@@ -56,68 +66,104 @@ async def cart(email: str, request: Request):
         selected_info = {}
         user = system.check_exists_account(email)
         user_cart = user.get_user_cart()
-        dict_price = {   "total_price": user_cart.get_total_price(),
+        dict_price = {  "total_price": user_cart.get_total_price(),
                         "discount_price": user_cart.get_discounted_price(None)}
         items = user_cart.get_items_in_cart()
         selected_item = user_cart.get_selected_items()
         for selected in selected_item:
-            selected_info.update(selected.get_item())
-            
+            selected_info.update(selected.get_item())   
+        print("===============")
         for item in items:
-            items_info.update(item.get_item())
+            price = item.get_price() * item.get_quantity()
+            temp_info = item.get_item()
+            temp_info[item.get_product().get_name()].update({"price": price})
+            items_info.update(temp_info)
+            
+            
         return templates.TemplateResponse("cart.html", {"request": request, 
                                                         "items_info": items_info, 
                                                         "list": list,
-                                                        "email": user.get_Email(), 
+                                                        "email": email, 
                                                         "dict_price": dict_price, 
-                                                        "selected_info": selected_info})
+                                                        "selected_info": selected_info
+                                                        })
 
-
-@app.put("/{email}/cart/selecting_item_and_coupon", tags = ["View Cart"])
-async def select_item(email: str, selected_item_idx: int, selected_coupon: Optional[str] = None):
+@app.get('/{email}/cart/current_selected_items' , tags = ["View Cart"])
+async def get_selected_items(email:str, request:Request):
+    user = system.check_exists_account(email)
+    user_cart = user.get_user_cart()
+    return {"selected_item": user_cart.get_selected_items()}
+        
+@app.put("/{email}/cart/select_item_handler", tags = ["View Cart"])
+async def select_item(email: str, data: dict):
     user = system.check_exists_account(email)
     user_cart = user.get_user_cart()
     cart_items = user_cart.get_items_in_cart()
-    if(selected_item_idx < len(cart_items)):
-        user_cart.select_items(cart_items[selected_item_idx])
+    if(data["selected_item_idx"] > len(cart_items)):
+        return 0
     
-    
-@app.get("/{email}/checkout/make_payment", tags = ["Checkout"])
-async def make_payment(email: str, selected_info: dict) -> dict:
-        user = system.check_exists_account(email)
-        user_cart = user.get_user_cart()
-        selected_info = user_cart.get_items_in_cart()
+    if(data["option"] == 0):
+        user_cart.select_items(cart_items[data["selected_item_idx"]])
+    elif(data["option"] == 1):
+        user_cart.deselect_items(cart_items[data["selected_item_idx"]])
 
-@app.get("/{email}/checkout/pre_checkout", tags = ["Checkout"])
-async def summarize(email: str) -> dict:
-    response = {}
+@app.put("/{email}/cart/edit_amount_item", tags = ["View Cart"])
+async def select_item(email: str, data: dict):
     user = system.check_exists_account(email)
     user_cart = user.get_user_cart()
-    selected_info = user_cart.get_selected_info()
-    if(isinstance(selected_info, list)):
-        for item in selected_info:
-            response.update(item.get_item())
-        response.update({
-                        "total_price": user_cart.get_total_price(),
-                        "discounted_price": user_cart.get_discounted_price(None)
-                        })
-        return response
-                
-@app.post("/{email}/checkout/creating_order", tags = ["Checkout"])
+    cart_items = user_cart.get_items_in_cart()
+    if(data["selected_item_idx"] > len(cart_items)):
+        return 0
+    
+    edit_item = cart_items[data["selected_item_idx"]]
+    new_amount = data["new_amount"]
+    user_cart.edit_amount_item(edit_item, new_amount)
+
+@app.put("/{email}/cart/deleting_item", tags = ["View Cart"])
+async def delete_item(email:str, data: dict):
+    try:    
+        user = system.check_exists_account(email)
+        user_cart = user.get_user_cart()
+        cart_items = user_cart.get_items_in_cart()
+        
+        user_cart.delete_item(cart_items[data['deleteing_index']])
+        return {"status": "success"}
+    except:
+        return {"status": "fail"}
+
+@app.put("/{email}/checkout/create_order", tags = ["Checkout"])
 async def create_order(email: str, data: dict):
-    status = OrderStatus.pending_payment
-    user = system.check_exists_account(email)
-    user_order_history = user.get_order_history()
-    payment_method = data["payment_method"]
-    tracking_number = data["tracking_number"]
-    total_price = data["total_price"]
-    discounted_price = data["discounted_price"]
-    order_id = data["order_id"]
-    items_list = data["item_list"]
-    user_order_history.add_order(Order(payment_method, tracking_number,
-                            total_price, discounted_price,
-                            order_id, status, items_list))
-    return user_order_history
+        try:
+            user = system.check_exists_account(email)
+            user_order_history = user.get_order_history()
+            payment_method = data["payment_method"]
+            total_price = data["total_price"]
+            discounted_price = data["discounted_price"]
+            status = OrderStatus(int(data["status"])).name
+            selected_shipping_address =  data["shipping_address"]
+            items_list = user.get_user_cart().get_selected_items()
+            
+            user_order_history.add_order(Order(payment_method, 
+                                            total_price,
+                                            discounted_price,
+                                            status,
+                                            items_list,
+                                            selected_shipping_address))
+            return {"status": "success"}
+        except:
+            return {"status": "failed"}
+
+@app.put("/{email}/checkout/update", tags = ["Checkout"])
+async def create_order(email: str, data: dict):
+    try:
+        user = system.check_exists_account(email)
+        user_cart = user.get_user_cart()
+        return {"status": user_cart.checkout()}
+    except:
+        return {"status": False}
+
+
+        
 
 
 @app.put("/{email}/add_item_to_cart", tags = ["View Product"])

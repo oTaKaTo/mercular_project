@@ -1,4 +1,4 @@
-class Shipping_Address:
+class ShippingAddress:
     def __init__(self, name_surname, phone_number, address, sub_district, district, province, postal_code):
         self.__name_surname = name_surname
         self.__phone_number = phone_number
@@ -37,6 +37,6 @@ class Shipping_Address:
     
     def get_postal_code(self):
         return self.__postal_code
-        
-        
     
+    def get_address_info(self):
+        return f"{self.get_address()} {self.get_sub_district()} {self.get_district()} {self.get_province()} {self.get_postal_code()}"

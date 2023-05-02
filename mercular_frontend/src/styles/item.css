@@ -37,6 +37,7 @@
 .right-item-component .item-quantity-component {
     position: relative;
     right: -50%;
+    display: block;
 }
 
 
@@ -49,8 +50,8 @@
     padding-left: 2px;
 }
 
-.item-quantity-component #quantity_handler, #item-quantity{
-    width: 25%;
+.item-quantity-component #quantity_handler{
+    width: 29%;
     right: -50%;
 }
 
@@ -67,7 +68,26 @@
     background-color: rgb(222, 221, 221);
 }
 
+.right-item-component #remove-item {
+    width: 10%;
+    height: 25%;
+}
 
+#remove-item {
+    background-color: rgb(222, 221, 221);
+    border-radius: 10px;
+    height: 0;
+}
+
+#remove-item .remove-item-img {
+    position: relative;
+    transform: translate(50%, 0%);
+    right: 100%;
+    
+    width: 100%;
+    height: 100%;
+    padding-right: 2px;
+}
 
 
 
@@ -80,7 +100,6 @@
 #option {
     font-size: 12px;
 }
-
 
 .item img {
     width: 80px;

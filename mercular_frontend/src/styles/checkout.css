@@ -4,6 +4,7 @@
     box-sizing: border-box;
 }
 
+
 .price-contrainer {
     border-style: solid;
     border-radius: 10px;
@@ -45,4 +46,9 @@
 
 .price-contrainer .submit {
     width: 95%;
+}
+
+body .address-contrainer {
+    display: flex;
+    height: 20%;
 }
