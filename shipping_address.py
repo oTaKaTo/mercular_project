@@ -37,3 +37,6 @@ class ShippingAddress:
     
     def get_postal_code(self):
         return self.__postal_code
+    
+    def get_address_info(self):
+          return f"{self.__address} {self.__phone_number} {self.__sub_district} {self.__district} {self.__province} {self.__postal_code}"

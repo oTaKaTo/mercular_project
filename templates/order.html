@@ -10,7 +10,8 @@
           <div class="condition">วันที่สั่ง : {{Order[coupon]["order_date"]}}</div>
           <div class="condition">วันที่คาดว่าจะส่ง : {{Order[coupon]["delivery_expect_date"]}}</div>
           <div class="condition">เลขพัสดุ : {{Order[coupon]["tracking_number"]}}</div>
-          <div class="condition">ราคา : {{Order[coupon]["discounted_price"]}}</div>
+          <div class="condition">ราคารวม : {{Order[coupon]["total_price"]}}</div>
+          <div class="condition">ราคารวมส่วนลด : {{Order[coupon]["discounted_price"]}}</div>
           <div class="condition">เลขรายการ : {{Order[coupon]["order_id"]}}</div>
           <div class="condition">สถานะ : {{Order[coupon]["status"]}}</div>
           <div class="condition">ไอเท็ม :</div>
@@ -52,26 +53,25 @@
       <hr width="100%" >
       <ul id = "available_coupon" style="display: block;"> 
         {% for coupon in Order %}
-         <div class="coupon-container" onclick="show_popup({{Order[coupon]['order_id']}})" id="{{Order[coupon][order_id]}}">
+        <div class="coupon-container" onclick="show_popup({{Order[coupon]['order_id']}})" id="{{Order[coupon][order_id]}}">
             <div class="coupon-description">
-             <strong style="font-size: 20px;"> หมายเลขรายการ : {{Order[coupon]['order_id']}}</strong> 
-             <div> 
-             <div  style="display: inline;">ราคารวม : {{Order[coupon]["discounted_price"]}}</div>
-             <div  style="display: inline;padding-left: 50px;">วันที่สั่ง : {{Order[coupon]["order_date"]}}</div>
-             <div  style="display: inline;padding-left: 50px;">สถานะ : {{Order[coupon]["status"]}}</div>
-             
+              <strong style="font-size: 20px;"> หมายเลขรายการ : {{Order[coupon]['order_id']}}</strong> 
+              <div>
+              <div  style="display: inline;">ราคารวม : {{Order[coupon]["total_price"]}}</div>
+              <div  style="display: inline; padding-left: 50px;">ราคารวมส่วนลบ : {{Order[coupon]["discounted_price"]}}</div>
+              <div  style="display: inline; padding-left: 50px;">วันที่สั่ง : {{Order[coupon]["order_date"]}}</div>
+              <div  style="display: inline; padding-left: 50px;">สถานะ : {{Order[coupon]["status"]}}</div>
             </div>
-            </div>
-            
-         </div>
-         <hr width="100%">
+          </div>  
         </div>
+        <hr width="100%">
         {% endfor %}
+      </div>
      </ul>
       </div>
       </body>
     <script>
-      var email = "MOMO@gmail.com"
+      var email = sessionStorage.getItem("username")
       if(email!=null)
       {
       global = 1;

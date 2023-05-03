@@ -32,10 +32,16 @@ class Order:
                   "delivery_expect_date": self.__delivery_expect_date,
                   "payment_method": self.__payment_method,
                   "tracking_number": str(self.__tracking_number),
-                  "total_price": self.__total_price,
-                  "discounted_price": self.__discounted_price,
+                  "total_price": float(self.__total_price),
+                  "discounted_price": float(self.__discounted_price),
                   "order_id": str(self.__order_id),
                   "status": self.__status,
                   "items_list": self.__items_list,
                   "shipping_address": self.__shipping_address
                   }
+      
+      def get_order_id(self):
+          return self.__order_id
+      
+      def update_status(self, new_status: int):
+          self.__status = OrderStatus(new_status).name

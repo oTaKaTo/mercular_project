@@ -13,7 +13,7 @@
     {% for product in products %}
     <div class="item-container">
 
-      <a href="/{{email}}/{{product.get_product_id()}}">
+      <a href="/product/{{product.get_object_id()}}">
         <div class="product-img-container">
           <img src="{{product.get_image()[0]}}">
         </div>

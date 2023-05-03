@@ -5,6 +5,7 @@ from cart import Cart
 from copy import copy
 from uuid import uuid4
 from order_history import OrderHistory
+from product import Item
 
 class Account:
      def __init__(self, username, password, email, phone_number="",online_status:bool=False):
@@ -52,46 +53,41 @@ class Account:
           return False
 
 class Admin(Account):
-     __product_catalog = []
-     def __init__(self, username, password, email, phone_number="", product_catalog={}, coupon={}, promotion ={}, order=[]):
-            Account.__init__(self, username, password, email, phone_number)
-            self.__product_catalog = product_catalog # ProductCataog object
-            self.__coupon = coupon # Coupon object
-            self.__promotion = promotion # Promotion object
-            self.__order = order # Order object (specific user) 
-            
+     def __init__(self, username, password, email, phone_number=""):
+          Account.__init__(self, username, password, email, phone_number)
+
           
-     def add_item_to_product_catalog(self,product:Product,product_catalog:ProductCatalog):
+     def add_item_to_product_catalog(self, product: Product, product_catalog):
           if product_catalog.add_product(product):
                return True
           return False
      
-     def edit_item_in_product_catalog(self,product_id:str,new_product:Product,product_catalog:ProductCatalog):
+     def edit_item_in_product_catalog(self,product_id:str, new_product:Product, product_catalog):
           if product_catalog.edit_product(product_id,new_product):
                return True
           return False
      
-     def del_item_in_product_catalog(self,product:Product,product_catalog:ProductCatalog):
+     def del_item_in_product_catalog(self, product: Product, product_catalog):
           if product_catalog.remove_product(product):
                return True
           return False
      
-     def add_coupon_to_coupon_catalog(self,coupon:Coupon,coupon_catalog:CouponCatalog):
+     def add_coupon_to_coupon_catalog(self,coupon:Coupon, coupon_catalog: CouponCatalog):
           if coupon_catalog.add_coupon(coupon):
                return True
           return False
      
-     def edit_coupon_in_coupon_catalog(self,coupon_id,new_coupon:Coupon,coupon_catalog:CouponCatalog):
+     def edit_coupon_in_coupon_catalog(self, coupon_id, new_coupon:Coupon, coupon_catalog: CouponCatalog):
           if coupon_catalog.edit_coupon(coupon_id,new_coupon):
                return True
           return False
      
-     def del_coupon_in_coupon_catalog(self,coupon_id,coupon_catalog:CouponCatalog):
+     def del_coupon_in_coupon_catalog(self, coupon_id, coupon_catalog: CouponCatalog):
           if coupon_catalog.delete_coupon(coupon_id):
                return True
           return False
      
-     def add_product_promotion(self,product:Product,promotion:Promotion):
+     def add_product_promotion(self, product: Product, promotion: Promotion):
           if product.add_promotion(promotion):
                return True
           return False
@@ -131,9 +127,8 @@ class User(Account):
      def get_user_cart(self):
           return self.__cart
      
-     def add_item_to_cart(self, product, quantity):
-         item = item(product, quantity)
-         self.__cart.add_item(item)
+     def add_item_to_cart(self, items: Item):
+         self.__cart.add_item(items)
          return self.__cart
      
      def get_order_history(self):
@@ -178,6 +173,3 @@ class User(Account):
      def delete_address(self,address):
           self.__address.remove(address)
           return True
-     
-     def get_address_info(self):
-          return f"{self.get_address()} {self.address.get_sub_district()} {self.address.get_district()} {self.address.get_province()} {self.address.get_postal_code()}"

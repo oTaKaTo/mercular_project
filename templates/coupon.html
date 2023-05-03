@@ -39,7 +39,7 @@
           <div class="condition">{{type}}</div>
           {% endfor %}
           <div class="button-container">
-            <div class="get-code-button" id="B{{coupon.get_id()}}" onclick="get_coupon(this.id, '{{email}}')">เก็บคูปอง</div>
+            <div class="get-code-button" id="B{{coupon.get_id()}}" onclick="get_coupon(this.id)">เก็บคูปอง</div>
             <div class="close-button" onclick="close_popup()">ปิด</div>
           </div>
         </div>
@@ -185,7 +185,13 @@
   <script>
     var current_popup_id = 0
 
-    function get_coupon(id, email){
+    function get_coupon(id){
+      email = sessionStorage.getItem('username')
+      if (email == null) {
+        window.location.href = '/login-page'
+        return 0;
+      }
+      
       id = id.slice(1)
       fetch('http://127.0.0.1:8000/' + email + '/get-coupon', {method: 'POST',
       body: JSON.stringify({'email': email, 'id': id}),

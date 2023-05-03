@@ -11,24 +11,24 @@
             </div>
             <div class="product-type-component">
                 <div class = "list">
-                    <form class = "types" action="/">
+                    <form class = "types" action="/products/type/คอมพิวเตอร์">
                         <button class = "type">
                             <p>คอมพิวเตอร์</p>
                         </button>
                     </form>
-                    <form class = "types" action="/">
+                    <form class = "types" action="/products/type/หูฟัง">
                         <button class = "type">
                             <p>หูฟัง</p>
                         </button>
                     </form>
-                    <form class = "types" action="/">
+                    <form class = "types" action="/products/type/เกมมิ่ง">
                         <button class = "type">
                             <p>เกมมิ่ง</p>
                         </button>
                     </form>
-                    <form class = "types" action="/">
+                    <form class = "types" action="/products/type/โต๊ะคอม">
                         <button class = "type">
-                            <p>อุปกรณ์มือถือ </p>
+                            <p>โต๊ะคอม</p>
                         </button>
                     </form>
                 </div>
@@ -38,21 +38,18 @@
                     let session = sessionStorage.getItem("username")
                     
                 </script>
-                {% if email is none %} 
-                    <script>alert(session)</script>
-                    <a href= "" onclick= "location.href=this.href+session + '/cart';return false;"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+                {% if email is none%} 
+                    <a onclick= "cart_something()"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
                 {% elif email != "" and email is not none %} 
                     <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+                
                 {% else %} 
                     <a href= "/login-page"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
                 {% endif %}
             </div>
             <div class="user">
-                {% if email is none %} 
-                    <a href="/profile-page"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
-                    
-                {% elif email != "" and email is not none %} 
-                    <a href="/profile-page"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
+                {% if email is none or email != ""%} 
+                    <a href="/profile-page"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>    
                 {% else %} 
                 <div id="login_display" style="display: inline-flex;">
                     <button class="login_button" onclick="window.location.href='/login-page'">Login</button>
@@ -73,9 +70,20 @@
                   document.getElementById("account_display").style.display = 'block'
                   document.getElementById("account").innerHTML += session[0] +session[1]
                 }
+                
                 function go_to_profile()
                 {
                   window.location.href = "/profile-page";
+                }
+                
+                function cart_something() {
+                    if (session == null) {
+                        window.location.href = '/login-page';
+                        return 0;
+                    }
+                    
+                    window.location.href = '/' + session + '/cart';
+                    return 1;
                 }
             </script>
         </nav>

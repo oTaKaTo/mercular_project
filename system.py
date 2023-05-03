@@ -18,7 +18,11 @@ class System:
         self.__user_lst = []
         self.__coupon_catalog = CouponCatalog()
         self.__product_catalog = ProductCatalog()
-
+        self.__order_container = []
+    
+    def get_order_container(self):
+        return self.__order_container
+    
     def search_user_by_email(self, email):
         for ID in self.__user_lst:
             if ID.get_email() == email:

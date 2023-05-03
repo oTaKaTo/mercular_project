@@ -6,7 +6,7 @@
     </head>
     <body>
         {% include 'nav-bar.html' %}
-        {% set order_status = 0%}
+        {% set order_status = 0 %}
         {% set index_address = namespace(value="NotFoundAnyAddress") %}
         <div class = "address-contrainer">
             <form>
@@ -49,6 +49,23 @@
                 </fieldset>
             </form>
         </div>-->
+        {% for item in selected_items %}
+            {% set index = list(selected_items.keys()).index(item) %}
+            <div class="item">
+                <div class = "left-item-component">
+                    <img src="https://www.mercular.com/icons/me.png"></img>
+                    <div>
+                        <p id = 'name'>ชื่อสินค้า : {{item}}</p>
+                        <p id = 'option'>ลักษณะ : {{selected_items[item].option}}</p>
+                    </div>
+                    </div>
+                    <div class = "middle-item-component">
+                        <p id = "item-price-{{index}}">ราคา: {{selected_items[item].price}}</p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        {%endfor%}
         <div class = "summarize">
             <div class = "price-contrainer">
                 <div class = 'price-text'>
@@ -134,7 +151,7 @@
         function checkout(payment_method, checker) {
             if (checker.localeCompare("NotFoundAnyAddress") == 0) {
                 alert(checker + ": Please add shipping-address before checkout")
-                window.location.href = "/template/profile.html";
+                window.location.href = "/profile-page";
             }
             
             if (selected_shipping_address.localeCompare("Please select any shipping address") == 0) {
@@ -158,71 +175,95 @@
                         if(data["status"] != "success") {
                             alert("Failed Checkouting")
                             window.location.href = "/{{email}}/cart"
+                            return 0;
                         }
                         
-                        fetch( "/{{email}}/checkout/update",
+                        fetch( "/{{email}}/checkout/update_stock",
                         { method: 'PUT',
                             body: JSON.stringify({
-                                        
+                                            "created_order_id" : data["created_order_id"]
                                         }),
                             headers :{'Content-Type': 'application/json'}
                         })
                         .then(response => response.json())
-                        .then(checkout_status => {
-                            console.log(checkout_status["status"])
-                            if(checkout_status["status"] == false) {
-                                alert("Failed Checkouting")
+                        .then(data => {
+                            if(data["status"] != "success") {
+                                alert("Not enoung item in stock")
                                 window.location.href = "/{{email}}/cart"
+                                return 0;
                             }
-                            
+                
                             if (payment_method.localeCompare("QRCode payment") == 0) {
-                                perform_transaction_QR(selected_shipping_address)
+                                perform_transaction_QR(selected_shipping_address, data["created_order_id"])
+                                return 0;
                             }
                             else if (payment_method.localeCompare('Credit/Debit payment') == 0) {
-                                perform_transaction_credit_debit(selected_shipping_address)
+                                perform_transaction_credit_debit(selected_shipping_address, data["created_order_id"])
+                                return 0;
                             }
                             else if (payment_method.localeCompare('COD payment') == 0) {
-                                perform_transaction_COD(selected_shipping_address)
+                                perform_transaction_COD(selected_shipping_address, data["created_order_id"])
+                                return 0;
                             }
-                            window.location.href = "/"
+                            
+                            alert("Failed Checkouting")
+                            window.location.href = "/{{email}}/cart"
                         })
                     })
             }
         }
         
-        function perform_transaction_QR(address){
-            fetch("{{email}}" + '/requestQRpayment', {method: 'POST',
+        function perform_transaction_QR(address, order_id){
+            fetch('/requestQRpayment', {method: 'POST',
             body: JSON.stringify({'email': "{{email}}",
                                 'address': address,
+                                'created_order_id': order_id,
                             }),
             headers: {'Content-Type': 'application/json'}
-            }).then(response => response.json()).then(data => {console.log(data)})
+            }).then(response => {
+                if(response){
+                    alert("Checkout complete")
+                    window.location.href = '/{{email}}/account/view_order'
+                }
+            })
         }
         
-        function perform_transaction_COD(address){
-            fetch("{{email}}" + '/requestCOD', {method: 'POST',
+        function perform_transaction_COD(address, order_id){
+            fetch('/requestCOD', {method: 'POST',
             body: JSON.stringify({'email': "{{email}}", 
                                 'address': address,
+                                'created_order_id': order_id,
                             }),
             headers: {'Content-Type': 'application/json'}
-            }).then(response => response.json()).then(data => {console.log(data)})
+            }).then(response => {
+                if(response){
+                    alert("Checkout complete")
+                    window.location.href = '/{{email}}/account/view_order'
+                }
+            })
         }
         
-        function perform_transaction_credit_debit(address){
+        function perform_transaction_credit_debit(address, order_id){
             name_on_card = document.getElementById("name_on_card").value;
             CVV_number = document.getElementById("CVV").value;
             card_id = document.getElementById("card_id").value;
             due_date = document.getElementById("expiry").value;
-            fetch("{{email}}" + '/requestcreditdebit', {method: 'POST',
+            fetch('/requestcreditdebit', {method: 'POST',
             body: JSON.stringify({'email': "{{email}}",
                                 'address': address,
                                 'name_on_card': name_on_card.toString(),
                                 'card_id': card_id.toString(),
                                 'CVC': CVV_number.toString(),
                                 'due_date': due_date.toString(),
+                                'created_order_id': order_id,
                             }),
             headers: {'Content-Type': 'application/json'}
-            }).then(response => response.json()).then(data => {console.log(data)})
+            }).then(response => {
+                if(response){
+                    alert("Checkout complete")
+                    window.location.href = '/{{email}}/account/view_order'
+                }
+            })
         }
     </script>    
     </body>
