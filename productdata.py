@@ -13,8 +13,8 @@ data = { "data" :
             "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/06/Product/razer-viper-v2-pro-wireless-gaming-mouse-black-icon.jpg"] , 
             "option":"Black" ,
             "detail": {"มีสาย/ไร้สาย":"มีสาย",
-                       "ไฟ RGB":"มีไฟ" , 
-                       "ความไวเมาส์":"200 - 8,000 DPI"},
+                        "ไฟ RGB":"มีไฟ" , 
+                        "ความไวเมาส์":"200 - 8,000 DPI"},
             "promotion":None
         },    
         {
@@ -28,8 +28,8 @@ data = { "data" :
             "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/03/4-ogitech-G333-In-Ear.jpg?w=256"] , 
             "option":"Black" ,
             "detail": {"ประเภทหูฟัง":"หูฟังอินเอียร์","มีสาย/ไร้สาย":"มีสาย" ,"การเชื่อมต่อหูฟัง (Input)":"AUX (3.5mm), USB-C","ไมโครโฟน":"มีไมค์" , "ไฟ RGB" : "ไม่มีไฟ" ,
-                       "แพล็ตฟอร์ม":"Window, Mac,Nintendo Switch, PlayStation 4, XBOX One, iOS, Android, PlayStation 5","อิมพีแดนซ์":"24Ω ±20%","การตอบสนองความถี่":"20 - 20,000 Hz","ความยาวสาย":"1.2 m",
-                       "น้ำหนัก":"19.00 g"},
+                        "แพล็ตฟอร์ม":"Window, Mac,Nintendo Switch, PlayStation 4, XBOX One, iOS, Android, PlayStation 5","อิมพีแดนซ์":"24Ω ±20%","การตอบสนองความถี่":"20 - 20,000 Hz","ความยาวสาย":"1.2 m",
+                        "น้ำหนัก":"19.00 g"},
             "promotion":None
         },   
         {

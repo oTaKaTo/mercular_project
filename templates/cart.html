@@ -68,7 +68,7 @@
             <p id = "Discounted">ยอดรวมส่วนลด: {{discount_price}}</p>
           </div>
           <br><hr>
-          <input class="submit" type="submit" value="ทำการสั่งซื้อ" onclick='pre_checkout("{{email}}")'>
+          <input class="submit" type="submit" value="ทำการสั่งซื้อ" onclick=pre_checkout("{{email}}")>
         </div>
       </div>
       {% endif %}
@@ -110,20 +110,12 @@
       }
       
       function pre_checkout(email) { 
-        fetch("/" + email + '/cart/current_selected_items',{
-        })
+        fetch("/" + email + '/cart/current_selected_items')
           .then(response => response.json())
           .then(data => {
             if(data["selected_item"].length > 0) {
-              fetch('/'+ email + '/checkout',{
-                method: 'POST',
-                body: JSON.stringify({
-                      "is_buynow": false,
-                }),
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              })
+              fetch("/" + email + "/checkout")
+              window.location.href = ("/" + email + "/checkout")
               return 0;
             }
             

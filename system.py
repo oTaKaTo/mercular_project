@@ -1,8 +1,7 @@
-
 from account import Account,User,Admin
 from shipping_address import ShippingAddress
 from order import Order
-from OrderHistory import OrderHistory
+from order_history import OrderHistory
 from promotion import CouponCatalog,PercentageCoupon,PercentageDiscount,FlatCoupon
 from product import Product,Item,ProductCatalog
 from fastapi import FastAPI,Request,APIRouter
@@ -13,16 +12,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles 
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+
 class System:
     def __init__(self):
         self.__user_lst = []
         self.__coupon_catalog = CouponCatalog()
         self.__product_catalog = ProductCatalog()
 
-    def search_user_by_email(self,email):
+    def search_user_by_email(self, email):
         for ID in self.__user_lst:
             if ID.get_email() == email:
                 return ID
+            print(ID)
         return False
    
     def search_coupon_by_coupon_id(self,coupon_id):

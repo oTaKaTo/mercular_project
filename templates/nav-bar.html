@@ -1,123 +1,79 @@
 <header>
-    <nav>
-        <div class="logo">
-            <a href="/">
-                <img class="logo-img" src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=256&q=75">
-            </a>   
-        </div>
-        <div class="search-bar">
-            <input type="text" name="search" id="search-input" placeholder="Search" autoComplete="off"></input>
-            <button class = "search-button" onclick="search_pressed()" ><img class="search-img" src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
-        </div>
-        <div class="product-type-component" id="product-type-component">
+        <nav>
+            <div class="logo">
+                <a href="/">
+                    <img class="logo-img" src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=256&q=75">
+                </a>   
+            </div>
+            <div class="search-bar">
+                <input type="text" name="search" id="search-input" placeholder="Search" autoComplete="off"></input>
+                <button class = "search-button" type="submit" ><img class="search-img" src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
+            </div>
+            <div class="product-type-component">
+                <div class = "list">
+                    <form class = "types" action="/products/type/คอมพิวเตอร์">
+                        <button class = "type">
+                            <p>คอมพิวเตอร์</p>
+                        </button>
+                    </form>
+                    <form class = "types" action="/products/type/หูฟัง">
+                        <button class = "type">
+                            <p>หูฟัง</p>
+                        </button>
+                    </form>
+                    <form class = "types" action="/products/type/เกมมิ่ง">
+                        <button class = "type">
+                            <p>เกมมิ่ง</p>
+                        </button>
+                    </form>
+                    <form class = "types" action="/products/type/โต๊ะคอม">
+                        <button class = "type">
+                            <p>โต๊ะคอม</p>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="utility">
+                <script>
+                    let session = sessionStorage.getItem("username")
+                    
+                </script>
+                {% if email is none %} 
+                    <a href= "" onclick= "location.href=this.href+session + '/cart';return false;"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+                {% elif email != "" and email is not none %} 
+                    <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+                {% else %} 
+                    <a href= "/login-page"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+                {% endif %}
+            </div>
+            <div class="user">
+                {% if email is none or email != ""%} 
+                    <a href="/profile-page"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
+                    
+                {% else %} 
+                <div id="login_display" style="display: inline-flex;">
+                    <button class="login_button" onclick="window.location.href='/login-page'">Login</button>
+                    <button class="login_button" onclick="window.location.href='/register-page'">Register</button>
+                </div>
+                {% endif %}
+            </div>
             
-        </div>
-        <div class="utility">
-            {% if email != "" %} 
-                <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
-            {% else %} 
-                <a href= "/"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
-            {% endif %}
-        </div>
-        <div class="user">
-            {% if email != "" %} 
-                <a onclick="go_to_profile()"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
-
-            {% else %} 
-            <div id="login_display" style="display: inline-flex;">
-                <button class="login_button" onclick="window.location.href='login.html'">Login</button>
-                <button class="login_button" onclick="window.location.href='register.html'">Register</button>
-            </div>
-            {% endif %}
-        </div>
-        <script>
-            let email = sessionStorage.getItem["username"]
-
-            let html_noemail = `
-            <div class = "list">
-                <form class = "types" action= "http://127.0.0.1:8000/products/type/คอมพิวเตอร์">
-                    <button class = "type">
-                        <p>คอมพิวเตอร์</p>
-                    </button>
-                </form>
-                <form class = "types" action="http://127.0.0.1:8000/products/type/หูฟัง">
-                    <button class = "type">
-                        <p>หูฟัง/ลำโพง</p>
-                    </button>
-                </form>
-                <form class = "types" action="http://127.0.0.1:8000/products/type/เกมมิ่ง">
-                    <button class = "type">
-                        <p>เกมมิ่ง</p>
-                    </button>
-                </form>
-                <form class = "types" action="http://127.0.0.1:8000/products/type/โต๊ะคอม">
-                    <button class = "type">
-                        <p>โต๊ะคอม</p>
-                    </button>
-                </form>
-            </div>
-            `
-            let html_email = `
-            <div class = "list">
-                <form class = "types" action= "http://127.0.0.1:8000/"+email+"/products/type/คอมพิวเตอร์">
-                    <button class = "type">
-                        <p>คอมพิวเตอร์</p>
-                    </button>
-                </form>
-                <form class = "types" action="http://127.0.0.1:8000/"+email+"/products/type/หูฟัง">
-                    <button class = "type">
-                        <p>หูฟัง/ลำโพง</p>
-                    </button>
-                </form>
-                <form class = "types" action="http://127.0.0.1:8000/"+email+"/products/type/เกมมิ่ง">
-                    <button class = "type">
-                        <p>เกมมิ่ง</p>
-                    </button>
-                </form>
-                <form class = "types" action="http://127.0.0.1:8000/"+email+"/products/type/โต๊ะคอม">
-                    <button class = "type">
-                        <p>โต๊ะคอม</p>
-                    </button>
-                </form>
-            </div>
-            `
-
-            document.addEventListener("DOMContentLoaded", () => {
-               html_gen()
-            });
-
-            function html_gen(){
-                if(email == null){
-                    document.getElementById('product-type-component').innerHTML = html_noemail
+            <script>
+                session = sessionStorage.getItem("username")
+                console.log(session)
+                if (session == null)
+                {
+                  document.getElementById("login_display").style.display = 'block'
                 }
-                else{
-                    document.getElementById('product-type-component').innerHTML = html_email
+                else
+                {
+                  document.getElementById("account_display").style.display = 'block'
+                  document.getElementById("account").innerHTML += session[0] +session[1]
                 }
-            }
-
-            function search_pressed()
-            {
-                search = document.getElementById("search-input").value
-                search = search.toString()
-
-                console.log(search)
-                if(email == null){
-                    window.location.href='http://127.0.0.1:8000/search/'+search
+                function go_to_profile()
+                {
+                  window.location.href = "/profile-page";
                 }
-                else{
-                    window.location.href='http://127.0.0.1:8000/'+email+'search/'+search
-                }
-                
-          
-        
-                
-         
-            }
-            function go_to_profile()
-        {
-            window.location.href='http://127.0.0.1:8000/profile-page'
-        }
-        </script>
-        
-    </nav>
+            </script>
+        </nav>
 </header>

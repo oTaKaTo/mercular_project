@@ -13,7 +13,7 @@
                 {% for product in row %}
                     
                 <div class="item-container">
-                        <a href="/"+session+"/product/{{product.get_object_id()}}">
+                        <a href="/" + session +'/product/{{product.get_object_id()}}'>
                         
                             <div class="product-img-container">
                                 <img src="{{product.get_image()[0]}}">

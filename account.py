@@ -4,7 +4,8 @@ from promotion import Coupon,CouponCatalog,Promotion
 from cart import Cart
 from copy import copy
 from uuid import uuid4
-from OrderHistory import OrderHistory
+from order_history import OrderHistory
+from product import Item
 
 class Account:
      def __init__(self, username, password, email, phone_number="",online_status:bool=False):
@@ -131,9 +132,8 @@ class User(Account):
      def get_user_cart(self):
           return self.__cart
      
-     def add_item_to_cart(self, item):
-
-         self.__cart.add_item(item)
+     def add_item_to_cart(self, items: Item):
+         self.__cart.add_item(items)
          return self.__cart
      
      def get_order_history(self):

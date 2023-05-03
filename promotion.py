@@ -60,14 +60,14 @@ class PercentageDiscount(Promotion):
     
     def get_discount(self, price):
         if self.is_available_price(price):
-            discount = (100 - self.__discount_percent) * price / 100
+            discount = (100 - self.__discount) * price / 100
             if discount > self.__max_discount:
                 return self.__max_discount
             return discount
         return 0
     
     def get_discount_str(self):
-        return str(self.__discount_percent) + '%'
+        return str(self.__discount) + '%'
     
 coupon_id_gen = count()
 

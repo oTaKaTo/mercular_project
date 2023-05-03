@@ -2,9 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="{{ url_for('styles', path='order.css?v=1') }}" >
-    <link rel="stylesheet" href="{{ url_for('styles', path='nav_bar.css?v=1') }}" >
-    <meta charset="UTF-8">
-    <title>mercule</title>
+    {% include "global_head.html" %}
     {% for coupon in Order %}
        <div class="popup-container" style="display: none;" id="popup-{{Order[coupon]['order_id']}}">
         <div class="description-container">
@@ -12,7 +10,8 @@
           <div class="condition">วันที่สั่ง : {{Order[coupon]["order_date"]}}</div>
           <div class="condition">วันที่คาดว่าจะส่ง : {{Order[coupon]["delivery_expect_date"]}}</div>
           <div class="condition">เลขพัสดุ : {{Order[coupon]["tracking_number"]}}</div>
-          <div class="condition">ราคา : {{Order[coupon]["discounted_price"]}}</div>
+          <div class="condition">ราคา : {{Order[coupon]["total_price"]}}</div>
+          <div class="condition">ราคารวมส่วนลบ : {{Order[coupon]["discounted_price"]}}</div>
           <div class="condition">เลขรายการ : {{Order[coupon]["order_id"]}}</div>
           <div class="condition">สถานะ : {{Order[coupon]["status"]}}</div>
           <div class="condition">ไอเท็ม :</div>
@@ -22,11 +21,6 @@
             <div class="condition" style="padding-left: 30px;" >{{a.get_product().get_name()}}</div>
             <div class="condition" style="padding-left: 10px;" >X {{a.get_product().get_name()}}</div>
           </div>
-          
-                
-          
-           
-            
           {% endfor%}
             <div class="close-button" onclick="close_popup()">ปิด</div>
           </div>
@@ -35,79 +29,7 @@
   {% endfor %}
   </head>
   <body>
-    <header>
-      <nav>
-          <div class="logo">
-              <a href="/">
-                  <img class="logo-img" src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=256&q=75">
-              </a>   
-          </div>
-          <div class="search-bar">
-              <input type="text" name="search" id="search-input" placeholder="Search" autoComplete="off"></input>
-              <button class = "search-button" type="submit" ><img class="search-img" src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
-          </div>
-          <div class="product-type-component">
-              <div class = "list">
-                  <form class = "types" action="/">
-                      <button class = "type">
-                          <p>คอมพิวเตอร์</p>
-                      </button>
-                  </form>
-                  <form class = "types" action="/">
-                      <button class = "type">
-                          <p>หูฟัง/ลำโพง</p>
-                      </button>
-                  </form>
-                  <form class = "types" action="/">
-                      <button class = "type">
-                          <p>เกมมิ่ง</p>
-                      </button>
-                  </form>
-                  <form class = "types" action="/">
-                      <button class = "type">
-                          <p>อุปกรณ์มือถือ </p>
-                      </button>
-                  </form>
-              </div>
-          </div>
-          <div class="utility">
-              {% if email != "" %} 
-                  <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
-              {% else %} 
-                  <a href= "/"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
-              {% endif %}
-          </div>
-          <div class="user">
-              {% if email != "" %} 
-                  <a onclick="go_to_profile()"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
-
-              {% else %} 
-              <div id="login_display" style="display: inline-flex;">
-                  <button class="login_button" onclick="window.location.href='login.html'">Login</button>
-                  <button class="login_button" onclick="window.location.href='register.html'">Register</button>
-              </div>
-              {% endif %}
-          </div>
-          
-          <script>
-              session = sessionStorage.getItem("username")
-              console.log(session)
-              if (session == null)
-              {
-                document.getElementById("login_display").style.display = 'block'
-              }
-              else
-              {
-                document.getElementById("account_display").style.display = 'block'
-                document.getElementById("account").innerHTML += session[0] +session[1]
-              }
-              function go_to_profile()
-              {
-                window.location.href = "http://localhost:8000/template/profile.html";
-              }
-          </script>
-      </nav>
-</header>
+    {% include "nav-bar.html" %}
     <div class="popup-background" id="popup-background" style="display: none;" onclick="close_popup()"></div>
     <div  style="display: none;"  id="error_img"> <center><img src="https://i0.wp.com/learn.onemonth.com/wp-content/uploads/2017/08/1-10.png?fit=845%2C503&ssl=1"></center>
       <center><a href="login-page" style="font-size: 30px;">กดที่นี่เพื่อ Login</a></center>

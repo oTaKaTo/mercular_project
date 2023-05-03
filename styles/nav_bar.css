@@ -1,14 +1,6 @@
-/*Eng font*/
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap');
-
-/*TH font*/
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap');
-
 * {
   margin: 0;
   padding: 0;
-  font-family: 'Noto Sans', sans-serif;
-  font-family: 'Noto Sans Thai', sans-serif;
   box-sizing: border-box;
 }
 
@@ -16,6 +8,7 @@ header {
   width: 100%;
   position: sticky;
   top: 0;
+  z-index: 5;
 }
 
 nav {
@@ -23,7 +16,6 @@ nav {
   display: flex;
   align-items: center;
   justify-content:  space-between;
-  min-width: 1440px;
 }
 nav .logo {
   width: 10%;
@@ -132,7 +124,6 @@ nav .search-bar {
   width: 2em;
   height: 1.5em;
   top: 5px;
-  cursor: pointer;
 }
 
 .search-button .search-img {

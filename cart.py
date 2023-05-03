@@ -1,5 +1,4 @@
 from product import Item
-import main
 from fastapi.exceptions import HTTPException
 
 class Cart:
@@ -11,7 +10,7 @@ class Cart:
     self.__discounted_price = 0
     
   def add_item(self, items: Item):
-    items_quantity = int(items.get_quantity())
+    items_quantity = items.get_quantity()
     if(items not in self.__items):
       self.__items.append(items)
     else:
@@ -19,12 +18,11 @@ class Cart:
       exisited_item = self.__items[exisited_item_no]
       exisited_item_quantity = exisited_item.get_quantity()
       exisited_item.set_quantity(exisited_item_quantity + items_quantity)
-      
     self.__total_items += items_quantity
       
   def delete_item(self, items: Item) -> str:
     if(len(self.__items) != 0):
-      self.__total_items -= int(items.get_quantity())
+      self.__total_items -= items.get_quantity()
       self.__items.remove(items)
     else:
       raise HTTPException(status_code=204, detail="Cart is empty")
@@ -82,11 +80,9 @@ class Cart:
     except:
       return self.__total_price
 
-  def checkout(self, coupon = False):
+  def checkout(self, coupon = False, product_catalog = None, coupon_catalog = None):
     try:
       price = self.__total_price
-      product_catalog = main.product_catalog
-      coupon_catalog = main.coupoun_catalog
   
       for items in self.__selected_item:
         product = items.get_product() 
@@ -96,7 +92,7 @@ class Cart:
       for items in self.__selected_item:  
         items_quantity = items.get_quantity()
         items_id = items.get_product().get_product_id()
-        #product_catalog.checkout_product(items_id, items_quantity)
+        product_catalog.checkout_product(items_id, items_quantity)
         self.delete_item(items)
         
       self.__selected_item.clear()  

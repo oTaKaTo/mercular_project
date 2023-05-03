@@ -37,6 +37,3 @@ class ShippingAddress:
     
     def get_postal_code(self):
         return self.__postal_code
-        
-        
-    

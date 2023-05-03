@@ -2,10 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="{{ url_for('styles', path='font.css?v=1') }}" >
-    <link rel="stylesheet" href="{{ url_for('styles', path='nav_bar.css?v=1') }}" >
-    <meta charset="UTF-8">
-    {% include 'global_head.html' %}
-    <title>mercule</title>
+    {% include "global_head.html" %}
     <style>
       *{margin: 0;
       padding: 0;}
@@ -176,7 +173,7 @@
   </div>
   <div class="popup-background" style="display: none;" id="popup-bg"></div>
   <body>
-  {% include 'nav-bar.html' %}
+    {% include "nav-bar.html" %}
   <div style="display: none;" id ="all_display">
     <div class="menu_container" id ='coupon_display' style="display: block;">
       <button type="menu" onclick="go_to('http://127.0.0.1:8000/profile-page')">ข้อมูลส่วนตัว</button>

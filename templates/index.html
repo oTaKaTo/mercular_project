@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "global_head.html" %}
+    <link rel="stylesheet" href="{{ url_for('styles', path='index.css?v=1') }}" >
+</head>
+<body>
+  {% include "nav-bar.html" %}
+  <a href="{{email}}/coupon-special">
+    <div class="box">coupon-special</div>
+  </a>
+  <a href="{{email}}/monthly-promotion">
+    <div class="box">monthly-promotion</div>
+  </a>
+</body>
+</html>

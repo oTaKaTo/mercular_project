@@ -4,15 +4,279 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from promotion import FlatCoupon, PercentageCoupon, CouponCatalog
+from account import Admin
 import productdata
 from product import *
+from database import *
 from promotion import PercentageDiscount
 from database import *
+from fastapi import HTTPException
+from typing import Optional
+from order import Order, OrderStatus
 
-app = FastAPI()
+import uvicorn
+
+
+origins = [
+    "http://127.0.0.1",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:5173"
+]
+
+async def not_found_error(request: Request, exc: HTTPException):
+    return templates.TemplateResponse('404.html', {'request': request}, status_code=404)
+
+
+async def internal_error(request: Request, exc: HTTPException):
+    return templates.TemplateResponse('500.html', {'request': request}, status_code=500)
+
+exception_handlers = {
+    404: not_found_error,
+    500: internal_error
+}
+
+app = FastAPI(exception_handlers = exception_handlers)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.mount('/styles', StaticFiles(directory='styles'), name='styles')
 
 templates = Jinja2Templates(directory="templates")
+
+def handle_products_page_request(brand="",type="",search=""):
+    list = []
+    cnt = 0
+    inner_list = []
+    if search != "":
+        for i in pd_catalog_dict.search(search):
+            if cnt == 4:
+                list.append(inner_list)  
+                inner_list = []
+                cnt = 0 
+            inner_list.append(i)
+            cnt += 1
+        list.append(inner_list)
+    elif type != "":
+        for i in pd_catalog_dict.get_object_products_by_type(type):
+            if cnt == 4:
+                list.append(inner_list)  
+                inner_list = []
+                cnt = 0 
+            inner_list.append(i)
+            cnt += 1
+        list.append(inner_list)
+    elif brand != "":
+        for i in pd_catalog_dict.get_object_products_by_brand(brand):
+            if cnt == 4:
+                list.append(inner_list)  
+                inner_list = []
+                cnt = 0 
+            inner_list.append(i)
+            cnt += 1
+        list.append(inner_list)
+    else:
+        for i in pd_catalog_dict.get_object_products():
+            if cnt == 4:
+                list.append(inner_list)  
+                inner_list = []
+                cnt = 0 
+            inner_list.append(i)
+            cnt += 1
+        list.append(inner_list)
+    return list
+
+@app.get('/{email}/checkout', tags=["Page"], response_class=HTMLResponse)
+async def index(request: Request, email: str):
+    user = my_system.search_user_by_email(email)
+    user = my_system.search_user_by_email(email)
+    user_cart = user.get_user_cart()
+    
+    return templates.TemplateResponse("checkout.html", {"request": request,
+                                                        "email": email,
+                                                        "shipping_address": user.get_address(),
+                                                        "total_price": user_cart.get_total_price(),
+                                                        "discount_price": user_cart.get_discounted_price(None),
+                                                        "user_coupons": user.get_user_coupon(),
+                                                        })
+
+@app.get('/{email}/{product_id}/buynow', tags=["Page"], response_class=HTMLResponse)
+async def buynow(request: Request, email: str, product_id):
+    user = my_system.search_user_by_email(email)
+    user = my_system.search_user_by_email(email)
+    user_cart = user.get_user_cart()
+    selected_item = user.get_selected_item()
+    selected_item.clear()
+    
+    user_cart.add_item()
+    
+    return templates.TemplateResponse("checkout.html", {"request": request,
+                                                        "email": email,
+                                                        "shipping_address": user.get_address(),
+                                                        "total_price": user_cart.get_total_price(),
+                                                        "discount_price": user_cart.discounted_price(),
+                                                        "user_coupons": user.get_user_coupon(),
+                                                        })
+
+@app.get('/{email}/cart', tags=["Page"], response_class=HTMLResponse)
+async def cart(email: str, request: Request):
+        items_info = {}
+        selected_info = {}
+        user = my_system.search_user_by_email(email)
+        user_cart = user.get_user_cart()
+        dict_price = {  "total_price": user_cart.get_total_price(),
+                        "discount_price": user_cart.get_discounted_price(None)}
+        items = user_cart.get_items_in_cart()
+        selected_item = user_cart.get_selected_items()
+        for selected in selected_item:
+            selected_info.update(selected.get_item())   
+            
+        for item in items:
+            price = item.get_price() * item.get_quantity()
+            temp_info = item.get_item()
+            temp_info[item.get_product().get_name()].update({"price": price})
+            items_info.update(temp_info)
+            
+            
+        return templates.TemplateResponse("cart.html", {"request": request, 
+                                                        "items_info": items_info, 
+                                                        "list": list,
+                                                        "email": email, 
+                                                        "dict_price": dict_price, 
+                                                        "selected_info": selected_info,
+                                                        "user_coupons": user.get_user_coupon()
+                                                        })
+
+@app.get("/",response_class=HTMLResponse)
+async def get_products(request: Request):
+    return templates.TemplateResponse("allproduct_noemail.html",{"request":request,"products": handle_products_page_request(), "email":None})
+
+@app.get("/{email}/",response_class=HTMLResponse)
+async def get_products(request: Request,email:str):
+    return templates.TemplateResponse("allproduct.html",{"request":request,"products": handle_products_page_request(),"email":email})
+
+
+@app.get("/{email}/products/type/{product_type}",response_class=HTMLResponse)
+async def get_products(request: Request, product_type:str,email:str):
+    return templates.TemplateResponse("product_type.html",{"request":request,"products":handle_products_page_request(type = product_type),"type":product_type,"email":email})
+
+@app.get("/products/type/{product_type}",response_class=HTMLResponse)
+async def get_products(request: Request, product_type:str):
+    return templates.TemplateResponse("product_type_noemail.html",{"request":request,"products":handle_products_page_request(type = product_type),"type":product_type, "email":None})
+
+
+@app.get("/products/brand/{brand}",response_class=HTMLResponse)
+async def get_brand(request: Request, brand:str):
+    return templates.TemplateResponse("product_brand_noemail.html",{"request":request, "products":handle_products_page_request(brand = brand),"brand": brand, "email":None})
+
+@app.get("/{email}/products/brand/{brand}",response_class=HTMLResponse)
+async def get_brand(request: Request, brand:str,email:str):
+    return templates.TemplateResponse("product_brand.html",{"request":request, "products":handle_products_page_request(brand = brand),"brand": brand,"email":email})
+
+@app.get("/{email}/product/{object_id}",response_class=HTMLResponse)
+async def get_product(request: Request, object_id:str,email:str):
+    print(pd_catalog_dict.get_option(object_id))
+    return templates.TemplateResponse("product.html",{"request":request, "product": pd_catalog_dict.get_product_info(object_id),"option": pd_catalog_dict.get_option(object_id),"email":email})
+
+@app.get("/product/{object_id}",response_class=HTMLResponse)
+async def get_product(request: Request, object_id:str):
+    return templates.TemplateResponse("product_noemail.html",{"request":request, 
+                                                            "product": pd_catalog_dict.get_product_info(object_id),
+                                                            "option": pd_catalog_dict.get_option(object_id), 
+                                                            "email":None})
+
+
+@app.get('/{email}/cart/current_selected_items' , tags = ["View Cart"])
+async def get_selected_items(email:str, request:Request):
+    user = my_system.search_user_by_email(email)
+    user_cart = user.get_user_cart()
+    return {"selected_item": user_cart.get_selected_items()}
+        
+@app.put("/{email}/cart/select_item_handler", tags = ["View Cart"])
+async def select_item(email: str, data: dict):
+    user = my_system.search_user_by_email(email)
+    user_cart = user.get_user_cart()
+    cart_items = user_cart.get_items_in_cart()
+    if(data["selected_item_idx"] > len(cart_items)):
+        return 0
+    
+    if(data["option"] == 0):
+        user_cart.select_items(cart_items[data["selected_item_idx"]])
+    elif(data["option"] == 1):
+        user_cart.deselect_items(cart_items[data["selected_item_idx"]])
+
+@app.put("/{email}/cart/edit_amount_item", tags = ["View Cart"])
+async def select_item(email: str, data: dict):
+    user = my_system.search_user_by_email(email)
+    user_cart = user.get_user_cart()
+    cart_items = user_cart.get_items_in_cart()
+    if(data["selected_item_idx"] > len(cart_items)):
+        return 0
+    
+    edit_item = cart_items[data["selected_item_idx"]]
+    new_amount = data["new_amount"]
+    user_cart.edit_amount_item(edit_item, new_amount)
+
+@app.put("/{email}/cart/deleting_item", tags = ["View Cart"])
+async def delete_item(email:str, data: dict):
+    try:    
+        user = my_system.search_user_by_email(email)
+        user_cart = user.get_user_cart()
+        cart_items = user_cart.get_items_in_cart()
+        
+        user_cart.delete_item(cart_items[data['deleteing_index']])
+        return {"status": "success"}
+    except:
+        return {"status": "fail"}
+
+@app.put("/{email}/checkout/create_order", tags = ["Checkout"])
+async def create_order(email: str, data: dict):
+        try:
+            user = my_system.search_user_by_email(email)
+            user_order_history = user.get_order_history()
+            payment_method = data["payment_method"]
+            total_price = data["total_price"]
+            discounted_price = data["discounted_price"]
+            status = OrderStatus(int(data["status"])).name
+            selected_shipping_address =  data["shipping_address"]
+            items_list = user.get_user_cart().get_selected_items()
+            
+            user_order_history.add_order(Order(payment_method, 
+                                            total_price,
+                                            discounted_price,
+                                            status,
+                                            items_list,
+                                            selected_shipping_address))
+            return {"status": "success"}
+        except:
+            return {"status": "failed"}
+
+@app.put("/{email}/checkout/update", tags = ["Checkout"])
+async def create_order(email: str, data: dict):
+    try:
+        user = my_system.search_user_by_email(email)
+        user_cart = user.get_user_cart()
+        return {"status": user_cart.checkout(None, my_system.get_product_catalog(), my_system.get_coupon_catalog())}
+    except:
+        return {"status": False}
+
+@app.put("/{email}/add_item_to_cart", tags = ["View Product"])
+def add_item(email: str, data: dict):
+        id = data['product_id']
+        quantity = int(data['quantity'])
+        
+        user = my_system.search_user_by_email(email)
+        product = pd_catalog_dict.search_by_id(id) 
+        
+        item = Item(product, quantity)
+        user.add_item_to_cart(item)
+    
+        return {'status': 'success'}
+
 
 @app.get("/{email}/admin", response_class=HTMLResponse)
 async def view_admin_page(request: Request, email:str):
@@ -33,7 +297,7 @@ async def search_coupon_infor_by_id(data:dict):
 @app.get("/coupon-special", response_class=HTMLResponse)
 async def view_coupon(request: Request):
   coupons = my_system.get_coupon_catalog().get_coupons_sorted_by_coupon_type()
-  return templates.TemplateResponse("coupon_no_email.html", {"request": request, 'coupons': coupons, 'email':''})
+  return templates.TemplateResponse("coupon_no_email.html", {"request": request, 'coupons': coupons, 'email': None})
 
 @app.get("/{email}/coupon-special", response_class=HTMLResponse)
 async def view_coupon_email(request: Request, email: str):
@@ -43,7 +307,7 @@ async def view_coupon_email(request: Request, email: str):
 
 @app.get("/monthly-promotion", response_class=HTMLResponse)
 async def view_promotion(request: Request):
-  return templates.TemplateResponse("promotion_no_email.html", {"request": request, 'products': promo_pd_catalog_dict.get_products(), 'email':''})
+  return templates.TemplateResponse("promotion_no_email.html", {"request": request, 'products': promo_pd_catalog_dict.get_products(), 'email':None})
 
 @app.get("/{email}/monthly-promotion", response_class=HTMLResponse)
 async def view_promotion_email(request: Request, email: str):
@@ -100,11 +364,11 @@ async def view_login_page(request: Request):
 
 @app.get('/address-page', response_class=HTMLResponse)
 async def view_login_page(request: Request):
-    return templates.TemplateResponse("address.html", {"request": request})
+    return templates.TemplateResponse("address.html", {"request": request, "email": None})
 
 @app.get('/profile-page', response_class=HTMLResponse)
 async def view_login_page(request: Request):
-    return templates.TemplateResponse("profile.html", {"request": request})
+    return templates.TemplateResponse("profile.html", {"request": request, "email": None})
 
 @app.post("/login",tags=["account"])
 def  login(data:dict):
@@ -227,8 +491,7 @@ def add_coupon(email:str,data:dict):
         return {"result":f"Email not found"}
 
 @app.get("/{email}/account/view_user_coupon",tags=["account"],name="/account")
-async def view_user_coupon(request:Request,email:str):
-
+async def view_user_coupon(request:Request, email:str):
     id = my_system.search_user_by_email(email)
     if id!=False:
         user_coupon_dict = {}
@@ -244,12 +507,15 @@ async def view_user_coupon(request:Request,email:str):
         for coupon in id.get_expire_coupon():
             expire_coupon.append(coupon)
         user_coupon_dict["expire_coupon"] = expire_coupon
-        return templates.TemplateResponse('user_coupon.html',{"request":request,"user_coupon_dict": user_coupon_dict})
+        return templates.TemplateResponse('user_coupon.html',{"request":request,
+                                                            "user_coupon_dict": 
+                                                            user_coupon_dict,
+                                                            'email': email})
     else:
         return {"Failed":"Email Not Found"}
     
-@app.post("/{email}/admin/add_system_coupon")
-async def  add_system_product(data:dict):
+@app.post("/{email}/admin/add_my_system_coupon")
+async def  add_my_system_product(data:dict):
     print(data)
     data = data["data"]
     email = data["email"]
@@ -319,10 +585,15 @@ def  user_used_coupon(email:str,data:dict):
         return {"Failed":"Email Not Found"}
 
 @app.get("/{email}/account/view_order",tags=["account"])
-def view_order(request:Request,email:str):
+def view_order(request:Request, email:str):
     id = my_system.search_user_by_email(email)
     if id!=False:
         response = id.get_order_history().get_order_info()
-        return templates.TemplateResponse('order.html',{"request":request,"Order":response})
+        return templates.TemplateResponse('order.html',{"request":request,"Order":response, "email": email})
     else:
         return {"Failed":"Email Not Found"}
+
+
+
+if __name__=="__main__":
+    uvicorn.run("main:app", host='127.0.0.1', port=8000, reload=True)
