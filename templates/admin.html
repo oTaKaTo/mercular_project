@@ -421,21 +421,26 @@
       headers: {'Content-Type': 'application/json'}
       }).then(response => response.json()).then(data => {
         console.log(data)
-        document.getElementById('due-date').value = data['_Promotion__due_date']
-        document.getElementById('minimum-price').value = data['_Promotion__minimum_price']
-        document.getElementById('discount').value = data['_PercentageDiscount__discount'] ? data_handler(data['_PercentageDiscount__discount'], 1) : data_handler(data['_FlatDiscount__discount'], 0)
-        if (document.getElementById('max-discount')){
-          document.getElementById('max-discount').value = data['_PercentageDiscount__max_discount'] ? data['_PercentageDiscount__max_discount'] : '0'
+        if(data != 'ID Invaild'){
+          document.getElementById('due-date').value = data['_Promotion__due_date']
+          document.getElementById('minimum-price').value = data['_Promotion__minimum_price']
+          document.getElementById('discount').value = data['_PercentageDiscount__discount'] ? data_handler(data['_PercentageDiscount__discount'], 1) : data_handler(data['_FlatDiscount__discount'], 0)
+          if (document.getElementById('max-discount')){
+            document.getElementById('max-discount').value = data['_PercentageDiscount__max_discount'] ? data['_PercentageDiscount__max_discount'] : '0'
+          }
+          document.getElementById('description').value = data['_Promotion__description']
+          document.getElementById('title').value = data['_Promotion__title']
+          document.getElementById('quantity').value = data['_Coupon__quantity']
+          ban_types_arr = data['_Coupon__ban_types']
+          ban_products_arr = data['_Coupon__ban_products']
+          types_arr = data['_Coupon__types']
+          brands_arr = data['_Coupon__brands']
+          document.getElementById('coupon-type').value = data['_Coupon__coupon_type']
+          generate_coupon()
         }
-        document.getElementById('description').value = data['_Promotion__description']
-        document.getElementById('title').value = data['_Promotion__title']
-        document.getElementById('quantity').value = data['_Coupon__quantity']
-        ban_types_arr = data['_Coupon__ban_types']
-        ban_products_arr = data['_Coupon__ban_products']
-        types_arr = data['_Coupon__types']
-        brands_arr = data['_Coupon__brands']
-        document.getElementById('coupon-type').value = data['_Coupon__coupon_type']
-        generate_coupon()
+        else{
+          alert(data)
+        }
       })
     }
 
