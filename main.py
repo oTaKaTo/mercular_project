@@ -252,11 +252,14 @@ async def get_product(request: Request, object_id:str):
 
 @app.put("/{email}/cart/clear_select", tags= ["View Cart"])
 async def clear_selected_items(email: str):
-    user = my_system.search_user_by_email(email)
-    user_cart = user.get_user_cart()
-    selected_items = user_cart.get_selected_items()
-    
-    user_cart.deselect_items(selected_items[0])
+    try:
+        user = my_system.search_user_by_email(email)
+        user_cart = user.get_user_cart()
+        selected_items = user_cart.get_selected_items()
+        
+        selected_items.clear()
+    except:
+        raise HTTPException(status_code=404)
 
 @app.get('/{email}/cart/current_selected_items' , tags = ["View Cart"])
 async def get_selected_items(email:str, request:Request):
@@ -312,6 +315,7 @@ async def create_order(email: str, data: dict):
             
             system_order_container.append(new_order)
             user_order_history.add_order(new_order)
+            print(user_order_history.get_order_info())
             
             return {"status": "success",
                     'created_order_id': new_order.get_order_id()}
@@ -648,16 +652,19 @@ def  user_used_coupon(email:str,data:dict):
 def update_order_status(email, order_id):
     user = my_system.search_user_by_email(email)
     user_order_history = user.get_order_history()
-    select_order = user_order_history.get_order_by_id(int(order_id))
+    system_order_container = my_system.get_order_container()
+    
+    select_order = user_order_history.get_order_by_id(int(order_id), system_order_container)
     
     select_order.update_status(1)
 
 @app.get("/{email}/account/view_order",tags=["account"])
 def view_order(request:Request, email:str):
     id = my_system.search_user_by_email(email)
-    if id!=False:
+    if id != False:
         response = id.get_order_history().get_order_info()
-        return templates.TemplateResponse('order.html',{"request":request,"Order":response, "email": email})
+        
+        return templates.TemplateResponse('order.html',{"request":request, "Order":response, "email": email})
     else:
         return {"Failed":"Email Not Found"}
 
