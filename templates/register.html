@@ -5,7 +5,6 @@
     <title>mercule</title>
     <script>
       const myVariable = sessionStorage.getItem("username");
-      console.log(myVariable)
     </script>
     <link rel="stylesheet" href="{{ url_for('styles', path='nav_bar.css?v=1') }}" >
     <style>
@@ -34,7 +33,7 @@
         display: block;
         margin-bottom: 10px;
       }
-        input[type="text"], input[type="password"] {
+        input[type="email"], input[type="password"] {
         display: block;
         width: 30%;
         padding: 10px;
@@ -66,52 +65,62 @@
     <h1 style="font-size:300%;">Register</h1>
     <form>
       <label style="margin-left: 35%;" for="email">Username:</label>
-      <input type="text" id="email" name="email" required>
+      <input type="email" id="email" name="email" required>
       <label style="margin-left: 35%" for="password">Password:</label>
       <input type="password" id="password" name="password" required>
       <label style="margin-left: 35%" for="confirm_password">Confirm Password:</label>
       <input type="password" id="confirm_password" name="confirm_password" required>
-      <button style="display: inline-block;margin-left:35%;font-size: 100%;" onclick="submitForm(event)">Submit</button>
-      <a href="login-page" style="padding-left:17%;padding-right: 1%;display: inline-block;">Aready has account?</a> 
-     
+      <button type="submit" style="display: inline-block;margin-left:35%;font-size: 100%;" onclick="submitForm(event)">Submit</button>
+      <a href="login-page" style="padding-left:17%;padding-right: 1%;display: inline-block;">Aready has account?</a>
     </form> 
     <p id="error" style="color: red; display: none;margin-left: 35%;">""</p>
     <p id="success" style="color: rgb(0, 255, 72); display: none;">Login success.</p>
     <script>  
-        function submitForm(event) {
-        event.preventDefault()
+        function submitForm(event) 
+        {
+        
         var error_alert = document.getElementById('error');
         var username1 = document.getElementById("email").value; 
         var password1 = document.getElementById("password").value; 
         var password2 = document.getElementById("confirm_password").value;
-        if(password1 == password2)
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailPattern.test(username1))
         {
-        fetch("http://127.0.0.1:8000/register", {
-          method: 'POST',
-          body:JSON.stringify({'email': username1,'password': password1}),
-          headers :{'Content-Type': 'application/json'}
-        }).then(response => response.json()).then(data =>{
-          console.log(data)
-          if(data.result == 'success')
+          event.preventDefault()
+          if(password1 == password2)
+              {
+              fetch("http://127.0.0.1:8000/register", {
+                method: 'POST',
+                body:JSON.stringify({'email': username1,'password': password1}),
+                headers :{'Content-Type': 'application/json'}
+              }).then(response => response.json()).then(data =>{
+                console.log(data)
+                if(data.result == 'success')
+                {
+                  sessionStorage.setItem("username",username1);
+                  username1 = ""
+                  password1 = ""
+                  password2 = "" 
+                  window.location.href='profile-page';
+                }
+                else{
+                  error_alert.style.display = 'block'
+                  error_alert.innerHTML = "This email is already used"
+                }
+              })
+            }
+            else
+            {
+              error_alert.style.display = 'block'
+              error_alert.innerHTML = "password not match"
+            }
+          }
+          else
           {
-            sessionStorage.setItem("username",username1);
-            username1 = ""
-            password1 = ""
-            password2 = "" 
-            window.location.href='profile-page';
+
           }
-          else{
-            error_alert.style.display = 'block'
-            error_alert.innerHTML = "This email is already used"
-          }
-        })
-      }
-      else
-      {
-        error_alert.style.display = 'block'
-        error_alert.innerHTML = "password not match"
-      }
-    }
+        }
+       
     </script>
   </body>
 </html>

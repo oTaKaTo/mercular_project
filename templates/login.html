@@ -19,7 +19,7 @@
         display: block;
         margin-bottom: 10px;
       }
-        input[type="text"], input[type="password"] {
+        input[type="email"], input[type="password"] {
         display: block;
         width: 30%;
         padding: 10px;
@@ -52,25 +52,29 @@
     <h1 style="font-size:300%;">Login</h1>
     <form>
       <label style="margin-left: 35%;" for="username">Username:</label>
-      <input type="text" id="username" name="username" required>
+      <input type="email" id="username" name="username" required>
       <label style="margin-left: 35%" for="password">Password:</label>
       <input type="password" id="password" name="password" required>
       <button style="display: inline-block;margin-left:35%;font-size: 100%;" onclick="submitForm(event)">Submit</button>
       <a href="register-page" style="padding-left:10%;padding-right: 1%;display: inline-block;">Register</a> 
-      <a href="*" >Forgot your password?</a>
+      <a>Forgot your password?</a>
       <p id="error" style="color:red;display: none;padding-left: 35%;">Login failed. Please check your email and password.</p>
     </form> 
     <p id="success" style="color: rgb(0, 255, 72); display: none;">Login success.</p>
     <script>  
        function submitForm(event) {
-        event.preventDefault()
+        
         var username1 = document.getElementById("username").value; 
-        var password1 = document.getElementById("password").value;  
+        var password1 = document.getElementById("password").value; 
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailPattern.test(username1))
+        { 
+          event.preventDefault()
           fetch("http://127.0.0.1:8000/login", {
           method: 'POST',
           body:JSON.stringify({'email': username1,'password': password1}),
           headers :{'Content-Type': 'application/json'}
-        }).then(response => response.json()).then(data =>{
+           }).then(response => response.json()).then(data =>{
           console.log(data.result)
           if(data.result == 'success')
           {
@@ -108,7 +112,7 @@
             } 
           }
         })
-       
+      }
       }
     </script>
   </body>
