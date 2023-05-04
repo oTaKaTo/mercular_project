@@ -90,8 +90,11 @@ class Cart:
   
       for items in self.__selected_item:
         product = items.get_product() 
-        if (coupon and not coupon.is_available(price, product.get_type_brand_id())) or items.get_quantity() > product.get_quantity():
-          return False
+        if (items.get_quantity() > product.get_quantity()):
+          return "Not enough item in stock"
+        
+        if (coupon and not coupon.is_available(price, product.get_type_brand_id())):
+          return "coupon is not available"
       
       for items in self.__selected_item:  
         items_quantity = items.get_quantity()
@@ -106,7 +109,7 @@ class Cart:
       if(coupon):
         coupon_catalog.delete_coupon(coupon.get_id())
       
-      return True
+      return "success"
 
 
   

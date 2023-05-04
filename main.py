@@ -155,7 +155,7 @@ async def index(request: Request, email: str, is_buynow: str):
         temp_info[items_name].update({"price": price})
         temp_info[items_name].update({"image": product_image})
             
-    selected_items_info.update(temp_info)
+        selected_items_info.update(temp_info)
     
     return templates.TemplateResponse("checkout.html", {"request": request,
                                                         "email": email,
@@ -282,7 +282,7 @@ async def select_item(email: str, data: dict):
     user = my_system.search_user_by_email(email)
     user_cart = user.get_user_cart()
     cart_items = user_cart.get_items_in_cart()
-    if(data["selected_item_idx"] > len(cart_items)):
+    if(data["selected_item_idx"] >=   len(cart_items)):
         return 0
     
     edit_item = cart_items[data["selected_item_idx"]]
@@ -320,13 +320,13 @@ async def create_order(email: str, data: dict):
 
 @app.put("/{email}/checkout/update_stock", tags = ["Checkout"])
 async def create_order(email: str, data: dict):
+    try:
         user = my_system.search_user_by_email(email)
         user_cart = user.get_user_cart()
-        print(data['is_buynow'])
-        user_cart.checkout(None, my_system.get_product_catalog(), my_system.get_coupon_catalog(), data['is_buynow'])
-        
-        return {"status": 'success',
-                "created_order_id": data['created_order_id']}
+
+        return {"status": user_cart.checkout(None, my_system.get_product_catalog(), my_system.get_coupon_catalog(), data['is_buynow'])}
+    except:
+        return {"status": 'fail'}
 
     
 
