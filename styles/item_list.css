@@ -8,6 +8,7 @@ body .cart-contrainer {
     margin: 0 auto;
     width: 70%;
 }
+
 .cart-contrainer {
     top: 0;
     margin: 30px;
@@ -27,7 +28,8 @@ body .cart-contrainer {
 .price-contrainer {
     border-style: solid;
     border-radius: 10px;
-    border-color: rgb(222, 221, 221);;
+    border-color: rgb(222, 221, 221);
+    ;
     margin: 10px 0px;
 }
 
@@ -38,19 +40,21 @@ body .cart-contrainer {
 #Total {
     margin: 10px 5px 0px 5px;
 }
+
 #Discounted {
     margin: 5px;
 }
 
 #order-conclusion {
     height: 10%;
-    background-color:rgb(222, 221, 221);
+    background-color: rgb(222, 221, 221);
     text-align: center;
 }
 
-.price-text hr{
+.price-text hr {
     color: rgb(222, 221, 221);
 }
+
 .submit {
     background-color: rgb(15, 99, 233);
     border-radius: 10px;
@@ -75,12 +79,12 @@ body .cart-contrainer {
     width: 50%;
 }
 
-.item-list .item-NotFound{
+.item-list .item-NotFound {
     transform: translate(50%, 0);
     top: -50%;
     right: -50%;
     width: 50%;
-} 
+}
 
 #upper-item-NotFound {
     margin: 0px;
