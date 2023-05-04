@@ -127,8 +127,16 @@ async def add_promotion(request: Request, data: dict):
     else:
         return "Email Not Found"
 
-@app.get('/{email}/checkout', tags=["Page"], response_class=HTMLResponse)
-async def index(request: Request, email: str):
+@app.get("/search/{keyword}", tags=["Page"], response_class=HTMLResponse)
+async def get_product(request: Request, keyword:str):
+    return templates.TemplateResponse("product_search_noemail.html",{"request":request,"products":handle_products_page_request(search=keyword),"email":None,"keyword":keyword})
+
+@app.get("/{email}/search/{keyword}", tags=["Page"], response_class=HTMLResponse)
+async def get_product(request: Request, keyword:str, email:str):
+    return templates.TemplateResponse("product_search.html",{"request":request,"products":handle_products_page_request(search=keyword),"email":email,"keyword":keyword})
+
+@app.get('/{email}/{is_buynow}/checkout', tags=["Page"], response_class=HTMLResponse)
+async def index(request: Request, email: str, is_buynow: str):
     selected_items_info = {}
     user = my_system.search_user_by_email(email)
     user = my_system.search_user_by_email(email)
@@ -136,10 +144,18 @@ async def index(request: Request, email: str):
     selected_items = user_cart.get_selected_items()
     
     for item in selected_items:
-            price = item.get_price() * item.get_quantity()
-            temp_info = item.get_item()
-            temp_info[item.get_product().get_name()].update({"price": price})
-            selected_items_info.update(temp_info)
+        price = item.get_price() * item.get_quantity()
+        temp_info = item.get_item()
+        
+        product_image = item.get_product().get_name()
+        
+        product_image = item.get_product().get_image()[0]
+        items_name = item.get_product().get_name()
+        
+        temp_info[items_name].update({"price": price})
+        temp_info[items_name].update({"image": product_image})
+            
+    selected_items_info.update(temp_info)
     
     return templates.TemplateResponse("checkout.html", {"request": request,
                                                         "email": email,
@@ -149,21 +165,20 @@ async def index(request: Request, email: str):
                                                         "user_coupons": user.get_user_coupon(),
                                                         "selected_items": selected_items_info,
                                                         "list": list,
+                                                        "is_buynow": is_buynow
                                                         })
 
 @app.put('/{email}/{product_id}/buynow', tags=["Page"], response_class=HTMLResponse)
 async def buynow(email: str, data: dict):
-    user = my_system.search_user_by_email(email)
-    user = my_system.search_user_by_email(email)
-    user_cart = user.get_user_cart()
-    user_cart.get_selected_items().clear()
-    
-    product = pd_catalog_dict.search_by_id(data['product_id']) 
+        user = my_system.search_user_by_email(email)
+        user = my_system.search_user_by_email(email)
+        user_cart = user.get_user_cart()
         
-    items = Item(product, float(data['quantity']))
-    
-    user.add_item_to_cart(items)
-    user_cart.select_items(items)
+        product = pd_catalog_dict.search_by_id(data['product_id']) 
+        items = Item(product, int(data['quantity']))
+        
+        user_cart.get_selected_items().clear()
+        user_cart.select_items(items)
 
 @app.get('/{email}/cart', tags=["Page"], response_class=HTMLResponse)
 async def cart(email: str, request: Request):
@@ -181,10 +196,16 @@ async def cart(email: str, request: Request):
         for item in items:
             price = item.get_price() * item.get_quantity()
             temp_info = item.get_item()
-            temp_info[item.get_product().get_name()].update({"price": price})
+            
+            product_image = item.get_product().get_image()[0]
+            items_name = item.get_product().get_name()
+            
+            temp_info[items_name].update({"price": price})
+            temp_info[items_name].update({"image": product_image})
+            
             items_info.update(temp_info)
             
-            
+  
         return templates.TemplateResponse("cart.html", {"request": request, 
                                                         "items_info": items_info, 
                                                         "list": list,
@@ -217,7 +238,6 @@ async def get_brand(request: Request, brand:str,email:str):
 
 @app.get("/{email}/product/{object_id}",response_class=HTMLResponse)
 async def get_product(request: Request, object_id:str,email:str):
-    print(pd_catalog_dict.get_option(object_id))
     return templates.TemplateResponse("product.html",{"request":request, "product": pd_catalog_dict.get_product_info(object_id),"option": pd_catalog_dict.get_option(object_id),"email":email})
 
 @app.get("/product/{object_id}",response_class=HTMLResponse)
@@ -227,6 +247,13 @@ async def get_product(request: Request, object_id:str):
                                                             "option": pd_catalog_dict.get_option(object_id), 
                                                             "email":None})
 
+@app.put("/{email}/cart/clear_select", tags= ["View Cart"])
+async def clear_selected_items(email: str):
+    user = my_system.search_user_by_email(email)
+    user_cart = user.get_user_cart()
+    selected_items = user_cart.get_selected_items()
+    
+    user_cart.deselect_items(selected_items[0])
 
 @app.get('/{email}/cart/current_selected_items' , tags = ["View Cart"])
 async def get_selected_items(email:str, request:Request):
@@ -258,19 +285,7 @@ async def select_item(email: str, data: dict):
     edit_item = cart_items[data["selected_item_idx"]]
     new_amount = data["new_amount"]
     user_cart.edit_amount_item(edit_item, new_amount)
-
-@app.put("/{email}/cart/deleting_item", tags = ["View Cart"])
-async def delete_item(email:str, data: dict):
-    try:    
-        user = my_system.search_user_by_email(email)
-        user_cart = user.get_user_cart()
-        cart_items = user_cart.get_items_in_cart()
-        
-        user_cart.delete_item(cart_items[data['deleteing_index']])
-        return {"status": "success"}
-    except:
-        return {"status": "fail"}
-
+    
 @app.put("/{email}/checkout/create_order", tags = ["Checkout"])
 async def create_order(email: str, data: dict):
         try:
@@ -306,7 +321,7 @@ async def create_order(email: str, data: dict):
         user = my_system.search_user_by_email(email)
         user_cart = user.get_user_cart()
         
-        user_cart.checkout(None, my_system.get_product_catalog(), my_system.get_coupon_catalog())
+        user_cart.checkout(None, my_system.get_product_catalog(), my_system.get_coupon_catalog(), data['is_buynow'])
         
         return {"status": 'success',
                 "created_order_id": data['created_order_id']}
@@ -340,7 +355,6 @@ async def view_admin_page(request: Request, email:str):
 async def search_coupon_infor_by_id(data:dict):
     try:
         id = str(data["id"])
-        print(my_system.get_coupon_catalog().get_coupons())
         for coupon in my_system.get_coupon_catalog().get_coupons():
             if coupon != None and coupon.get_id()==id:
                 return coupon
@@ -423,7 +437,6 @@ def  login(data:dict):
      password = data["password"]
      x = my_system.login(email,password)
      if x != False:
-         print(x)
          if x=="Admin":
             
             return {'result':"Admin"}
@@ -563,7 +576,6 @@ async def view_user_coupon(request:Request, email:str):
     
 @app.post("/{email}/admin/add_my_system_coupon")
 async def  add_my_system_product(data:dict):
-    print(data)
     data = data["data"]
     email = data["email"]
     due_date = data["due_date"]

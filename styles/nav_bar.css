@@ -124,6 +124,7 @@ nav .search-bar {
   width: 2em;
   height: 1.5em;
   top: 5px;
+  cursor:pointer; 
 }
 
 .search-button .search-img {
@@ -131,6 +132,7 @@ nav .search-bar {
   width: 1.5em;
   height: 1.5em;
   align-items: center;
+  cursor:pointer; 
 }
 
 nav .user {

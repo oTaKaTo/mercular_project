@@ -1,90 +1,105 @@
 <header>
-        <nav>
-            <div class="logo">
-                <a href="/">
-                    <img class="logo-img" src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=256&q=75">
-                </a>   
+    <nav>
+        <div class="logo">
+            <a href="/">
+                <img class="logo-img" src="https://www.mercular.com/_next/image?url=%2Fimages%2Fmercular-logo.png&w=256&q=75">
+            </a>   
+        </div>
+        <div class="search-bar">
+            <input type="text" name="search" id="search-input" placeholder="Search" autoComplete="off"></input>
+            <button class = "search-button" type="submit" onclick="search_pressed()"><img class="search-img" src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
+        </div>
+        <div class="product-type-component">
+            <div class = "list">
+                <form class = "types" action="/products/type/คอมพิวเตอร์">
+                    <button class = "type">
+                        <p>คอมพิวเตอร์</p>
+                    </button>
+                </form>
+                <form class = "types" action="/products/type/หูฟัง">
+                    <button class = "type">
+                        <p>หูฟัง</p>
+                    </button>
+                </form>
+                <form class = "types" action="/products/type/เกมมิ่ง">
+                    <button class = "type">
+                        <p>เกมมิ่ง</p>
+                    </button>
+                </form>
+                <form class = "types" action="/products/type/โต๊ะคอม">
+                    <button class = "type">
+                        <p>โต๊ะคอม</p>
+                    </button>
+                </form>
             </div>
-            <div class="search-bar">
-                <input type="text" name="search" id="search-input" placeholder="Search" autoComplete="off"></input>
-                <button class = "search-button" type="submit" ><img class="search-img" src="https://cdn.iconscout.com/icon/free/png-256/search-1365-459145.png?f=webp&w=256"></img> </button>
-            </div>
-            <div class="product-type-component">
-                <div class = "list">
-                    <form class = "types" action="/products/type/คอมพิวเตอร์">
-                        <button class = "type">
-                            <p>คอมพิวเตอร์</p>
-                        </button>
-                    </form>
-                    <form class = "types" action="/products/type/หูฟัง">
-                        <button class = "type">
-                            <p>หูฟัง</p>
-                        </button>
-                    </form>
-                    <form class = "types" action="/products/type/เกมมิ่ง">
-                        <button class = "type">
-                            <p>เกมมิ่ง</p>
-                        </button>
-                    </form>
-                    <form class = "types" action="/products/type/โต๊ะคอม">
-                        <button class = "type">
-                            <p>โต๊ะคอม</p>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <div class="utility">
-                <script>
-                    let session = sessionStorage.getItem("username")
-                    
-                </script>
-                {% if email is none%} 
-                    <a onclick= "cart_something()"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
-                {% elif email != "" and email is not none %} 
-                    <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
-                
-                {% else %} 
-                    <a href= "/login-page"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
-                {% endif %}
-            </div>
-            <div class="user">
-                {% if email is none or email != ""%} 
-                    <a href="/profile-page"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>    
-                {% else %} 
-                <div id="login_display" style="display: inline-flex;">
-                    <button class="login_button" onclick="window.location.href='/login-page'">Login</button>
-                    <button class="login_button" onclick="window.location.href='/register-page'">Register</button>
-                </div>
-                {% endif %}
+        </div>
+        <div class="utility">
+            <script>
+                let session = sessionStorage.getItem("username")
+            </script>
+            {% if email is none%} 
+                <a onclick= "go_to_cart()"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+            {% elif email != "" and email is not none %} 
+                <a href= "{{email}}/cart"><img class="cart-img" src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+            
+            {% else %} 
+                <a href= "/login-page"><img class="cart-img"src="https://cdn.iconscout.com/icon/free/png-256/cart-3731224-3112098.png?f=webp&w=256"></img></a>
+            {% endif %}
+        </div>
+        <div class="user">
+            <div id = profile-section style="display: none;">
+                <p id = account></p>
+                <a href="/profile-page"><img class="user-img" src="https://www.mercular.com/icons/me.png"></img></a>
             </div>
             
-            <script>
-                session = sessionStorage.getItem("username")
-                console.log(session)
-                if (session == null)
-                {
-                  document.getElementById("login_display").style.display = 'block'
-                }
-                else
-                {
-                  document.getElementById("account_display").style.display = 'block'
-                  document.getElementById("account").innerHTML += session[0] +session[1]
+            <div id = login-section style="display: none;">
+                <div id="login_display" style="display: inline-flex;">
+                <button class="login_button" onclick="window.location.href='/login-page'">Login</button>
+                <button class="login_button" onclick="window.location.href='/register-page'">Register</button>
+            </div>
+        </div>
+        
+        <script>
+            session = sessionStorage.getItem("username")
+            
+            if (session == null)
+            {
+                document.getElementById("login-section").style.display = 'inline-flex'
+            }
+            else
+            {
+                document.getElementById("profile-section").style.display = 'inline-flex'
+                document.getElementById("account").innerHTML = session
+            }
+            
+            
+            function go_to_profile()
+            {
+              window.location.href = "/profile-page";
+            }
+            
+            function go_to_cart() {
+                if (session == null) {
+                    window.location.href = '/login-page';
+                    return 0;
                 }
                 
-                function go_to_profile()
-                {
-                  window.location.href = "/profile-page";
+                window.location.href = '/' + session + '/cart';
+                return 1;
+            }
+            
+            function search_pressed() {
+                search = document.getElementById("search-input").value
+                search = search.toString()
+                if(search != ""){
+                    if(session == null){
+                    window.location.href='/search/'+search
                 }
-                
-                function cart_something() {
-                    if (session == null) {
-                        window.location.href = '/login-page';
-                        return 0;
-                    }
-                    
-                    window.location.href = '/' + session + '/cart';
-                    return 1;
+                else{
+                    window.location.href='/'+session+'/search/'+search
+                }   
                 }
-            </script>
-        </nav>
+            }
+        </script>
+    </nav>
 </header>

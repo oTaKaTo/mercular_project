@@ -52,3 +52,9 @@ body .address-contrainer {
     display: flex;
     height: 20%;
 }
+
+.item .left-item-component img {
+    width: 80px;
+    height: 80px;
+    margin: 0 10px
+}

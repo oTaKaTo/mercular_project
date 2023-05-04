@@ -53,10 +53,10 @@
             {% set index = list(selected_items.keys()).index(item) %}
             <div class="item">
                 <div class = "left-item-component">
-                    <img src="https://www.mercular.com/icons/me.png"></img>
+                    <img src="{{selected_items[item].image}}">
                     <div>
                         <p id = 'name'>ชื่อสินค้า : {{item}}</p>
-                        <p id = 'option'>ลักษณะ : {{selected_items[item].option}}</p>
+                        <p id = 'option'>ลักษณะ : {{selected_items[item].product_option}}</p>
                     </div>
                     </div>
                     <div class = "middle-item-component">
@@ -181,14 +181,15 @@
                         fetch( "/{{email}}/checkout/update_stock",
                         { method: 'PUT',
                             body: JSON.stringify({
-                                            "created_order_id" : data["created_order_id"]
+                                            "created_order_id" : data["created_order_id"],
+                                            "is_buynow": '{{is_buynow}}',
                                         }),
                             headers :{'Content-Type': 'application/json'}
                         })
                         .then(response => response.json())
                         .then(data => {
                             if(data["status"] != "success") {
-                                alert("Not enoung item in stock")
+                                alert("Not enough item in stock")
                                 window.location.href = "/{{email}}/cart"
                                 return 0;
                             }
@@ -210,6 +211,18 @@
                             window.location.href = "/{{email}}/cart"
                         })
                     })
+            }
+        }
+        
+        window.onbeforeunload = function() {
+            if('{{is_buynow}}' == 'true') {   
+                url = "/" + '{{email}}' + "/cart/clear_select";
+                fetch ( url,
+                    { method: 'PUT',
+                        body: JSON.stringify({
+                                        }),
+                        headers :{'Content-Type': 'application/json'}
+                    }).then(response=>response.json())
             }
         }
         

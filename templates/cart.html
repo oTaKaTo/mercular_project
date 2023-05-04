@@ -36,10 +36,10 @@
                         onchange="checkbox_handle(this, {{items_info[item].price}}, {{index}})">
                         
               {% endif %}
-              <img src="https://www.mercular.com/icons/me.png"></img>
+              <img src="{{items_info[item].image}}">
               <div>
                 <p id = 'name'>item_name : {{item}}</p>
-                <p id = 'option'>item_option : {{items_info[item].option}}</p>
+                <p id = 'option'>item_option : {{items_info[item].product_option}}</p>
               </div>
             </div>
             <div class = "middle-item-component">
@@ -51,7 +51,7 @@
                   <p id = "item-quantity-{{index}}" style = "width: 25%; right: 0%;">{{items_info[item].quantity}}</p>
                   <button id = "quantity_handler" type="button" onmousedown="edit_item_amount('{{index}}', 1)" onmouseup="update_amount_item('{{index}}')">+</button>
               </div>
-              <button id = "remove-item" type="button" onclick="remove_item({{index}})">
+              <button id = "remove-item" type="button" onclick="delete_items('{{index}}')">
                 <img class = "remove-item-img" src = "https://cdn.discordapp.com/attachments/1069555702835720212/1102822212358119445/pngwing.com.png"></img>
               </button>
             </div>
@@ -114,8 +114,7 @@
           .then(response => response.json())
           .then(data => {
             if(data["selected_item"].length > 0) {
-              fetch("/" + email + "/checkout")
-              window.location.href = ("/" + email + "/checkout")
+              window.location.href = ("/" + email + "/false/checkout")
               return 0;
             }
             
@@ -135,6 +134,20 @@
                                   }),
                 headers :{'Content-Type': 'application/json'}
               }).then(response=>response.json())
+      }
+      
+      function delete_items(index){
+        new_amount = 0     
+        url = "/{{email}}/cart/edit_amount_item";
+        fetch ( url,
+              { method: 'PUT',
+                body: JSON.stringify({
+                                      "selected_item_idx": Number(index),
+                                      "new_amount": Number(new_amount),
+                                  }),
+                headers :{'Content-Type': 'application/json'}
+              }).then(response=>response.json())
+              window.location.reload()
       }
             
       function edit_item_amount(index, edit_by) {
@@ -160,18 +173,6 @@
         }
       }
       
-      function remove_item(index) {
-        url = "/{{email}}/cart/deleting_item";
-        fetch ( url,
-              { method: 'PUT',
-                body: JSON.stringify({
-                                    "deleteing_index": Number(index),
-                                  }),
-                headers :{'Content-Type': 'application/json'}
-              }).then(response=>response.json())
-              .then(data => console.log(data))
-              window.location.reload()
-      }
     </script>
   </body>
 </html>

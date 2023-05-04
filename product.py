@@ -196,7 +196,7 @@ class Item:
     
     def get_item(self):
             item_info = {
-                "product_option": self.__product.get_type(), 
+                "product_option": self.__product.get_option(), 
                 "quantity": int(self.__quantity)
                 }
             brand_id = self.__product.get_type_brand_id()

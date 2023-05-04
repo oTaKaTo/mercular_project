@@ -11,23 +11,29 @@ class Cart:
     
   def add_item(self, items: Item):
     items_quantity = items.get_quantity()
-    if(items not in self.__items):
+    
+    items_product_ref = items.get_product()
+    cart_product_ref = [item.get_product() for item in self.__items]
+    
+    if(items_product_ref not in cart_product_ref):
+      print(f"insert_quantity : {items.get_quantity()}")
       self.__items.append(items)
+      
     else:
-      exisited_item_no = self.__items.index(items)
+      exisited_item_no = cart_product_ref.index(items_product_ref)
       exisited_item = self.__items[exisited_item_no]
       exisited_item_quantity = exisited_item.get_quantity()
       exisited_item.set_quantity(exisited_item_quantity + items_quantity)
-    self.__total_items += items_quantity
       
-  def delete_item(self, items: Item) -> str:
-    if(len(self.__items) != 0):
-      self.__total_items -= items.get_quantity()
-      self.__items.remove(items)
-    else:
-      raise HTTPException(status_code=204, detail="Cart is empty")
+    self.__total_items += items_quantity
   
   def edit_amount_item(self, items: Item, quantity):
+    if(quantity <= items.get_quantity()):
+      self.__total_items -= items.get_quantity()
+      self.__items.remove(items)
+      self.__update_total_price()
+      return 0
+    
     if(len(self.__items) > 0):
       delta_quantity = quantity - items.get_quantity()
       self.__total_items += delta_quantity
@@ -47,18 +53,12 @@ class Cart:
       return self.__items
   
   def select_items(self, items: Item):
-    if(len(self.__items) != 0):
       self.__selected_item.append(items)
       self.__update_total_price()
-    else:
-      raise HTTPException(status_code=204, detail="Cart is empty")
   
   def deselect_items(self, items: Item):
-    if(len(self.__items) != 0):
       self.__selected_item.remove(items)
       self.__update_total_price()
-    else:
-      raise HTTPException(status_code=204, detail="Cart is empty")
 
   def get_selected_items(self):
     return self.__selected_item
@@ -80,8 +80,7 @@ class Cart:
     except:
       return self.__total_price
 
-  def checkout(self, coupon = False, product_catalog = None, coupon_catalog = None):
-    try:
+  def checkout(self, coupon = False, product_catalog = None, coupon_catalog = None, is_buynow = False):
       price = self.__total_price
   
       for items in self.__selected_item:
@@ -93,7 +92,9 @@ class Cart:
         items_quantity = items.get_quantity()
         items_id = items.get_product().get_product_id()
         product_catalog.checkout_product(items_id, items_quantity)
-        self.delete_item(items)
+        if(not is_buynow):
+          self.edit_amount_item(items, 0)
+          
         
       self.__selected_item.clear()  
       self.__update_total_price()    
@@ -101,8 +102,7 @@ class Cart:
         coupon_catalog.delete_coupon(coupon.get_id())
       
       return True
-    except:
-      return False
+
 
   
   def select_coupon(self, coupon):

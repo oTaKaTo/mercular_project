@@ -27,7 +27,6 @@ class System:
         for ID in self.__user_lst:
             if ID.get_email() == email:
                 return ID
-            print(ID)
         return False
    
     def search_coupon_by_coupon_id(self,coupon_id):
