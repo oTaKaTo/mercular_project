@@ -100,6 +100,41 @@ async def get_product_information(request: Request, data: dict):
     product = my_system.get_product_catalog().search_by_id(id)
     return product
 
+@app.post("/edit_system_coupon")
+async def  edit_system_coupon(data:dict):
+    coupon_id = data['coupon_id']
+    data = data["data"]
+    email = data["email"]
+    due_date = data["due_date"]
+    minimum_price = int(data["minimum_price"])
+    discount = int(data["discount"])
+    max_discount = int(data["max_discount"])
+    description = data["description"]
+    title = data["title"]
+    quantity = int(data["quantity"])
+    ban_types = data["ban_types"]
+    ban_products = data["ban_products"]
+    type = data["type"]
+    brand = data["brand"]
+    coupon_type = data["coupon_type"]
+    discount_type = data["discount_type"]
+    id = my_system.search_user_by_email(email)
+    if id != False:
+        if isinstance(id, Admin):
+                if discount_type == "flat":
+                       new_coupon = FlatCoupon(due_date,minimum_price,discount,quantity,coupon_type,title,description,ban_products,ban_types,type,brand)
+                elif discount_type == "percentage":
+                       new_coupon = PercentageCoupon(due_date,minimum_price,discount,max_discount,quantity,coupon_type,title,description,ban_products,ban_types,type,brand)
+
+                if my_system.get_coupon_catalog().edit_coupon(coupon_id, new_coupon)==True:
+                    return f"Success to edit coupon {new_coupon.get_id()}"
+                else:
+                    return "Failed to add"
+        else:
+                return "you are not admin"
+    else:
+        return "Email Not Found"
+
 @app.post('/add-promotion')
 async def add_promotion(request: Request, data: dict):
     data = data['data']
