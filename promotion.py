@@ -32,9 +32,12 @@ class Promotion:
         return str(self.__minimum_price) + '.-'
     
     def get_due_date_str(self):
-        month = ["ม.ค.", 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
-        dmy = self.__due_date.split('-')
-        return dmy[0] + ' ' + month[int(dmy[1]) - 1] + ' ' + dmy[2]
+        try:
+            month = ["ม.ค.", 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
+            dmy = self.__due_date.split('-')
+            return dmy[0] + ' ' + month[int(dmy[1]) - 1] + ' ' + dmy[2]
+        except:
+            return ''
     
     def get_title(self):
         return self.__title
