@@ -29,26 +29,34 @@
                 </fieldset>
             </form>
         </div>
-        <!--<div class = "coupon-contrainer">
-            <form>
-                <fieldset class="coupons-list" action = "javascript:">
-                    <div>
-                        {% for coupon in user_coupons %}
-                        <p>Hi</p>
-                            {% set coupon_index = user_coupons.index(coupon) %}
-                                <input  type="radio"
-                                id = "coupon-no-{{coupon_index}}"
-                                name="contact"
-                                value = {{coupon_index}}
-                                onchange="checkbox_handle(this)"
-                                >
-                                <label for="coupon-no-{{coupon_index}}">{{user_coupons[coupon_index].get_id()}}</label>
-                            <hr>
-                        {% endfor %}
-                    <div>
-                </fieldset>
-            </form>
-        </div>-->
+        <div class="user-coupon-container">
+            <p>Your Coupon</p>
+            <hr>
+            {% for coupon in user_coupons %}
+            <div class="coupon-container" id="{{coupon.get_id()}}">
+                <div class="circle-top"></div>
+                <div class="coupon-discount">
+                <div class="text">
+                    ลดเพิ่ม
+                </div>
+                <div class="discount">
+                    {{coupon.get_discount_str()}}
+                </div>
+                </div>
+                <div class="coupon-description">
+                <div class="title">{{coupon.get_title()}}</div>
+                <div class="description">เมื่อซื้อครบ {{coupon.get_minimum_price_str()}}</div>
+                <div class="due-date">หมดอายุ : {{coupon.get_due_date_str()}}</div>
+                </div>
+                <div class="coupon-button"></div>
+                <div class="circle-bottom"></div>
+                <div class="button">
+                <div class="text" onclick="use_this_coupon({{coupon}})">ใช้</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <hr>
         {% for item in selected_items %}
             {% set index = list(selected_items.keys()).index(item) %}
             <div class="item">

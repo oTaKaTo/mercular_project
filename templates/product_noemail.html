@@ -134,8 +134,16 @@
                     method:"PUT",
                     body:JSON.stringify({'quantity':quantity,'product_id': id}),
                     headers :{'Content-Type': 'application/json'}
-                }).then(response => response.json()).then(data =>{
-          console.log(data)
+                }).then(response => response.json())
+                .then(data =>{
+                    if (data["status"] == 'fail')
+                    {
+                        alert("Add item to cart failed")
+                    }
+                    else
+                    {
+                        alert("Add item to cart complete: " + quantity.toString())
+                    }
             })
         }
         </script>

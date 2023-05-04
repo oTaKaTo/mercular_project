@@ -131,10 +131,15 @@
                         'product_id': id,
                     }),
                     headers :{'Content-Type': 'application/json'}
-                }).then(response => response.json()).then(data =>{
+                }).then(response => response.json())
+                .then(data =>{
                     if (data["status"] = 'failed')
                     {
                         alert("Add item to cart failed")
+                    }
+                    else
+                    {
+                        alert("Add item to cart complete: " + quantity.toString())
                     }
             })
         }
