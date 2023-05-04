@@ -94,6 +94,39 @@ def handle_products_page_request(brand="",type="",search=""):
         list.append(inner_list)
     return list
 
+@app.post('/get-product-information')
+async def get_product_information(request: Request, data: dict):
+    id = data['id']
+    product = my_system.get_product_catalog().search_by_id(id)
+    return product
+
+@app.post('/add-promotion')
+async def add_promotion(request: Request, data: dict):
+    data = data['data']
+    id = data['id']
+    email = data['email']
+    discount_type = data['discount_type']
+    due_date = data['due_date']
+    minimum_price = data['minimum_price']
+    max_discount = data['max_discount']
+    discount = data['discount']
+    title = data['title']
+    description = data['description']
+    promotion = None
+    admin = my_system.search_user_by_email(email)
+    if admin != False:
+        if isinstance(admin, Admin):
+                if discount_type == 'flat':
+                    promotion = FlatDiscount(due_date, minimum_price, discount, title, description)
+                elif discount_type == 'percentage':
+                    promotion = PercentageDiscount(due_date, minimum_price, discount, max_discount, title, description)
+                my_system.get_product_catalog().search_by_id(id).add_promotion(promotion)
+                return "Success"
+        else:
+                return "you are not admin"
+    else:
+        return "Email Not Found"
+
 @app.get('/{email}/checkout', tags=["Page"], response_class=HTMLResponse)
 async def index(request: Request, email: str):
     selected_items_info = {}
