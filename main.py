@@ -574,8 +574,8 @@ async def view_user_coupon(request:Request, email:str):
     else:
         return {"Failed":"Email Not Found"}
     
-@app.post("/{email}/admin/add_my_system_coupon")
-async def  add_my_system_product(data:dict):
+@app.post("/{email}/admin/add_system_coupon")
+async def  add_system_coupon(data:dict):
     data = data["data"]
     email = data["email"]
     due_date = data["due_date"]
