@@ -30,39 +30,41 @@
         <option value="flat">flat</option>
         <option value="percentage">percentage</option>
       </select><br><br>
+      <div class="form" class="form">
+        <form onsubmit="system_add_coupon()">
+          <label for="discount">discount: </label>
+          <input type="number" name="discount" id="discount" required><br><br>
+          <label for="minimum-price">minimum price: </label>
+          <input type="number" name="minimum-price" id="minimum-price" required><br><br>
+          <label for="due-date">due date: </label>
+          <input type="date" name="due-date" id="due-date" required><br><br>
+          <label for="quantity">quantity: </label>
+          <input type="number" name="quantity" id="quantity" required><br><br>
+          <label for="coupon-type">coupon type: </label>
+          <input type="text" name="coupon-type" id="coupon-type" required><br><br>
+          <label for="title">title: </label>
+          <input type="text" name="title" id="title" required><br><br>
+          <label for="description">description: </label>
+          <input type="text" name="description" id="description" required><br><br>
 
-      <div class="form" id="form">
-        <label for="discount">discount: </label>
-        <input type="text" name="discount" id="discount"><br><br>
-        <label for="minimum-price">minimum price: </label>
-        <input type="text" name="minimum-price" id="minimum-price"><br><br>
-        <label for="due-date">due date: </label>
-        <input type="text" name="due-date" id="due-date"><br><br>
-        <label for="quantity">quantity: </label>
-        <input type="text" name="quantity" id="quantity"><br><br>
-        <label for="coupon-type">coupon type: </label>
-        <input type="text" name="coupon-type" id="coupon-type"><br><br>
-        <label for="title">title: </label>
-        <input type="text" name="title" id="title"><br><br>
-        <label for="description">description: </label>
-        <input type="text" name="description" id="description"><br><br>
+          <label for="ban-product">ban product: </label>
+          <input type="text" name="ban-product" id="ban-product">
+          <button onclick="add_ban_product()">add</button><br><br>
 
-        <label for="ban-product">ban product: </label>
-        <input type="text" name="ban-product" id="ban-product">
-        <button onclick="add_ban_product()">add</button><br><br>
+          <label for="ban-type">ban type: </label>
+          <input type="text" name="ban-type" id="ban-type">
+          <button onclick="add_ban_type()">add</button><br><br>
 
-        <label for="ban-type">ban type: </label>
-        <input type="text" name="ban-type" id="ban-type">
-        <button onclick="add_ban_type()">add</button><br><br>
+          <label for="type">ban product: </label>
+          <input type="text" name="type" id="type">
+          <button onclick="add_type()">add</button><br><br>
 
-        <label for="type">ban product: </label>
-        <input type="text" name="type" id="type">
-        <button onclick="add_type()">add</button><br><br>
-
-        <label for="brand">brand: </label>
-        <input type="text" name="brand" id="brand">
-        <button onclick="add_brand()">add</button><br><br>
-        <button onclick="generate_coupon()">view coupon</button>
+          <label for="brand">brand: </label>
+          <input type="text" name="brand" id="brand">
+          <button onclick="add_brand()">add</button><br><br>
+          <button onclick="generate_coupon()">view coupon</button>
+          <button type="submit">submit</button>
+        </form>
       </div>
     </div>
     <div class="data-container" id="data-container">
@@ -71,7 +73,6 @@
       <div class="types-container" id="types-container">types</div>
       <div class="brands-container" id="brands-container">brands</div>
       <div class="coupon-container" id="coupon-container"></div>
-      <button onclick="system_add_coupon()">submit</button>
     </div>
   </div>
   <script>
@@ -82,11 +83,40 @@
     let types_arr = []
     let brands_arr = []
 
+    let inputBox = Array(4)
+    inputBox[0] = document.getElementById("discount")
+    inputBox[1] = document.getElementById("minimum-price")
+    inputBox[2] = document.getElementById("quantity")
+    inputBox[3] = document.getElementById("max-discount")
+
+    var invalidChars = [
+      "-",
+      "+",
+      "e",
+    ]
+
+    function block_number(){
+      for(let i=0;i<4;++i){
+        try{
+          inputBox[i].addEventListener("keydown", function(e) {
+            if (invalidChars.includes(e.key)) {
+              e.preventDefault();
+            }
+          })
+        }
+        catch(e){
+        }
+      }
+    }
+
+    block_number()
+    
     function add_ban_product(){
       value = document.getElementById('ban-product').value
       ban_products_arr.push(value)
       document.getElementById('ban-product').value = ''
     }
+
     function add_ban_type(){
       value = document.getElementById('ban-type').value
       ban_types_arr.push(value)
@@ -114,21 +144,23 @@
         <option value="flat">flat</option>
         <option value="percentage">percentage</option>
       </select><br><br>
-
       <div class="form" id="form">
-        <label for="discount">discount: </label>
-        <input type="text" name="discount" id="discount"><br><br>
-        <label for="minimum-price">minimum price: </label>
-        <input type="text" name="minimum-price" id="minimum-price"><br><br>
-        <label for="due-date">due date: </label>
-        <input type="text" name="due-date" id="due-date"><br><br>
-        <label for="title">title: </label>
-        <input type="text" name="title" id="title"><br><br>
-        <label for="description">description: </label>
-        <input type="text" name="description" id="description"><br><br>
+        <form onsubmit="system_add_promotion()">
+          <label for="discount">discount: </label>
+          <input type="number" name="discount" id="discount" required><br><br>
+          <label for="minimum-price">minimum price: </label>
+          <input type="number" name="minimum-price" id="minimum-price" required><br><br>
+          <label for="due-date">due date: </label>
+          <input type="date" name="due-date" id="due-date" required><br><br>
+          <label for="title">title: </label>
+          <input type="text" name="title" id="title" required><br><br>
+          <label for="description">description: </label>
+          <input type="text" name="description" id="description" required><br><br>
 
-        <button onclick="system_add_promotion()">submit</button>
+          <button type="submit">submit</button>
+        </form>
       </div>
+    </div>
       <div class="data-container" id="data-container">
         <div class="item-container">
         <div class="product-img-container">
@@ -148,31 +180,31 @@
       let container = document.getElementById('form')
       let p = `
         <label for="discount">discount: </label>
-        <input type="text" name="discount" id="discount"><br><br>
+        <input type="number" name="discount" id="discount" required><br><br>
         <label for="minimum-price">minimum price: </label>
-        <input type="text" name="minimum-price" id="minimum-price"><br><br>
+        <input type="number" name="minimum-price" id="minimum-price" required><br><br>
         <label for="max-discount">max discount: </label>
-        <input type="text" name="max-discount" id="max-discount"><br><br>
+        <input type="number" name="max-discount" id="max-discount" required><br><br>
         <label for="due-date">due date: </label>
-        <input type="text" name="due-date" id="due-date"><br><br>
+        <input type="date" name="due-date" id="due-date" required><br><br>
         <label for="title">title: </label>
-        <input type="text" name="title" id="title"><br><br>
+        <input type="text" name="title" id="title" required><br><br>
         <label for="description">description: </label>
-        <input type="text" name="description" id="description"><br><br>
-        <button onclick="system_add_promotion()">submit</button>
+        <input type="text" name="description" id="description" required><br><br>
+        <button type="submit" onclick="system_add_promotion()">submit</button>
       `
       let f = `
       <label for="discount">discount: </label>
-        <input type="text" name="discount" id="discount"><br><br>
+        <input type="number" name="discount" id="discount" required><br><br>
         <label for="minimum-price">minimum price: </label>
-        <input type="text" name="minimum-price" id="minimum-price"><br><br>
+        <input type="number" name="minimum-price" id="minimum-price" required><br><br>
         <label for="max-discount">max discount: </label>
-        <input type="text" name="due-date" id="due-date"><br><br>
+        <input type="date" name="due-date" id="due-date" required><br><br>
         <label for="title">title: </label>
-        <input type="text" name="title" id="title"><br><br>
+        <input type="text" name="title" id="title" required><br><br>
         <label for="description">description: </label>
-        <input type="text" name="description" id="description"><br><br>
-        <button onclick="system_add_promotion()">submit</button>
+        <input type="text" name="description" id="description" required><br><br>
+        <button type="submit" onclick="system_add_promotion()">submit</button>
       `
       if(type=='percentage'){
         container.innerHTML = p
@@ -228,48 +260,49 @@
         <option value="flat">flat</option>
         <option value="percentage">percentage</option>
       </select><br><br>
-
       <div class="form" id="form">
-        <label for="discount">discount: </label>
-        <input type="text" name="discount" id="discount"><br><br>
-        <label for="minimum-price">minimum price: </label>
-        <input type="text" name="minimum-price" id="minimum-price"><br><br>
-        <label for="due-date">due date: </label>
-        <input type="text" name="due-date" id="due-date"><br><br>
-        <label for="quantity">quantity: </label>
-        <input type="text" name="quantity" id="quantity"><br><br>
-        <label for="coupon-type">coupon type: </label>
-        <input type="text" name="coupon-type" id="coupon-type"><br><br>
-        <label for="title">title: </label>
-        <input type="text" name="title" id="title"><br><br>
-        <label for="description">description: </label>
-        <input type="text" name="description" id="description"><br><br>
+        <form onsubmit="system_add_coupon()">
+          <label for="discount">discount: </label>
+          <input type="number" name="discount" id="discount" required><br><br>
+          <label for="minimum-price">minimum price: </label>
+          <input type="number" name="minimum-price" id="minimum-price"required><br><br>
+          <label for="due-date">due date: </label>
+          <input type="date" name="due-date" id="due-date" required><br><br>
+          <label for="quantity">quantity: </label>
+          <input type="number" name="quantity" id="quantity" required><br><br>
+          <label for="coupon-type">coupon type: </label>
+          <input type="text" name="coupon-type" id="coupon-type" required><br><br>
+          <label for="title">title: </label>
+          <input type="text" name="title" id="title" required><br><br>
+          <label for="description">description: </label>
+          <input type="text" name="description" id="description" required><br><br>
 
-        <label for="ban-product">ban product: </label>
-        <input type="text" name="ban-product" id="ban-product">
-        <button onclick="add_ban_product()">add</button><br><br>
+          <label for="ban-product">ban product: </label>
+          <input type="text" name="ban-product" id="ban-product">
+          <button onclick="add_ban_product()">add</button><br><br>
 
-        <label for="ban-type">ban type: </label>
-        <input type="text" name="ban-type" id="ban-type">
-        <button onclick="add_ban_type()">add</button><br><br>
+          <label for="ban-type">ban type: </label>
+          <input type="text" name="ban-type" id="ban-type">
+          <button onclick="add_ban_type()">add</button><br><br>
 
-        <label for="type">ban product: </label>
-        <input type="text" name="type" id="type">
-        <button onclick="add_type()">add</button><br><br>
+          <label for="type">ban product: </label>
+          <input type="text" name="type" id="type">
+          <button onclick="add_type()">add</button><br><br>
 
-        <label for="brand">brand: </label>
-        <input type="text" name="brand" id="brand">
-        <button onclick="add_brand()">add</button><br><br>
-        <button onclick="generate_coupon()">view coupon</button>
+          <label for="brand">brand: </label>
+          <input type="text" name="brand" id="brand">
+          <button onclick="add_brand()">add</button><br><br>
+          <button onclick="generate_coupon()">view coupon</button>
+          <button type="submit">submit</button>
+        </form>
       </div>
-    </div>
+      </div>
     <div class="data-container" id="data-container">
       <div class="ban-products-container" id="ban-products-container">ban products</div>
       <div class="ban-types-container" id="ban-types-container">ban types</div>
       <div class="types-container" id="types-container">types</div>
       <div class="brands-container" id="brands-container">brands</div>
       <div class="coupon-container" id="coupon-container"></div>
-      <button onclick="system_add_coupon()">submit</button>
     </div>`
     let edit_coupon = `
       <div class="form-container">
@@ -282,41 +315,42 @@
         <option value="flat">flat</option>
         <option value="percentage">percentage</option>
       </select><br><br>
-
       <div class="form" id="form">
-        <label for="discount">discount: </label>
-        <input type="text" name="discount" id="discount"><br><br>
-        <label for="minimum-price">minimum price: </label>
-        <input type="text" name="minimum-price" id="minimum-price"><br><br>
-        <label for="due-date">due date: </label>
-        <input type="text" name="due-date" id="due-date"><br><br>
-        <label for="quantity">quantity: </label>
-        <input type="text" name="quantity" id="quantity"><br><br>
-        <label for="coupon-type">coupon type: </label>
-        <input type="text" name="coupon-type" id="coupon-type"><br><br>
-        <label for="title">title: </label>
-        <input type="text" name="title" id="title"><br><br>
-        <label for="description">description: </label>
-        <input type="text" name="description" id="description"><br><br>
+        <form onsubmit="edit_system_coupon">
+          <label for="discount">discount: </label>
+          <input type="number" name="discount" id="discount" required><br><br>
+          <label for="minimum-price">minimum price: </label>
+          <input type="number" name="minimum-price" id="minimum-price"required><br><br>
+          <label for="due-date">due date: </label>
+          <input type="date" name="due-date" id="due-date" required><br><br>
+          <label for="quantity">quantity: </label>
+          <input type="number" name="quantity" id="quantity" required><br><br>
+          <label for="coupon-type">coupon type: </label>
+          <input type="text" name="coupon-type" id="coupon-type" required><br><br>
+          <label for="title">title: </label>
+          <input type="text" name="title" id="title" required><br><br>
+          <label for="description">description: </label>
+          <input type="text" name="description" id="description" required><br><br>
 
-        <label for="ban-product">ban product: </label>
-        <input type="text" name="ban-product" id="ban-product">
-        <button onclick="add_ban_product()">add</button><br><br>
+          <label for="ban-product">ban product: </label>
+          <input type="text" name="ban-product" id="ban-product">
+          <button onclick="add_ban_product()">add</button><br><br>
 
-        <label for="ban-type">ban type: </label>
-        <input type="text" name="ban-type" id="ban-type">
-        <button onclick="add_ban_type()">add</button><br><br>
+          <label for="ban-type">ban type: </label>
+          <input type="text" name="ban-type" id="ban-type">
+          <button onclick="add_ban_type()">add</button><br><br>
 
-        <label for="type">ban product: </label>
-        <input type="text" name="type" id="type">
-        <button onclick="add_type()">add</button><br><br>
+          <label for="type">ban product: </label>
+          <input type="text" name="type" id="type">
+          <button onclick="add_type()">add</button><br><br>
 
-        <label for="brand">brand: </label>
-        <input type="text" name="brand" id="brand">
-        <button onclick="add_brand()">add</button><br><br>
-        <button onclick="generate_coupon()">view coupon</button>
+          <label for="brand">brand: </label>
+          <input type="text" name="brand" id="brand">
+          <button onclick="add_brand()">add</button><br><br>
+          <button onclick="generate_coupon()">view coupon</button>
+        </form>
       </div>
-    </div>
+      </div>
     <div class="data-container" id="data-container">
       <div class="ban-products-container" id="ban-products-container">ban products</div>
       <div class="ban-types-container" id="ban-types-container">ban types</div>
@@ -331,40 +365,41 @@
         <option value="flat">flat</option>
         <option value="percentage">percentage</option>
       </select><br><br>
-    <div class="form" id="form">
-        <label for="discount">discount: </label>
-        <input type="text" name="discount" id="discount"><br><br>
-        <label for="minimum-price">minimum price: </label>
-        <input type="text" name="minimum-price" id="minimum-price"><br><br>
-        <label for="due-date">due date: </label>
-        <input type="text" name="due-date" id="due-date"><br><br>
-        <label for="quantity">quantity: </label>
-        <input type="text" name="quantity" id="quantity"><br><br>
-        <label for="coupon-type">coupon type: </label>
-        <input type="text" name="coupon-type" id="coupon-type"><br><br>
-        <label for="title">title: </label>
-        <input type="text" name="title" id="title"><br><br>
-        <label for="description">description: </label>
-        <input type="text" name="description" id="description"><br><br>
+      <div class="form" id="form">
+        <form>
+          <label for="discount">discount: </label>
+          <input type="number" name="discount" id="discount" required><br><br>
+          <label for="minimum-price">minimum price: </label>
+          <input type="number" name="minimum-price" id="minimum-price"required><br><br>
+          <label for="due-date">due date: </label>
+          <input type="date" name="due-date" id="due-date" required><br><br>
+          <label for="quantity">quantity: </label>
+          <input type="number" name="quantity" id="quantity" required><br><br>
+          <label for="coupon-type">coupon type: </label>
+          <input type="text" name="coupon-type" id="coupon-type" required><br><br>
+          <label for="title">title: </label>
+          <input type="text" name="title" id="title" required><br><br>
+          <label for="description">description: </label>
+          <input type="text" name="description" id="description" required><br><br>
 
-        <label for="ban-product">ban product: </label>
-        <input type="text" name="ban-product" id="ban-product">
-        <button onclick="add_ban_product()">add</button><br><br>
+          <label for="ban-product">ban product: </label>
+          <input type="text" name="ban-product" id="ban-product">
+          <button onclick="add_ban_product()">add</button><br><br>
 
-        <label for="ban-type">ban type: </label>
-        <input type="text" name="ban-type" id="ban-type">
-        <button onclick="add_ban_type()">add</button><br><br>
+          <label for="ban-type">ban type: </label>
+          <input type="text" name="ban-type" id="ban-type">
+          <button onclick="add_ban_type()">add</button><br><br>
 
-        <label for="type">ban product: </label>
-        <input type="text" name="type" id="type">
-        <button onclick="add_type()">add</button><br><br>
+          <label for="type">ban product: </label>
+          <input type="text" name="type" id="type">
+          <button onclick="add_type()">add</button><br><br>
 
-        <label for="brand">brand: </label>
-        <input type="text" name="brand" id="brand">
-        <button onclick="add_brand()">add</button><br><br>
-        <button onclick="generate_coupon()">view coupon</button>
+          <label for="brand">brand: </label>
+          <input type="text" name="brand" id="brand">
+          <button onclick="add_brand()">add</button><br><br>
+          <button onclick="generate_coupon()">view coupon</button>
+        </form>
       </div>
-    </div>
       <div class="form-container" id="form-container">
         <label for="id">id: </label>
         <input type="text" id="id">
@@ -406,6 +441,7 @@
         container.innerHTML = add_promotion
         document.getElementById('form').style.display = 'block'
       }
+      block_number()
     }
 
     let input2_value = ''
@@ -448,21 +484,21 @@
       let container = document.getElementById('form')
       let p = `
         <label for="discount">discount: </label>
-        <input type="text" name="discount" id="discount"><br><br>
+        <input type="number" name="discount" id="discount" required><br><br>
         <label for="minimum-price">minimum price: </label>
-        <input type="text" name="minimum-price" id="minimum-price"><br><br>
+        <input type="number" name="minimum-price" id="minimum-price"required><br><br>
         <label for="max-discount">max discount: </label>
         <input type="text" name="max-discount" id="max-discount"><br><br>
         <label for="due-date">due date: </label>
-        <input type="text" name="due-date" id="due-date"><br><br>
+        <input type="date" name="due-date" id="due-date" required><br><br>
         <label for="quantity">quantity: </label>
-        <input type="text" name="quantity" id="quantity"><br><br>
+        <input type="number" name="quantity" id="quantity" required><br><br>
         <label for="coupon-type">coupon type: </label>
-        <input type="text" name="coupon-type" id="coupon-type"><br><br>
+        <input type="text" name="coupon-type" id="coupon-type" required><br><br>
         <label for="title">title: </label>
-        <input type="text" name="title" id="title"><br><br>
+        <input type="text" name="title" id="title" required><br><br>
         <label for="description">description: </label>
-        <input type="text" name="description" id="description"><br><br>
+        <input type="text" name="description" id="description" required><br><br>
 
         <label for="ban-product">ban product: </label>
         <input type="text" name="ban-product" id="ban-product">
@@ -476,26 +512,26 @@
         <input type="text" name="type" id="type">
         <button onclick="add_type()">add</button><br><br>
 
-        <label for="brand">brand: </label>
+        <label for="brand">brand: </label>br
         <input type="text" name="brand" id="brand">
         <button onclick="add_brand()">add</button><br><br>
         <button onclick="generate_coupon()">view coupon</button>
       `
       let f = `
         <label for="discount">discount: </label>
-        <input type="text" name="discount" id="discount"><br><br>
+        <input type="number" name="discount" id="discount" required><br><br>
         <label for="minimum-price">minimum price: </label>
-        <input type="text" name="minimum-price" id="minimum-price"><br><br>
+        <input type="number" name="minimum-price" id="minimum-price"required><br><br>
         <label for="due-date">due date: </label>
-        <input type="text" name="due-date" id="due-date"><br><br>
+        <input type="date" name="due-date" id="due-date" required><br><br>
         <label for="quantity">quantity: </label>
-        <input type="text" name="quantity" id="quantity"><br><br>
+        <input type="number" name="quantity" id="quantity" required><br><br>
         <label for="coupon-type">coupon type: </label>
-        <input type="text" name="coupon-type" id="coupon-type"><br><br>
+        <input type="text" name="coupon-type" id="coupon-type" required><br><br>
         <label for="title">title: </label>
-        <input type="text" name="title" id="title"><br><br>
+        <input type="text" name="title" id="title" required><br><br>
         <label for="description">description: </label>
-        <input type="text" name="description" id="description"><br><br>
+        <input type="text" name="description" id="description" required><br><br>
 
         <label for="ban-product">ban product: </label>
         <input type="text" name="ban-product" id="ban-product">
@@ -548,7 +584,7 @@
       let data = {'due_date' : document.getElementById('due-date').value,
       'minimum_price' : document.getElementById('minimum-price').value,
       'discount' : document.getElementById('discount').value,
-      'max_discount' : document.getElementById('max-discount') ? document.getElementById('max-discount').value : 0,
+      'max_discount' : document.getElementById('max-discount') ? document.getElementById('max-discount').value : 99999,
       'description' : document.getElementById('description').value,
       'title' : document.getElementById('title').value,
       'quantity' : document.getElementById('quantity').value,
@@ -565,6 +601,32 @@
       headers: {'Content-Type': 'application/json'}
       }).then(response => response.json()).then(data => {alert(data)})
     }
+
+    function edit_system_coupon(){
+      let data = {
+      'coupon_id': document.getElementById('id').value,
+      'due_date' : document.getElementById('due-date').value,
+      'minimum_price' : document.getElementById('minimum-price').value,
+      'discount' : document.getElementById('discount').value,
+      'max_discount' : document.getElementById('max-discount') ? document.getElementById('max-discount').value : 99999,
+      'description' : document.getElementById('description').value,
+      'title' : document.getElementById('title').value,
+      'quantity' : document.getElementById('quantity').value,
+      'ban_types' : ban_types_arr,
+      'ban_products' : ban_products_arr,
+      'type' : types_arr,
+      'brand' : brands_arr,
+      'coupon_type' : document.getElementById('coupon-type').value,
+      'discount_type' : document.getElementById('input2').value,
+      'email': email}
+      console.log(data)
+      fetch('/edit_system_coupon', {method: 'POST',
+      body: JSON.stringify({'data': data}),
+      headers: {'Content-Type': 'application/json'}
+      }).then(response => response.json()).then(data => {alert(data)})
+    }
+
+
     function logout()
     {
       email = sessionStorage.getItem("username")
