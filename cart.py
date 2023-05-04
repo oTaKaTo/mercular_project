@@ -11,6 +11,11 @@ class Cart:
     
   def add_item(self, items: Item):
     items_quantity = items.get_quantity()
+    if (items_quantity >= 99):
+      items.set_quantity(99)
+    
+    elif (items_quantity <= 0):
+      items.set_quantity(1)
     
     items_product_ref = items.get_product()
     cart_product_ref = [item.get_product() for item in self.__items]
@@ -80,7 +85,7 @@ class Cart:
     except:
       return self.__total_price
 
-  def checkout(self, coupon = False, product_catalog = None, coupon_catalog = None, is_buynow = False):
+  def checkout(self, coupon = False, product_catalog = None, coupon_catalog = None, is_buynow = ''):
       price = self.__total_price
   
       for items in self.__selected_item:
@@ -92,7 +97,7 @@ class Cart:
         items_quantity = items.get_quantity()
         items_id = items.get_product().get_product_id()
         product_catalog.checkout_product(items_id, items_quantity)
-        if(not is_buynow):
+        if(is_buynow == 'false'):
           self.edit_amount_item(items, 0)
           
         
