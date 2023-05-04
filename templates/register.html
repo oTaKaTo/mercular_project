@@ -87,7 +87,7 @@
         if (emailPattern.test(username1))
         {
           event.preventDefault()
-          if(password1 == password2 && password1 != null)
+          if(password1 == password2 && password1 != "")
               {
               fetch("http://127.0.0.1:8000/register", {
                 method: 'POST',
