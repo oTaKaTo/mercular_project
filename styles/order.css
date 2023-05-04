@@ -268,7 +268,7 @@ h1 {
 .container {
     position: relative;
     display: inline;
-    max-width: 800px;
+    width: 800px;
     max-height: 4000px;
     margin: 0 auto;
     padding: 40px;

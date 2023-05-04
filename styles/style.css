@@ -36,6 +36,7 @@
             background-color: rgb(15, 99, 233);
             border-radius: 8px;
             font-weight: bold;
+            padding: 10px;
             height: 40px;
       }
     input[type ="whiteblock"] {
@@ -91,7 +92,7 @@
       background-color: transparent;
       color: rgb(15, 99, 233);
       border: none;
-      padding: 10px;
+      padding: 0px;
       font-size: 16px;
       cursor: pointer;
     }
