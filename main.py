@@ -186,10 +186,13 @@ async def cart(email: str, request: Request):
         selected_info = {}
         user = my_system.search_user_by_email(email)
         user_cart = user.get_user_cart()
+        user_coupon = user.get_user_coupon()
+        
         dict_price = {  "total_price": user_cart.get_total_price(),
                         "discount_price": user_cart.get_discounted_price(None)}
         items = user_cart.get_items_in_cart()
         selected_item = user_cart.get_selected_items()
+        
         for selected in selected_item:
             selected_info.update(selected.get_item())   
             
@@ -212,7 +215,7 @@ async def cart(email: str, request: Request):
                                                         "email": email, 
                                                         "dict_price": dict_price, 
                                                         "selected_info": selected_info,
-                                                        "user_coupons": user.get_user_coupon()
+                                                        "user_coupons": user_coupon,
                                                         })
 
 @app.get("/",response_class=HTMLResponse)
@@ -317,16 +320,13 @@ async def create_order(email: str, data: dict):
 
 @app.put("/{email}/checkout/update_stock", tags = ["Checkout"])
 async def create_order(email: str, data: dict):
-    try:
         user = my_system.search_user_by_email(email)
         user_cart = user.get_user_cart()
-        
+        print(data['is_buynow'])
         user_cart.checkout(None, my_system.get_product_catalog(), my_system.get_coupon_catalog(), data['is_buynow'])
         
         return {"status": 'success',
                 "created_order_id": data['created_order_id']}
-    except:
-        return {'status': "failed"}
 
     
 
@@ -344,7 +344,7 @@ def add_item(email: str, data: dict):
     
         return {'status': 'success'}
     except:
-        return {'status': 'failed'}
+        return {'status': 'fail'}
 
 
 @app.get("/{email}/admin", response_class=HTMLResponse)
@@ -365,7 +365,9 @@ async def search_coupon_infor_by_id(data:dict):
 @app.get("/coupon-special", response_class=HTMLResponse)
 async def view_coupon(request: Request):
   coupons = my_system.get_coupon_catalog().get_coupons_sorted_by_coupon_type()
-  return templates.TemplateResponse("coupon.html", {"request": request, 'coupons': coupons, 'email': None})
+  return templates.TemplateResponse("coupon.html", {"request": request, 
+                                                    'coupons': coupons, 
+                                                    'email': None})
 
 @app.get("/monthly-promotion", response_class=HTMLResponse)
 async def view_promotion(request: Request):
@@ -596,9 +598,9 @@ async def  add_system_coupon(data:dict):
     if id != False:
         if isinstance(id, Admin):
                 if discount_type == "flat":
-                       new_coupon = FlatCoupon(due_date,minimum_price,discount,quantity,coupon_type,title,description,ban_products,ban_types,type,brand)
+                    new_coupon = FlatCoupon(due_date,minimum_price,discount,quantity,coupon_type,title,description,ban_products,ban_types,type,brand)
                 elif discount_type == "percentage":
-                       new_coupon = PercentageCoupon(due_date,minimum_price,discount,max_discount,quantity,coupon_type,title,description,ban_products,ban_types,type,brand)
+                    new_coupon = PercentageCoupon(due_date,minimum_price,discount,max_discount,quantity,coupon_type,title,description,ban_products,ban_types,type,brand)
 
                 if id.add_coupon_to_coupon_catalog(new_coupon,my_system.get_coupon_catalog())==True:
                     return f"Success to add coupon {new_coupon.get_id()}"
