@@ -19,7 +19,7 @@
           {%for a in Order[coupon]["items_list"]%}
           <div style="display: flex;">      
             <div class="condition" style="padding-left: 30px;" >{{a.get_product().get_name()}}</div>
-            <div class="condition" style="padding-left: 10px;" >X {{a.get_product().get_name()}}</div>
+            <div class="condition" style="padding-left: 10px;" >X {{a.get_quantity()}}</div>
           </div>
           {% endfor%}
             <div class="close-button" onclick="close_popup()">ปิด</div>
