@@ -91,9 +91,11 @@ class Cart:
       for items in self.__selected_item:
         product = items.get_product() 
         if (items.get_quantity() > product.get_quantity()):
+          self.__selected_item.clear()
           return "Not enough item in stock"
         
         if (coupon and not coupon.is_available(price, product.get_type_brand_id())):
+          self.__selected_item.clear()
           return "coupon is not available"
       
       for items in self.__selected_item:  
