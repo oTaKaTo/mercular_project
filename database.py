@@ -33,7 +33,7 @@ my_system.get_coupon_catalog().add_coupon(coupon8)
 my_system.get_coupon_catalog().add_coupon(coupon9)
 # print(coupon5.get_due_date_str())
 
-my_system.add_admin("Admin@.gmail.com","1234","0","Admin")
+my_system.add_admin("Admin@gmail.com","1234","0","Admin")
 my_system.create_account("User@gmail.com","1234","095-635-1526","hi")
 my_system.search_user_by_email("User@gmail.com").add_address('name_surname','phone_number','address','sub_district','district','province','postal_code')
 
