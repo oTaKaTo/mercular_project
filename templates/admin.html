@@ -11,12 +11,14 @@
 </head>
 
 <body>
+  <button  style="color:red" onclick="logout()">logout</button>
   <form>
     <label for="input1">Select method</label>
     <select id="input1" name="input1" onchange="select(this.value)">
       <option value="add coupon">add coupon</option>
       <option value="edit coupon">edit coupon</option>
       <option value="delete coupon">delete coupon</option>
+      <option value="add promotion">add promotion</option>
     </select>
   </form><br>
   <div class="container" id="container">
@@ -99,6 +101,122 @@
       value = document.getElementById('brand').value
       brands_arr.push(value)
       document.getElementById('brand').value = ''
+    }
+
+    let add_promotion = `
+    <div class="form-container">
+      <label for="id">id: </label>
+      <input type="text" id="id">
+      <button onclick="get_product()">get data</button>
+
+      <label for="input2" onchange="change_form_product(this.value)">Select discount type</label>
+      <select id="input2" name="input2">
+        <option value="flat">flat</option>
+        <option value="percentage">percentage</option>
+      </select><br><br>
+
+      <div class="form" id="form">
+        <label for="discount">discount: </label>
+        <input type="text" name="discount" id="discount"><br><br>
+        <label for="minimum-price">minimum price: </label>
+        <input type="text" name="minimum-price" id="minimum-price"><br><br>
+        <label for="due-date">due date: </label>
+        <input type="text" name="due-date" id="due-date"><br><br>
+        <label for="title">title: </label>
+        <input type="text" name="title" id="title"><br><br>
+        <label for="description">description: </label>
+        <input type="text" name="description" id="description"><br><br>
+
+        <button onclick="system_add_promotion()">submit</button>
+      </div>
+      <div class="data-container" id="data-container">
+        <div class="item-container">
+        <div class="product-img-container">
+          <img id="product-img" src="">
+        </div>
+        <div class="product-name" id="product-name"></div>
+        <div class="price-container">
+          <div id="product-discount" class="product-discount"></div>
+          <div id="product-price" class="product-price"></div>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>`
+
+    function change_form_product(type){
+      let container = document.getElementById('form')
+      let p = `
+        <label for="discount">discount: </label>
+        <input type="text" name="discount" id="discount"><br><br>
+        <label for="minimum-price">minimum price: </label>
+        <input type="text" name="minimum-price" id="minimum-price"><br><br>
+        <label for="max-discount">max discount: </label>
+        <input type="text" name="max-discount" id="max-discount"><br><br>
+        <label for="due-date">due date: </label>
+        <input type="text" name="due-date" id="due-date"><br><br>
+        <label for="title">title: </label>
+        <input type="text" name="title" id="title"><br><br>
+        <label for="description">description: </label>
+        <input type="text" name="description" id="description"><br><br>
+        <button onclick="system_add_promotion()">submit</button>
+      `
+      let f = `
+      <label for="discount">discount: </label>
+        <input type="text" name="discount" id="discount"><br><br>
+        <label for="minimum-price">minimum price: </label>
+        <input type="text" name="minimum-price" id="minimum-price"><br><br>
+        <label for="max-discount">max discount: </label>
+        <input type="text" name="due-date" id="due-date"><br><br>
+        <label for="title">title: </label>
+        <input type="text" name="title" id="title"><br><br>
+        <label for="description">description: </label>
+        <input type="text" name="description" id="description"><br><br>
+        <button onclick="system_add_promotion()">submit</button>
+      `
+      if(type=='percentage'){
+        container.innerHTML = p
+      }
+      else{
+        container.innerHTML = f
+      }
+    }
+
+    function system_add_promotion(){
+      let data = {'due_date' : document.getElementById('due-date').value,
+      'minimum_price' : document.getElementById('minimum-price').value,
+      'discount' : document.getElementById('discount').value,
+      'max_discount' : document.getElementById('max-discount') ? document.getElementById('max-discount').value : 0,
+      'description' : document.getElementById('description').value,
+      'title' : document.getElementById('title').value,
+      'discount_type' : document.getElementById('input2').value,
+      'id': document.getElementById('id').value,
+      'email': email}
+      console.log(data)
+      fetch('/add-promotion', {method: 'POST',
+      body: JSON.stringify({'data': data}),
+      headers: {'Content-Type': 'application/json'}
+      }).then(response => response.json()).then(data => {console.log(data)})
+    }
+
+    function get_product(){
+      let id = document.getElementById('id').value
+      console.log(id)
+      fetch('/get-product-information', {method: 'POST',
+      body: JSON.stringify({'id': id}),
+      headers: {'Content-Type': 'application/json'}
+      }).then(response => response.json()).then(data => {
+        console.log(data)
+        document.getElementById("product-img").src = data['_Product__image'][0]
+        document.getElementById('product-name').innerHTML = data['_Product__name']
+        document.getElementById('product-price').innerHTML = data['_Product__price'] + '.-'
+        if(data['_Product__promotion'] != null){
+          temp = data['_Product__promotion']
+          let discount = temp['_PercentageDiscount__discount'] ? temp['_PercentageDiscount__discount'] + '%' : temp['_FlatDiscount__discount'] + '.-'
+          console.log(discount)
+          document.getElementById('product-discount').innerHTML = '-' + discount
+        }
+      })
     }
 
     let add_coupon = `
@@ -284,6 +402,10 @@
         container.innerHTML = delete_coupon
         document.getElementById('form').style.display = 'none'
       }
+      else if(value == 'add promotion'){
+        container.innerHTML = add_promotion
+        document.getElementById('form').style.display = 'block'
+      }
     }
 
     let input2_value = ''
@@ -438,8 +560,22 @@
       headers: {'Content-Type': 'application/json'}
       }).then(response => response.json()).then(data => {alert(data)})
     }
-
+    function logout()
+    {
+      email = sessionStorage.getItem("username")
+      fetch("http://127.0.0.1:8000/logout",
+      {method: 'POST',
+      body:JSON.stringify({'email': email}),
+      headers :{'Content-Type': 'application/json'}
+    }).then(response=>response.json()).then(data=>
+      { 
+      if (data.result == "success")
+      {
+        sessionStorage.removeItem("username")
+        window.location.href='http://127.0.0.1:8000/login-page'
+      }
+      })
+    }
   </script>
 </body>
-
 </html>
