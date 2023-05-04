@@ -84,7 +84,7 @@ img{
   flex-wrap: wrap;
   display: flex;
   flex-direction: row;
-  width: 800px;
+  width: 750px;
   margin: 0 0 0 0;
   z-index: 1;
 }
