@@ -57,6 +57,7 @@
             {% endfor %}
         </div>
         <hr>
+        <div class = "item-container">
         {% for item in selected_items %}
             {% set index = list(selected_items.keys()).index(item) %}
             <div class="item">
@@ -69,11 +70,13 @@
                     </div>
                     <div class = "middle-item-component">
                         <p id = "item-price-{{index}}">ราคา: {{selected_items[item].price}}</p>
+                        <p id = "item-quantity-{{index}}">จำนวน: {{selected_items[item].quantity}}</p>
                     </div>
                 </div>
             </div>
             <hr>
         {%endfor%}
+        </div>
         <div class = "summarize">
             <div class = "price-contrainer">
                 <div class = 'price-text'>
@@ -167,31 +170,30 @@
             }
             
             else {
-                fetch ( "/{{email}}/checkout/create_order",
-                { method: 'PUT',
+                fetch( "/{{email}}/checkout/update_stock",{ 
+                    method: 'PUT',
                     body: JSON.stringify({
-                                        "payment_method": payment_method,
-                                        "total_price": {{total_price}},
-                                        "discounted_price": {{discount_price}},
-                                        "status": 0,
-                                        "shipping_address": selected_shipping_address,
-                                        }),
+                                        "is_buynow": '{{is_buynow}}',
+                                    }),
                     headers :{'Content-Type': 'application/json'}
                 })
                 .then(response => response.json())
                 .then(data => { 
                         if(data["status"] != "success") {
-                            alert("Failed Checkouting")
+                            alert(data["status"] )
                             window.location.href = "/{{email}}/cart"
                             return 0;
                         }
                         
-                        fetch( "/{{email}}/checkout/update_stock",
+                        fetch ( "/{{email}}/checkout/create_order",
                         { method: 'PUT',
                             body: JSON.stringify({
-                                            "created_order_id" : data["created_order_id"],
-                                            "is_buynow": '{{is_buynow}}',
-                                        }),
+                                                "payment_method": payment_method,
+                                                "total_price": {{total_price}},
+                                                "discounted_price": {{discount_price}},
+                                                "status": 0,
+                                                "shipping_address": selected_shipping_address,
+                                                }),
                             headers :{'Content-Type': 'application/json'}
                         })
                         .then(response => response.json())
