@@ -148,8 +148,6 @@
         <form onsubmit="system_add_promotion()">
           <label for="discount">discount: </label>
           <input type="number" name="discount" id="discount" required><br><br>
-          <label for="minimum-price">minimum price: </label>
-          <input type="number" name="minimum-price" id="minimum-price" required><br><br>
           <label for="due-date">due date: </label>
           <input type="date" name="due-date" id="due-date" required><br><br>
           <label for="title">title: </label>
@@ -216,9 +214,9 @@
 
     function system_add_promotion(){
       let data = {'due_date' : document.getElementById('due-date').value,
-      'minimum_price' : document.getElementById('minimum-price').value,
+      'minimum_price' : document.getElementById('minimum-price').value ? document.getElementById('max-discount').value : 0,
       'discount' : document.getElementById('discount').value,
-      'max_discount' : document.getElementById('max-discount') ? document.getElementById('max-discount').value : 0,
+      'max_discount' : document.getElementById('max-discount') ? document.getElementById('max-discount').value : 99999,
       'description' : document.getElementById('description').value,
       'title' : document.getElementById('title').value,
       'discount_type' : document.getElementById('input2').value,
