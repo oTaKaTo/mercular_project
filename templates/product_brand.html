@@ -25,7 +25,15 @@
                                 {% else %}
                                 <div class="product-discount"></div>
                                 {% endif %}
-                                <div class="product-price">{{product.get_price()}} .-</div>
+
+                                {% if product.get_promotion() %}
+                                <div class="price-promo-container">
+                                    <div class="product-price">฿{{product.get_discounted_price()}}</div>
+                                    <div class="old-product-price">฿{{product.get_price()}}</div>
+                                </div>
+                                {% else %}
+                                <div class="product-price">฿{{product.get_price()}}</div>
+                                {% endif %}
                             </div>
                         </a>
             

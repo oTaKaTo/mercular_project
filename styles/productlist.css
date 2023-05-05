@@ -82,6 +82,14 @@ body{
   margin-left: 20px;
   width: 50%;
   height: 10%;
+  color: red;
+}
+
+.price-promo-container{
+  display: flex;
+  width: 50%;
+  margin-left: 20px;
+  flex-direction: column;
 }
 
 .product-price{
@@ -91,4 +99,17 @@ body{
   height: 10%;
   background-color: white;
   font-weight: bold;
+}
+
+.old-product-price{
+  margin-right: 20px;
+  text-align: right;
+  width: 50%;
+  height: 10%;
+  line-height: 10px;
+  padding-top: 20px;
+  text-decoration: line-through;
+  font-size: small;
+  padding-left: 10px;
+  color: grey;
 }
