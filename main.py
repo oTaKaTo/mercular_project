@@ -100,6 +100,39 @@ async def get_product_information(request: Request, data: dict):
     product = my_system.get_product_catalog().search_by_id(id)
     return product
 
+@app.post('/get-product-information')
+async def get_product_information(request: Request, data: dict):
+    id = data['id']
+    product = my_system.get_product_catalog().search_by_id(id)
+    return product
+
+@app.post('/add-promotion')
+async def add_promotion(request: Request, data: dict):
+    data = data['data']
+    id = data['id']
+    email = data['email']
+    discount_type = data['discount_type']
+    due_date = data['due_date']
+    minimum_price = int(data['minimum_price'])
+    max_discount = int(data['max_discount'])
+    discount = int(data['discount'])
+    title = data['title']
+    description = data['description']
+    promotion = None
+    admin = my_system.search_user_by_email(email)
+    if admin != False:
+        if isinstance(admin, Admin):
+                if discount_type == 'flat':
+                    promotion = FlatDiscount(due_date, minimum_price, discount, title, description)
+                elif discount_type == 'percentage':
+                    promotion = PercentageDiscount(due_date, minimum_price, discount, max_discount, title, description)
+                my_system.get_product_catalog().search_by_id(id).add_promotion(promotion)
+                return "Success"
+        else:
+                return "you are not admin"
+    else:
+        return "Email Not Found"
+
 @app.post("/edit_system_coupon")
 async def  edit_system_coupon(data:dict):
     coupon_id = data['coupon_id']
@@ -135,33 +168,40 @@ async def  edit_system_coupon(data:dict):
     else:
         return "Email Not Found"
 
-@app.post('/add-promotion')
-async def add_promotion(request: Request, data: dict):
-    data = data['data']
-    id = data['id']
-    email = data['email']
-    discount_type = data['discount_type']
-    due_date = data['due_date']
-    minimum_price = data['minimum_price']
-    max_discount = data['max_discount']
-    discount = data['discount']
-    title = data['title']
-    description = data['description']
-    promotion = None
-    admin = my_system.search_user_by_email(email)
-    if admin != False:
-        if isinstance(admin, Admin):
-                if discount_type == 'flat':
-                    promotion = FlatDiscount(due_date, minimum_price, discount, title, description)
-                elif discount_type == 'percentage':
-                    promotion = PercentageDiscount(due_date, minimum_price, discount, max_discount, title, description)
-                my_system.get_product_catalog().search_by_id(id).add_promotion(promotion)
-                return "Success"
+@app.post("/{email}/admin/add_system_coupon")
+async def  add_my_system_product(data:dict):
+    data = data["data"]
+    email = data["email"]
+    due_date = data["due_date"]
+    minimum_price = int(data["minimum_price"])
+    discount = int(data["discount"])
+    max_discount = int(data["max_discount"])
+    description = data["description"]
+    title = data["title"]
+    quantity = int(data["quantity"])
+    ban_types = data["ban_types"]
+    ban_products = data["ban_products"]
+    type = data["type"]
+    brand = data["brand"]
+    coupon_type = data["coupon_type"]
+    discount_type = data["discount_type"]
+    id = my_system.search_user_by_email(email)
+    if id != False:
+        if isinstance(id, Admin):
+                if discount_type == "flat":
+                       new_coupon = FlatCoupon(due_date,minimum_price,discount,quantity,coupon_type,title,description,ban_products,ban_types,type,brand)
+                elif discount_type == "percentage":
+                       new_coupon = PercentageCoupon(due_date,minimum_price,discount,max_discount,quantity,coupon_type,title,description,ban_products,ban_types,type,brand)
+
+                if id.add_coupon_to_coupon_catalog(new_coupon,my_system.get_coupon_catalog())==True:
+                    return f"Success to add coupon {new_coupon.get_id()}"
+                else:
+                    return "Failed to add"
         else:
                 return "you are not admin"
     else:
         return "Email Not Found"
-
+    
 @app.get("/search/{keyword}", tags=["Page"], response_class=HTMLResponse)
 async def get_product(request: Request, keyword:str):
     return templates.TemplateResponse("product_search_noemail.html",{"request":request,"products":handle_products_page_request(search=keyword),"email":None,"keyword":keyword})
