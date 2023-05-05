@@ -1,6 +1,7 @@
 from account import Account,User,Admin
 from shipping_address import ShippingAddress
 from order import Order
+from cart import Cart
 from order_history import OrderHistory
 from promotion import CouponCatalog,PercentageCoupon,PercentageDiscount,FlatCoupon
 from product import Product,Item,ProductCatalog
@@ -46,7 +47,7 @@ class System:
                 
                 return False
             else:
-                self.__user_lst.append(User(username,password,email,phone_number))
+                self.__user_lst.append(User(username,password,email,phone_number,cart=Cart(),order_history=OrderHistory()))
                 self.login(email,password)
                 return True
     

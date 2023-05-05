@@ -94,12 +94,12 @@ class Admin(Account):
           return False
 class User(Account):
      
-     def __init__(self, username, password, email, phone_number:int="", person_data="", address=[], cart="", order=[], coupon=[]):
+     def __init__(self, username, password, email, phone_number:int="", person_data="", address=[], cart="",order_history="", order=[], coupon=[]):
         Account.__init__(self, username, password, email, phone_number)
         self.__person_data = person_data
         self.__address = [] # List of Shipping_Address Object 
-        self.__cart = Cart()# Cart object
-        self.__order_history = OrderHistory() # OrderHistory object
+        self.__cart = cart# Cart object
+        self.__order_history = order_history # OrderHistory object
         self.__user_coupons = [] # List for store Coupon object
         self.__used_user_coupons = []
         self.__expire_user_coupons = []
