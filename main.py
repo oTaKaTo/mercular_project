@@ -332,14 +332,15 @@ async def get_brand(request: Request, brand:str,email:str):
 
 @app.get("/{email}/product/{object_id}",response_class=HTMLResponse)
 async def get_product(request: Request, object_id:str,email:str):
-    return templates.TemplateResponse("product.html",{"request":request, "product": my_system.get_product_catalog().get_product_info(object_id),"option": my_system.get_product_catalog().get_option(object_id),"email":email})
+    return templates.TemplateResponse("product.html",{"request":request, "product": my_system.get_product_catalog().get_product_info(object_id),"option": my_system.get_product_catalog().get_option(object_id),"email":email,"pd_catalog":my_system.get_product_catalog()})
 
 @app.get("/product/{object_id}",response_class=HTMLResponse)
 async def get_product(request: Request, object_id:str):
     return templates.TemplateResponse("product_noemail.html",{"request":request, 
                                                             "product": my_system.get_product_catalog().get_product_info(object_id),
                                                             "option": my_system.get_product_catalog().get_option(object_id), 
-                                                            "email":None})
+                                                            "email":None,
+                                                            "pd_catalog":my_system.get_product_catalog()})
 
 @app.put("/{email}/cart/clear_select", tags= ["View Cart"])
 async def clear_selected_items(email: str):
