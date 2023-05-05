@@ -4,6 +4,7 @@ from promotion import Coupon,CouponCatalog,Promotion
 from cart import Cart
 from copy import copy
 from uuid import uuid4
+from order import Order
 from order_history import OrderHistory
 from product import Item
 
@@ -170,3 +171,18 @@ class User(Account):
      def delete_address(self,address):
           self.__address.remove(address)
           return True
+     
+     def create_order(self, payment_method, total_price,discounted_price, status, selected_shipping_address, system_order_container):
+          items_list = self.__cart.get_selected_items()
+          
+          new_order = Order(payment_method, 
+                         total_price,
+                         discounted_price,
+                         status,
+                         items_list,
+                         selected_shipping_address)
+          
+          system_order_container.append(new_order)
+          self.__order_history.add_order(new_order)
+          
+          return new_order

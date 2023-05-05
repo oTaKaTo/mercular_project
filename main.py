@@ -371,26 +371,20 @@ async def select_item(email: str, data: dict):
 async def create_order(email: str, data: dict):
         try:
             user = my_system.search_user_by_email(email)
-            user_order_history = user.get_order_history()
+            system_order_container = my_system.get_order_container()
+            
             payment_method = data["payment_method"]
             total_price = data["total_price"]
             discounted_price = data["discounted_price"]
             status = OrderStatus(int(data["status"])).name
             selected_shipping_address =  data["shipping_address"]
-            items_list = user.get_user_cart().get_selected_items()
             
-            system_order_container = my_system.get_order_container()
-            
-            new_order = Order(payment_method, 
+            new_order = user.create_order(payment_method, 
                             total_price,
                             discounted_price,
                             status,
-                            items_list,
-                            selected_shipping_address)
-            
-            system_order_container.append(new_order)
-            user_order_history.add_order(new_order)
-            print(user_order_history.get_order_info())
+                            selected_shipping_address,
+                            system_order_container)
             
             return {"status": "success",
                     'created_order_id': new_order.get_order_id()}
