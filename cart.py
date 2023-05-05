@@ -8,6 +8,7 @@ class Cart:
     self.__total_price = 0
     self.__total_items = 0
     self.__discounted_price = 0
+    self.__coupon = None
     
   def add_item(self, items: Item):
     items_quantity = items.get_quantity()
