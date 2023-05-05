@@ -48,6 +48,7 @@ for i in productdata.data["data"]:
     promo_handle = my_promotion
 
   x = Product(i["product_id"],i["object_id"],i["name"],i["type"],i["brand"],i["price"],i["quantity"],i["detail"],i["image"],i["option"],promo_handle)
+  my_system.get_product_catalog().add_product(x)
   pd_catalog_dict.add_product(x)
   if bool(promo):
     promo_pd_catalog_dict.add_product(x)
