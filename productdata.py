@@ -243,7 +243,7 @@ data = { "data" :
             "name": "เมาส์ Razer Viper V2 Pro Wireless Gaming Mouse" , 
             "type": "เกมมิ่ง" , 
             "brand":"Razer" , 
-            "price" : 5690  , 
+            "price" : 5490  , 
             "quantity" : 20 , 
             "image" : ["https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2022/05/razer-viper-v2-pro-wireless-gaming-mouse-white-icon.jpg"] , 
             "option": "White" ,
