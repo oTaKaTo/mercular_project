@@ -198,7 +198,7 @@ class Item:
         self.__quantity = quantity
 
     def get_price(self):
-        return self.__product.get_price()
+        return self.__product.get_discounted_price()
     
     def get_item(self):
             item_info = {

@@ -51,7 +51,7 @@ class Cart:
   def __update_total_price(self): #update_total_item(self)
     self.__total_price = 0
     for item in self.__selected_item:
-      price = item.get_price() * item.get_quantity()
+      price = item.get_discounted_price() * item.get_quantity()
       self.__total_price += price
     self.cal_discount_price()
     
