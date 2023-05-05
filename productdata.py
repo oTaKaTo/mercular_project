@@ -1,4 +1,4 @@
-
+from promotion import *
 
 data = { "data" : 
     [
@@ -93,7 +93,7 @@ data = { "data" :
                         'การตอบสนองความถี่':'12 – 28,000Hz',
                         'น้ำหนัก':'285กรัม',
                         'ความยาวสาย':'1.8 m'},
-            "promotion":{"date":"2023-08-30","price":1000,"title":"ส่วนลด 10%","description":"JOJO"}
+            "promotion":PercentageDiscount("2023-08-30",1000,10,1000,"ส่วนลด 10%","JOJO")
         },
         {
             "product_id": "1965014000001" , 
@@ -176,7 +176,7 @@ data = { "data" :
                        "การตอบสนองความถี่":"20 - 20,000 Hz",
                        "ความยาวสาย":"1.2 m",
                        "น้ำหนัก":"165 กรัม"},
-            "promotion":None
+            "promotion":PercentageDiscount("2023-08-30",1000,5,1000,"ส่วนลด 5%","JOJO")
         },
         {
             "product_id": "1740025000001" , 

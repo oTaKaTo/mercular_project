@@ -52,11 +52,20 @@ app.mount('/styles', StaticFiles(directory='styles'), name='styles')
 
 templates = Jinja2Templates(directory="templates")
 
-def handle_products_page_request(brand="",type="",search=""):
+def handle_products_page_request(brand="",type="",search="",promo =False):
     list = []
     cnt = 0
     inner_list = []
-    if search != "":
+    if promo:
+        for i in promo_pd_catalog_dict.get_object_products():
+            if cnt == 4:
+                list.append(inner_list)  
+                inner_list = []
+                cnt = 0 
+            inner_list.append(i)
+            cnt += 1
+        list.append(inner_list)
+    elif search != "":
         for i in pd_catalog_dict.search(search):
             if cnt == 4:
                 list.append(inner_list)  
@@ -444,8 +453,9 @@ async def view_coupon(request: Request):
 
 @app.get("/monthly-promotion", response_class=HTMLResponse)
 async def view_promotion(request: Request):
+  print(handle_products_page_request(promo=True))
   return templates.TemplateResponse("promotion.html", {"request": request, 
-                                                                'products': promo_pd_catalog_dict.get_products(), 
+                                                                'products': handle_products_page_request(promo=True), 
                                                                 'email':None})
 
 

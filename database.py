@@ -11,8 +11,6 @@ my_system.create_account(email='qwer', password='1234')
 
 my_system.add_admin("qwe","123")
 
-my_promotion = PercentageDiscount("6-6-2023", 200, 12, 300)
-
 coupon1 = FlatCoupon("15-4-2024", 100, 50, 3, "exclusive", title="เล่นเกม ลดเพิ่ม 100.-", description="คูปองลดหนักลดแรง")
 coupon2 = PercentageCoupon("15-4-2024", 100, 5, 20, 3, "exclusive", title="คอมพิวเตอร์ ลดเพิ่ม 600.-", description="คูปองอันใดอันหนึ่งอันนั้น")
 coupon3 = PercentageCoupon("15-4-2024", 100, 10, 20, 3, "exclusive", title="จัดโต๊ะคอม ลดเพิ่ม 200.-", description="คูปองซักอัน")
@@ -44,8 +42,8 @@ for i in productdata.data["data"]:
   promo_handle = None
   promo = i["promotion"]
   
-  if bool(promo) == True:
-    promo_handle = my_promotion
+  if bool(promo):
+    promo_handle = promo
 
   x = Product(i["product_id"],i["object_id"],i["name"],i["type"],i["brand"],i["price"],i["quantity"],i["detail"],i["image"],i["option"],promo_handle)
   my_system.get_product_catalog().add_product(x)

@@ -3,16 +3,16 @@
 
 <head>
   {% include "global_head.html" %}
-  <link rel="stylesheet" href="{{ url_for('styles', path='promotion.css?v=1') }}">
+  <link rel="stylesheet" href="{{ url_for('styles', path='grid.css?v=1') }}">
   
 </head>
 
 <body>
   {% include "nav-bar.html" %}
-  <div class="products-container">
-    {% for product in products %}
+  {% for row in products %}
+  <div class="row-container">
+    {% for product in row %}
     <div class="item-container">
-
       <a href="/product/{{product.get_object_id()}}">
         <div class="product-img-container">
           <img src="{{product.get_image()[0]}}">
@@ -26,5 +26,6 @@
     </div>
     {% endfor %}
   </div>
+  {% endfor %}
 </body>
 </html>
