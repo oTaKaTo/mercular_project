@@ -151,6 +151,12 @@ class Product:
     def get_quantity(self):
         return int(self.__quantity)
     
+    def get_discounted_price(self):
+        if self.__promotion:
+            discounted_price = self.__price - self.__promotion.get_discount(self.__price)
+            return discounted_price
+        return self.__price
+    
     def get_image(self):
         return self.__image
     
