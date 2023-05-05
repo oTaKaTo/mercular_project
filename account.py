@@ -172,8 +172,8 @@ class User(Account):
           self.__address.remove(address)
           return True
      
-     def create_order(self, payment_method, total_price,discounted_price, status, selected_shipping_address, system_order_container):
-          items_list = self.__cart.get_selected_items()
+     def create_order(self, payment_method, total_price, discounted_price, status, selected_shipping_address, system_order_container):
+          items_list = copy(self.__cart.get_selected_items())
           
           new_order = Order(payment_method, 
                          total_price,
@@ -182,7 +182,10 @@ class User(Account):
                          items_list,
                          selected_shipping_address)
           
+          self.__cart.get_selected_items().clear()  
           system_order_container.append(new_order)
           self.__order_history.add_order(new_order)
+          print(self.__order_history.get_order_info())
+          
           
           return new_order

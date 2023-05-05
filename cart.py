@@ -109,7 +109,6 @@ class Cart:
           self.edit_amount_item(items, 0)
           
         
-      self.__selected_item.clear()  
       self.__update_total_price()    
       if(coupon):
         coupon_catalog.delete_coupon(coupon.get_id())

@@ -199,7 +199,7 @@
                         .then(response => response.json())
                         .then(data => {
                             if(data["status"] != "success") {
-                                alert("Not enough item in stock")
+                                alert("Create order failed")
                                 window.location.href = "/{{email}}/cart"
                                 return 0;
                             }
