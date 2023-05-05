@@ -19,7 +19,11 @@
                             </div>
                             <div class="product-name">{{product.get_name()}}</div>
                             <div class="price-container">
+                                {% if product.get_promotion() %}
+                                <div class="product-discount">{{product.get_promotion().get_discount_str()}}</div>
+                                {% else %}
                                 <div class="product-discount"></div>
+                                {% endif %}
                                 <div class="product-price">{{product.get_price()}} .-</div>
                             </div>
                         </a>
