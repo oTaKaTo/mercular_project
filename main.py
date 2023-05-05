@@ -66,7 +66,7 @@ def handle_products_page_request(brand="",type="",search="",promo =False):
             cnt += 1
         list.append(inner_list)
     elif search != "":
-        for i in pd_catalog_dict.search(search):
+        for i in my_system.get_product_catalog().search(search):
             if cnt == 4:
                 list.append(inner_list)  
                 inner_list = []
@@ -75,7 +75,7 @@ def handle_products_page_request(brand="",type="",search="",promo =False):
             cnt += 1
         list.append(inner_list)
     elif type != "":
-        for i in pd_catalog_dict.get_object_products_by_type(type):
+        for i in my_system.get_product_catalog().get_object_products_by_type(type):
             if cnt == 4:
                 list.append(inner_list)  
                 inner_list = []
@@ -84,7 +84,7 @@ def handle_products_page_request(brand="",type="",search="",promo =False):
             cnt += 1
         list.append(inner_list)
     elif brand != "":
-        for i in pd_catalog_dict.get_object_products_by_brand(brand):
+        for i in my_system.get_product_catalog().get_object_products_by_brand(brand):
             if cnt == 4:
                 list.append(inner_list)  
                 inner_list = []
@@ -93,7 +93,7 @@ def handle_products_page_request(brand="",type="",search="",promo =False):
             cnt += 1
         list.append(inner_list)
     else:
-        for i in pd_catalog_dict.get_object_products():
+        for i in my_system.get_product_catalog().get_object_products():
             if cnt == 4:
                 list.append(inner_list)  
                 inner_list = []
@@ -260,7 +260,7 @@ async def buynow(email: str, data: dict):
         user = my_system.search_user_by_email(email)
         user_cart = user.get_user_cart()
         
-        product = pd_catalog_dict.search_by_id(data['product_id']) 
+        product = my_system.get_product_catalog().search_by_id(data['product_id']) 
         items = Item(product, int(data['quantity']))
         
         user_cart.get_selected_items().clear()
@@ -332,13 +332,13 @@ async def get_brand(request: Request, brand:str,email:str):
 
 @app.get("/{email}/product/{object_id}",response_class=HTMLResponse)
 async def get_product(request: Request, object_id:str,email:str):
-    return templates.TemplateResponse("product.html",{"request":request, "product": pd_catalog_dict.get_product_info(object_id),"option": pd_catalog_dict.get_option(object_id),"email":email})
+    return templates.TemplateResponse("product.html",{"request":request, "product": my_system.get_product_catalog().get_product_info(object_id),"option": my_system.get_product_catalog().get_option(object_id),"email":email})
 
 @app.get("/product/{object_id}",response_class=HTMLResponse)
 async def get_product(request: Request, object_id:str):
     return templates.TemplateResponse("product_noemail.html",{"request":request, 
-                                                            "product": pd_catalog_dict.get_product_info(object_id),
-                                                            "option": pd_catalog_dict.get_option(object_id), 
+                                                            "product": my_system.get_product_catalog().get_product_info(object_id),
+                                                            "option": my_system.get_product_catalog().get_option(object_id), 
                                                             "email":None})
 
 @app.put("/{email}/cart/clear_select", tags= ["View Cart"])
@@ -423,7 +423,7 @@ def add_item(email: str, data: dict):
         quantity = int(data['quantity'])
         
         user = my_system.search_user_by_email(email)
-        product = pd_catalog_dict.search_by_id(id) 
+        product = my_system.get_product_catalog().search_by_id(id) 
         
         item = Item(product, quantity)
         user.add_item_to_cart(item)
