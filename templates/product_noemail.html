@@ -22,9 +22,14 @@
                 <div class="id-container">
                     รหัสสินค้า {{product.get_product_id()}} ({{product.get_object_id()}})
                 </div>
-                <div class="price-container">
-                    ฿{{product.get_price()}}
-                </div>
+                {% if product.get_promotion() %}
+                    <div class="promo-price-container">
+                        <div class="price-container">฿{{product.get_discounted_price()}}</div>
+                        <div class="old-price-container">ราคาปกติ ฿{{product.get_price()}}</div>
+                    </div>
+                {% else %}
+                <div class="price-container">฿{{product.get_price()}}</div>
+                {% endif %}
                 {% if option[0]["option"] != '' %}
                     <div class="option-container">
                         <p style="line-height: 20px;font-weight: 700; font-size: 14px;">ตัวเลือก :</p>
