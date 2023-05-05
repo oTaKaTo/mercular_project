@@ -31,7 +31,7 @@
         <option value="percentage">percentage</option>
       </select><br><br>
       <div class="form" class="form">
-        <form onsubmit="system_add_coupon()">
+        <form id="form-submit" onsubmit="system_add_coupon()">
           <label for="discount">discount: </label>
           <input type="number" name="discount" id="discount" required><br><br>
           <label for="minimum-price">minimum price: </label>
@@ -145,7 +145,7 @@
         <option value="percentage">percentage</option>
       </select><br><br>
       <div class="form" id="form">
-        <form onsubmit="system_add_promotion()">
+        <form id="form-submit" onsubmit="system_add_promotion()">
           <label for="discount">discount: </label>
           <input type="number" name="discount" id="discount" required><br><br>
           <label for="due-date">due date: </label>
@@ -220,7 +220,7 @@
         <option value="percentage">percentage</option>
       </select><br><br>
       <div class="form" id="form">
-        <form onsubmit="system_add_coupon()">
+        <form id="form-submit" onsubmit="system_add_coupon()">
           <label for="discount">discount: </label>
           <input type="number" name="discount" id="discount" required><br><br>
           <label for="minimum-price">minimum price: </label>
@@ -275,11 +275,11 @@
         <option value="percentage">percentage</option>
       </select><br><br>
       <div class="form" id="form">
-        <form onsubmit="edit_system_coupon">
+        <form id="form-submit" onsubmit="edit_system_coupon()">
           <label for="discount">discount: </label>
           <input type="number" name="discount" id="discount" required><br><br>
           <label for="minimum-price">minimum price: </label>
-          <input type="number" name="minimum-price" id="minimum-price"required><br><br>
+          <input type="number" name="minimum-price" id="minimum-price" required><br><br>
           <label for="due-date">due date: </label>
           <input type="date" name="due-date" id="due-date" required><br><br>
           <label for="quantity">quantity: </label>
@@ -363,11 +363,11 @@
       <div class="form-container" id="form-container">
         <label for="id">id: </label>
         <input type="text" id="id">
-        <button onclick="get_data()">get data</button>
+        <button type="button" onclick="get_data()">get data</button>
       </div>
       <div class="data-container">
         <div class="coupon-container" id="coupon-container"></div>
-        <button onclick="delete_system_coupon()">submit</button>
+        <button type="button" onclick="delete_system_coupon()">submit</button>
       </div>
       `
 
@@ -413,11 +413,11 @@
 
     function date_format_handler(date){
       let dmy = date.split('-')
-      for(let i=0;i<2;++i){
+      for(let i=1;i<3;++i){
         dmy[i] = ('0' + dmy[i]).slice(-2)
       }
       console.log(dmy)
-      return dmy[2] + '-' + dmy[1] + '-' + dmy[0]
+      return dmy[0] + '-' + dmy[1] + '-' + dmy[2]
     }
 
     function get_data(){
@@ -450,7 +450,7 @@
     }
 
     function change_form(type){
-      let container = document.getElementById('form')
+      let container = document.getElementById('form-submit')
       let p = `
         <label for="discount">discount: </label>
         <input type="number" name="discount" id="discount" required><br><br>
@@ -485,6 +485,7 @@
         <input type="text" name="brand" id="brand">
         <button type="button" onclick="add_brand()">add</button><br><br>
         <button type="button" onclick="generate_coupon()">view coupon</button>
+        <button>submit</button>
       `
       let f = `
         <label for="discount">discount: </label>
@@ -518,6 +519,7 @@
         <input type="text" name="brand" id="brand">
         <button type="button" onclick="add_brand()">add</button><br><br>
         <button type="button" onclick="generate_coupon()">view coupon</button>
+        <button>submit</button>
       `
       if(type=='percentage'){
         container.innerHTML = p
@@ -581,15 +583,14 @@
       'description' : document.getElementById('description').value,
       'title' : document.getElementById('title').value,
       'quantity' : document.getElementById('quantity').value,
-      'ban_types' : ban_types_arr,
-      'ban_products' : ban_products_arr,
-      'type' : types_arr,
-      'brand' : brands_arr,
+      'ban_types' : ban_types_arr ? ban_types_arr : [],
+      'ban_products' : ban_products_arr ? ban_products_arr : [],
+      'type' : types_arr ? types_arr : [],
+      'brand' : brands_arr ? brands_arr : [],
       'coupon_type' : document.getElementById('coupon-type').value,
       'discount_type' : document.getElementById('input2').value,
       'email': email}
-      console.log(data)
-      fetch('/edit_system_coupon', {method: 'POST',
+      fetch('/edit-system-coupon', {method: 'POST',
       body: JSON.stringify({'data': data}),
       headers: {'Content-Type': 'application/json'}
       }).then(response => response.json()).then(data => {alert(data)})
