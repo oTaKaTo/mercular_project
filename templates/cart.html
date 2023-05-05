@@ -46,10 +46,10 @@
       <div class="right-item-component">
         <div class="item-quantity-component">
           <button id="quantity_handler" type="button" onmousedown="edit_item_amount('{{index}}', -1)"
-            onmouseup="update_amount_item('{{index}}')">-</button>
+            onmouseup="update_amount_item('{{index}}', -1)">-</button>
           <p id="item-quantity-{{index}}" style="width: 25%; right: 0%;">{{items_info[item].quantity}}</p>
           <button id="quantity_handler" type="button" onmousedown="edit_item_amount('{{index}}', 1)"
-            onmouseup="update_amount_item('{{index}}')">+</button>
+            onmouseup="update_amount_item('{{index}}', 1)">+</button>
         </div>
         <button id="remove-item" type="button" onclick="delete_items('{{index}}')">
           <img class="remove-item-img"
@@ -139,8 +139,12 @@
 
     }
 
-    function update_amount_item(index) {
+    function update_amount_item(index, is_del) {
       new_amount = document.getElementById("item-quantity-" + index).innerHTML
+      if( (Number(is_del) <= -1 && Number(new_amount) == 1) || (Number(is_del) >= 0 && Number(new_amount) == 99)) {
+        return 0;
+      }
+      
       url = "/{{email}}/cart/edit_amount_item";
       fetch(url,
         {
@@ -170,6 +174,10 @@
 
     function edit_item_amount(index, edit_by) {
       temp_amount = Number(document.getElementById("item-quantity-" + index).innerHTML)
+      if( (Number(edit_by) <= -1 && Number(temp_amount) == 1) || (Number(edit_by) >= 0 && Number(temp_amount) == 99)) {
+        return 0;
+      }
+      
       temp_price = Number(document.getElementById("item-price-" + index).innerHTML) / Number(temp_amount)
 
       temp_amount = temp_amount + Number(edit_by)
