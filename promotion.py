@@ -63,7 +63,7 @@ class PercentageDiscount(Promotion):
     
     def get_discount(self, price):
         if self.is_available_price(price):
-            discount = (100 - self.__discount) * price / 100
+            discount = self.__discount * price / 100
             if discount > self.__max_discount:
                 return self.__max_discount
             return discount
