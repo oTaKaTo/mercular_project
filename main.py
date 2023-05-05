@@ -343,15 +343,12 @@ async def get_product(request: Request, object_id:str):
 
 @app.put("/{email}/cart/clear_select", tags= ["View Cart"])
 async def clear_selected_items(email: str):
-    try:
         user = my_system.search_user_by_email(email)
         user_cart = user.get_user_cart()
         selected_items = user_cart.get_selected_items()
         
-        selected_items.clear()
-    except:
-        raise HTTPException(status_code=404)
-
+        for item in selected_items:
+            user_cart.deselect_items(item)
 @app.get('/{email}/cart/current_selected_items' , tags = ["View Cart"])
 async def get_selected_items(email:str, request:Request):
     user = my_system.search_user_by_email(email)
