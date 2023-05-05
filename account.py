@@ -94,7 +94,7 @@ class Admin(Account):
           return False
 class User(Account):
      
-     def __init__(self, username, password, email, phone_number:int="", person_data="", address=[], cart="",order_history="", order=[], coupon=[]):
+     def __init__(self, username, password, email, phone_number:int="", person_data="", cart="",order_history=""):
         Account.__init__(self, username, password, email, phone_number)
         self.__person_data = person_data
         self.__address = [] # List of Shipping_Address Object 
