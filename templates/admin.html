@@ -137,9 +137,9 @@
     <div class="form-container">
       <label for="id">id: </label>
       <input type="text" id="id">
-      <button onclick="get_product()">get data</button>
+      <button onclick="get_product()">get data</button> 
 
-      <label for="input2" onchange="change_form_product(this.value)">Select discount type</label>
+      <label for="input2">Select discount type</label>
       <select id="input2" name="input2">
         <option value="flat">flat</option>
         <option value="percentage">percentage</option>
@@ -154,7 +154,6 @@
           <input type="text" name="title" id="title" required><br><br>
           <label for="description">description: </label>
           <input type="text" name="description" id="description" required><br><br>
-
           <button type="submit">submit</button>
         </form>
       </div>
@@ -174,47 +173,9 @@
       </div>
     </div>`
 
-    function change_form_product(type){
-      let container = document.getElementById('form')
-      let p = `
-        <label for="discount">discount: </label>
-        <input type="number" name="discount" id="discount" required><br><br>
-        <label for="minimum-price">minimum price: </label>
-        <input type="number" name="minimum-price" id="minimum-price" required><br><br>
-        <label for="max-discount">max discount: </label>
-        <input type="number" name="max-discount" id="max-discount" required><br><br>
-        <label for="due-date">due date: </label>
-        <input type="date" name="due-date" id="due-date" required><br><br>
-        <label for="title">title: </label>
-        <input type="text" name="title" id="title" required><br><br>
-        <label for="description">description: </label>
-        <input type="text" name="description" id="description" required><br><br>
-        <button type="submit" onclick="system_add_promotion()">submit</button>
-      `
-      let f = `
-      <label for="discount">discount: </label>
-        <input type="number" name="discount" id="discount" required><br><br>
-        <label for="minimum-price">minimum price: </label>
-        <input type="number" name="minimum-price" id="minimum-price" required><br><br>
-        <label for="max-discount">max discount: </label>
-        <input type="date" name="due-date" id="due-date" required><br><br>
-        <label for="title">title: </label>
-        <input type="text" name="title" id="title" required><br><br>
-        <label for="description">description: </label>
-        <input type="text" name="description" id="description" required><br><br>
-        <button type="submit" onclick="system_add_promotion()">submit</button>
-      `
-      if(type=='percentage'){
-        container.innerHTML = p
-      }
-      else{
-        container.innerHTML = f
-      }
-    }
-
     function system_add_promotion(){
       let data = {'due_date' : document.getElementById('due-date').value,
-      'minimum_price' : document.getElementById('minimum-price').value ? document.getElementById('minimum-price').value : 0,
+      'minimum_price' : document.getElementById('minimum-price') ? document.getElementById('minimum-price').value : 0,
       'discount' : document.getElementById('discount').value,
       'max_discount' : document.getElementById('max-discount') ? document.getElementById('max-discount').value : 99999,
       'description' : document.getElementById('description').value,
@@ -226,7 +187,7 @@
       fetch('/add-promotion', {method: 'POST',
       body: JSON.stringify({'data': data}),
       headers: {'Content-Type': 'application/json'}
-      }).then(response => response.json()).then(data => {console.log(data)})
+      }).then(response => response.json()).then(data => {alert(data)})
     }
 
     function get_product(){
