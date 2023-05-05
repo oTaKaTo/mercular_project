@@ -2,7 +2,7 @@ from datetime import date
 from itertools import count
 
 class Promotion:
-    # due_date format = DD-MM-YYYY
+    # due_date format = YYYY-MM-DD
     def __init__(self, due_date:str, minimum_price:int, title:str="", description:str=""):
         self.__due_date = due_date
         self.__minimum_price = minimum_price
@@ -11,7 +11,7 @@ class Promotion:
 
     def is_available_date(self):
         today = date.today()
-        d, m, y = [int(x) for x in self.__due_date.split('-')]
+        y, m, d = [int(x) for x in self.__due_date.split('-')]
         due_date = date(y, m, d)
         if today > due_date:
             return False
@@ -35,7 +35,7 @@ class Promotion:
         try:
             month = ["ม.ค.", 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
             dmy = self.__due_date.split('-')
-            return dmy[0] + ' ' + month[int(dmy[1]) - 1] + ' ' + dmy[2]
+            return dmy[2] + ' ' + month[int(dmy[1]) - 1] + ' ' + dmy[0]
         except:
             return ''
     
@@ -63,7 +63,7 @@ class PercentageDiscount(Promotion):
     
     def get_discount(self, price):
         if self.is_available_price(price):
-            discount = self.__discount * price / 100
+            discount = (100 - self.__discount) * price / 100
             if discount > self.__max_discount:
                 return self.__max_discount
             return discount
@@ -163,7 +163,7 @@ class CouponCatalog:
         return True
     
     def edit_coupon(self, id, coupon):
-        id = int(coupon.get_id())
+        id = int(id)
         if id < len(self.__coupons):
             self.__coupons[id] = coupon
             return True
