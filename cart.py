@@ -18,9 +18,11 @@ class Cart:
     elif (items_quantity <= 0):
       items.set_quantity(1)
     
-    items_product_ref = items.get_product()
-    cart_product_ref = [item.get_product() for item in self.__items]
+    items_product_ref = items.get_product().get_product_id()
+    cart_product_ref = [item.get_product().get_product_id() for item in self.__items]
     
+    print(items_product_ref)
+    print(cart_product_ref)
     if(items_product_ref not in cart_product_ref):
       print(f"insert_quantity : {items.get_quantity()}")
       self.__items.append(items)
@@ -51,7 +53,7 @@ class Cart:
   def __update_total_price(self): #update_total_item(self)
     self.__total_price = 0
     for item in self.__selected_item:
-      price = item.get_discounted_price() * item.get_quantity()
+      price = item.get_product().get_discounted_price() * item.get_quantity()
       self.__total_price += price
     self.cal_discount_price()
     

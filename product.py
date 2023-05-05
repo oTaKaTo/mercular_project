@@ -209,7 +209,7 @@ class Item:
             for KEY in brand_id.keys():
                 item_info[KEY] = brand_id[KEY]
 
-            return {self.__product.get_name() : item_info}
+            return {self.__product.get_product_id() : item_info}
     
     def get_product(self):
         return self.__product
