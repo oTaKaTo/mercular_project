@@ -231,13 +231,15 @@ async def index(request: Request, email: str, is_buynow: str):
         price = item.get_price() * item.get_quantity()
         temp_info = item.get_item()
         
-        product_image = item.get_product().get_name()
+        items_product = item.get_product()
         
-        product_image = item.get_product().get_image()[0]
-        items_name = item.get_product().get_name()
+        product_image = items_product.get_image()[0]
+        items_name = items_product.get_name()
+        items_id = items_product.get_product_id()
         
-        temp_info[items_name].update({"price": price})
-        temp_info[items_name].update({"image": product_image})
+        temp_info[items_id].update({"price": price})
+        temp_info[items_id].update({"image": product_image})
+        temp_info[items_id].update({"name": items_name})
             
         selected_items_info.update(temp_info)
     
@@ -281,14 +283,19 @@ async def cart(email: str, request: Request):
             selected_info.update(selected.get_item())   
             
         for item in items:
+            print(item.get_product().get_product_id(), end = "")
             price = item.get_price() * item.get_quantity()
             temp_info = item.get_item()
             
-            product_image = item.get_product().get_image()[0]
-            items_name = item.get_product().get_name()
+            item_product = item.get_product()
+            product_image = item_product.get_image()[0]
+            items_id = item_product.get_product_id()
+            item_name = item_product.get_name()
             
-            temp_info[items_name].update({"price": price})
-            temp_info[items_name].update({"image": product_image})
+            temp_info[items_id].update({"price": price})
+            temp_info[items_id].update({"image": product_image})
+            temp_info[items_id].update({"name": item_name})
+            
             
             items_info.update(temp_info)
             
